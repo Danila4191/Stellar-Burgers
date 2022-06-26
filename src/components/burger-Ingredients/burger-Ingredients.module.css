@@ -1,0 +1,52 @@
+.BurgerIngredients {
+  width: 600px;
+  height: 912px;
+}
+.Subtitle {
+  margin: 0;
+  padding: 0;
+}
+.Section {
+  margin: 0;
+  padding-left: 0;
+}
+.Image {
+  width: 240px;
+  height: 120px;
+}
+.Price {
+  display: flex;
+  margin: 0 auto;
+  justify-content: center;
+  gap: 9px;
+  align-items: center;
+}
+.Item {
+  width: 272px;
+  text-align: center;
+  min-height: 208px;
+  position: relative;
+}
+.Grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 22px;
+  row-gap: 36px;
+}
+.Ingredients {
+  width: 600px;
+  height: 636px;
+  overflow: scroll;
+}
+
+.Ingredients::-webkit-scrollbar {
+  width: 8px;
+  height: 0px; 
+
+}
+.Ingredients::-webkit-scrollbar-track {
+  background: #2f2f37; 
+}
+.Ingredients::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
