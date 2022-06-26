@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDom from "react-dom";
+import PropTypes from 'prop-types';
 import {
   DragIcon,
   CurrencyIcon,
@@ -8,13 +9,13 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-Constructor.module.css";
 
-const Item = ({ text, type, thumbnail, price, id }) => {
+const Item = ({ text, type, ingType, thumbnail, price, id }) => {
   return (
-    <div className={styles.Item}>
-      <DragIcon />
+    <div className={ingType === "bun" ? `pl-8` : styles.Item}>
+      {ingType !== "bun" && <DragIcon />}
       <ConstructorElement
         type={type}
-        isLocked={false}
+        isLocked={ingType === "bun" ? true : false}
         text={text}
         price={price}
         thumbnail={thumbnail}
@@ -22,64 +23,29 @@ const Item = ({ text, type, thumbnail, price, id }) => {
     </div>
   );
 };
+Item.propTypes = {
+  text: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  price: PropTypes.number.isRequired,
+  ingType: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+};
 
 class BurgerConstructor extends React.Component {
   render() {
-  
     return (
       <div className={styles.BurgerConstructor}>
-        <div className={`${styles.BurgerList} mt-25 mb-10 pr-4 pl-4`}>
-          <Item
-            type="top"
-            text="Краторная булка N-200i (верх)"
-            price={200}
-            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-          />
-
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          <Item
-            text="Говяжий метеорит (отбивная)"
-            price={50}
-            thumbnail={"https://code.s3.yandex.net/react/code/meat-04.png"}
-          />
-          <Item
-            type="bottom"
-           
-            text="Краторная булка N-200i (низ)"
-            price={200}
-            thumbnail={"https://code.s3.yandex.net/react/code/bun-02.png"}
-          />
+        <div className={`${styles.BurgerList} mt-25 mb-10 pl-4 `}>
+       <div className={`${styles.EmpyBun} ${styles.EmpyBun_top} ml-8 `}></div>
+          <div className={`${styles.BurgerListScroll}  pr-4 `}>
+        
+          </div>
+          <div className={`${styles.EmpyBun} ${styles.EmpyBun_botton} ml-8`}></div>
         </div>
         <div className={`${styles.Order}`}>
           <div className={`${styles.Total}`}>
             <p
-              style={{ margin: "0" }}
-              className={` pr-2  text_type_digits-medium`}
+              className={`${styles.Total__Count} pr-2  text_type_digits-medium`}
             >
               0
             </p>

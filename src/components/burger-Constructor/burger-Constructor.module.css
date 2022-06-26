@@ -10,22 +10,26 @@
   height: min-content;
   align-items: center;
 }
-.BurgerList {
-  height: 616px;
+.BurgerListScroll {
+  height: 464px;
   overflow: scroll;
   align-content: start;
   display: grid;
   row-gap: 16px;
 }
-
-.BurgerList::-webkit-scrollbar {
+.BurgerList {
+  display: grid;
+  grid-template-rows: 80px 464px 80px;
+  row-gap: 16px;
+}
+.BurgerListScroll::-webkit-scrollbar {
   width: 8px;
   height: 0px;
 }
-.BurgerList::-webkit-scrollbar-track {
+.BurgerListScroll::-webkit-scrollbar-track {
   background: #2f2f37;
 }
-.BurgerList::-webkit-scrollbar-thumb {
+.BurgerListScroll::-webkit-scrollbar-thumb {
   background: #8585ad;
 }
 .Order {
@@ -39,4 +43,21 @@
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.Total__Count {
+  margin: 0;
+}
+.EmpyBun {
+  height: 80px;
+  width: 530px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 3px solid #1c1c21;
+}
+.EmpyBun_top {
+  border-radius: 88px 88px 40px 40px;
+}
+.EmpyBun_botton {
+  border-radius: 40px 40px 88px 88px;
 }

@@ -33,6 +33,12 @@
   column-gap: 22px;
   row-gap: 36px;
 }
+.Counter {
+  display: none;
+}
+.ScrollBar {
+  display: flex;
+}
 .Ingredients {
   width: 600px;
   height: 636px;
