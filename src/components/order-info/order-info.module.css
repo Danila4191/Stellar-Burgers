@@ -1,0 +1,17 @@
+.orderInfo {
+  justify-content: center;
+  text-align: center;
+}
+.icon {
+  width: 120px;
+  height: 120px;
+  background-image: url(../../images/done.svg);
+  background-repeat: no-repeat;
+  justify-content: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding-bottom: 60px;
+}
+.color {
+  color: #8585ad;
+}

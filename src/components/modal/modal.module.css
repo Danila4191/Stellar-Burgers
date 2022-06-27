@@ -1,0 +1,40 @@
+.modal {
+  width: 640px;
+  height: min-content;
+  background-color: #1c1c21;
+  box-shadow: 0px 24px 32px rgba(0, 0, 0, 0.04),
+    0px 16px 24px rgba(0, 0, 0, 0.04), 0px 4px 8px rgba(0, 0, 0, 0.04),
+    0px 0px 1px rgba(0, 0, 0, 0.04);
+  border-radius: 40px;
+  border: 1px solid rgba(76, 76, 255, 0.2);
+  z-index: 2;
+  position: relative;
+  
+}
+.overlay {
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    z-index: 1;
+    /*visibility: hidden;
+    opacity: 0;*/
+    transition: visibility 1s, opacity 0.5s linear;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    display: flex;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  .close {
+    width: 18px;
+    height: 18px;
+    background-image: url(../../images/Vector\ \(Stroke\).svg);
+    background-color: inherit;
+    border: 0;
+    position: absolute;
+    cursor: pointer;
+    right: 40px;
+    padding: 0;
+    top: 60px;
+  }
