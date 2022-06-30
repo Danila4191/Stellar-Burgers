@@ -5,7 +5,7 @@ import styles from "./order-info.module.css";
 const OrderInfo = () => {
   return (
     <div className={styles.orderInfo}>
-      <h1 className="text text_type_digits-large pt-15 pb-8">12312</h1>
+      <h1 className={`${styles.title} text text_type_digits-large pt-15 pb-8`}>12312</h1>
       <h2 className="text text_type_main-medium pb-15">идентификатор заказа</h2>
       <div className={`${styles.icon} `}></div>
       <p className={` text text_type_main-small`}>Ваш заказ начали готовить</p>

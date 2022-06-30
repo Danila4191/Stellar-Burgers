@@ -38,3 +38,11 @@ const IngredientInfo = ({
   );
 };
 export default IngredientInfo;
+IngredientInfo.propTypes = {
+  img: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  proteins: PropTypes.number.isRequired,
+  fat: PropTypes.number.isRequired,
+  carbohydrates: PropTypes.number.isRequired,
+  calories: PropTypes.number.isRequired,
+};
