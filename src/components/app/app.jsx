@@ -23,13 +23,16 @@ const App = () => {
       setState({ ...state, loading: true });
       try {
         const res = await fetch(`${http}`);
-        const data = await res.json();
+        if (!res.ok) {
+          throw new Error(`Ошибка  ${res.status}`);
+        }
+        const data = await res.json()
         setState({ productData: data.data, loading: false });
       } catch (err) {
         alert(`Ошибка ${err}`);
       }
     };
-    getProductData();
+    getProductData()
   }, []);
 
   return (
@@ -54,7 +57,6 @@ const App = () => {
         <Modal active={modalActive} setActive={setModalActive}>
           {modal}
         </Modal>
-
     </div>
   );
 };

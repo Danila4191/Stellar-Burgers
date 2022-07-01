@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
@@ -10,6 +10,7 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-Constructor.module.css";
+import { isMetaProperty } from "typescript";
 
 const Item = ({ item, position }) => {
   return (
@@ -18,7 +19,7 @@ const Item = ({ item, position }) => {
         <ConstructorElement
           type={position}
           isLocked={item.type === "bun" ? true : false}
-          text={item.name}
+          text={position === "bottom" ? (`${item.name} (низ)`)  : (position === "top" ? `${item.name} (верх)` : item.name ) }
           price={item.price}
           thumbnail={item.image}
         />
@@ -36,7 +37,14 @@ const BurgerConstructor = ({ data, setModalActive, setModal }) => {
     setModal(<OrderInfo />);
     setModalActive(true);
   }
- 
+
+  const [orderTotal, setTotal] = useState(0);
+  let orderElements = [data[3],data[7],data[5],data[0],data[0]]
+  useEffect(() => {
+     let summ = orderElements.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
+    setTotal(summ)
+  }, []);
+
   return (
     <div className={styles.BurgerConstructor}>
       <div className={`${styles.BurgerList} mt-25 mb-10 pl-4 `}>
@@ -47,13 +55,7 @@ const BurgerConstructor = ({ data, setModalActive, setModal }) => {
           <Item item={data[3]} />
           <Item item={data[5]} />
           <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
-          <Item item={data[7]} />
+         
         </div>
         <div className={`${styles.EmpyBun} ${styles.EmpyBun_botton} `}>
           <Item item={data[0]} position="bottom" />
@@ -62,7 +64,7 @@ const BurgerConstructor = ({ data, setModalActive, setModal }) => {
       <div className={`${styles.Order}`}>
         <div className={`${styles.Total}`}>
           <p className={`${styles.Total__Count} pr-2  text_type_digits-medium`}>
-            0
+            {orderTotal}
           </p>
           <CurrencyIcon />
         </div>
