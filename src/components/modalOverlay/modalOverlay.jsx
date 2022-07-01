@@ -3,18 +3,7 @@ import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import styles from "./modalOverlay.module.css";
 const ModalOverlay = ({ active, setActive, children }) => {
-  const ESC = 27;
-  useEffect(() => {
-    const handleEscapeClose = (evt) => {
-      if (evt.keyCode === ESC) {
-        setActive(false);
-      }
-    };
-    document.addEventListener("keydown", handleEscapeClose);
-    return () => {
-      document.removeEventListener("keydown", handleEscapeClose);
-    };
-  }, []);
+
   return (
     <div
       className={

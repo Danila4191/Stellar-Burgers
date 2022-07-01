@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDom from "react-dom";
+import IngredientType from "../../utils/types";
 import PropTypes from "prop-types";
 import {
   Counter,
@@ -10,7 +11,7 @@ import styles from "./burger-Ingredients.module.css";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 const Grid = (props) => {
   return (
-    <ul  id={`${props.id}`} className={`${styles.Section} pt-10`}>
+    <ul id={`${props.id}`} className={`${styles.Section} pt-10`}>
       <h2 className={`${styles.Subtitle} text_type_main-medium`}>
         {props.title}
       </h2>
@@ -22,30 +23,11 @@ Grid.propTypes = {
   id: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
 };
-const Ingredient = ({
-  title,
-  image,
-  price,
-  setModalActive,
-  setModal,
-  proteins,
-  fat,
-  carbohydrates,
-  calories,
-}) => {
+
+const Ingredient = ({ item, setModalActive, setModal }) => {
   const [count] = useState(0);
   function openModal() {
-    setModal(
-      <IngredientInfo
-        title={title}
-        price={price}
-        img={image}
-        proteins={proteins}
-        fat={fat}
-        carbohydrates={carbohydrates}
-        calories={calories}
-      />
-    );
+    setModal(<IngredientInfo item={item} />);
     setModalActive(true);
   }
   return (
@@ -55,30 +37,22 @@ const Ingredient = ({
       </div>
       <img
         className={`${styles.Image} pr-4 pl-4 pb-1`}
-        src={image}
-        alt={title}
+        src={item.image}
+        alt={item.name}
       />
       <div className={`${styles.Price} pb-1`}>
-        <div className="text_type_digits-default">{price}</div>
+        <div className="text_type_digits-default">{item.price}</div>
         <CurrencyIcon />
       </div>
-      <h3 className={`${styles.Subtitle} text_type_main-small`}>{title}</h3>
+      <h3 className={`${styles.Subtitle} text_type_main-small`}>
+        {item.name}
+      </h3>
     </div>
   );
 };
-Ingredient.propTypes = {
-  title: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  price: PropTypes.number.isRequired,
-  id: PropTypes.string.isRequired,
-  proteins: PropTypes.number.isRequired,
-  fat: PropTypes.number.isRequired,
-  carbohydrates: PropTypes.number.isRequired,
-  calories: PropTypes.number.isRequired,
-};
+Ingredient.propTypes = { item: PropTypes.object.isRequired };
 const BurgerIngredients = ({ data, setModalActive, setModal }) => {
   const [current, setCurrent] = useState("");
-
 
   function sroll(type) {
     setCurrent(type);
@@ -102,39 +76,25 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
         </Tab>
       </div>
       <div className={styles.Ingredients}>
-        <Grid   id="bun" title="Булки">
+        <Grid id="bun" title="Булки">
           {data
             .filter((item) => item.type == "bun")
             .map((item, index) => (
               <Ingredient
                 key={item._id}
-                title={item.name}
-                price={item.price}
-                image={item.image}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-                id={item._id}
+                item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
               />
             ))}
         </Grid>
-        <Grid  id="souce" title="Соусы">
+        <Grid id="souce" title="Соусы">
           {data
             .filter((item) => item.type == "sauce")
             .map((item, index) => (
               <Ingredient
                 key={item._id}
-                title={item.name}
-                price={item.price}
-                image={item.image}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-                id={item._id}
+                item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
               />
@@ -146,14 +106,7 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
             .map((item, index) => (
               <Ingredient
                 key={item._id}
-                title={item.name}
-                price={item.price}
-                image={item.image}
-                proteins={item.proteins}
-                fat={item.fat}
-                carbohydrates={item.carbohydrates}
-                calories={item.calories}
-                id={item._id}
+                item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
               />

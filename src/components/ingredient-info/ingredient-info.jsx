@@ -2,47 +2,38 @@ import React, { useState } from "react";
 import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import styles from "./ingredient-info.module.css";
-
+import IngredientType from "../../utils/types"
 const IngredientInfo = ({
-  img,
-  title,
-  proteins,
-  fat,
-  carbohydrates,
-  calories,
+  item
 }) => {
   return (
     <div className={styles.ingredientInfo}>
       <h1 className="text text_type_main-large ">Детали ингредиента</h1>
-      <img className={`${styles.image} pr-4 pl-4 pb-1`} src={img} alt={title} />
-      <h2 className="text text_type_main-medium pt-4 pb-8">{title}</h2>
+      <img className={`${styles.image} pr-4 pl-4 pb-1`} src={item.image} alt={item.name} />
+      <h2 className="text text_type_main-medium pt-4 pb-8">{item.name}</h2>
       <ul className={`${styles.grid} pb-5`}>
         <li>
           <p className="text text_type_main-small">Калории, ккал</p>
-          <p className="text text_type_digits-default">{calories}</p>
+          <p className="text text_type_digits-default">{item.calories}</p>
         </li>
         <li>
           <p className="text text_type_main-small">Белки, г</p>
-          <p className="text text_type_digits-default">{proteins}</p>
+          <p className="text text_type_digits-default">{item.proteins}</p>
         </li>
         <li>
           <p className="text text_type_main-small">Жиры, г</p>
-          <p className="text text_type_digits-default">{fat}</p>
+          <p className="text text_type_digits-default">{item.fat}</p>
         </li>
         <li>
           <p className="text text_type_main-small">Углеводы, г</p>
-          <p className="text text_type_digits-default">{carbohydrates}</p>
+          <p className="text text_type_digits-default">{item.carbohydrates}</p>
         </li>
       </ul>
     </div>
   );
 };
-export default IngredientInfo;
 IngredientInfo.propTypes = {
-  img: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  proteins: PropTypes.number.isRequired,
-  fat: PropTypes.number.isRequired,
-  carbohydrates: PropTypes.number.isRequired,
-  calories: PropTypes.number.isRequired,
-};
+  item:PropTypes.object.isRequired,
+}
+export default IngredientInfo;
+
