@@ -7,8 +7,7 @@ import BurgerIngredients from "../burger-Ingredients/burger-Ingredients";
 import BurgerConstructor from "../burger-Constructor/burger-Constructor";
 import Modal from "../modal/modal";
 import { isConstructorDeclaration } from "typescript";
-
-
+import { IngredientContext } from "../../services/appContext";
 
 const http = `https://norma.nomoreparties.space/api/ingredients/`;
 const App = () => {
@@ -26,37 +25,42 @@ const App = () => {
         if (!res.ok) {
           throw new Error(`Ошибка  ${res.status}`);
         }
-        const data = await res.json()
+        const data = await res.json();
         setState({ productData: data.data, loading: false });
       } catch (err) {
         alert(`Ошибка ${err}`);
       }
     };
-    getProductData()
+    getProductData();
   }, []);
 
   return (
     <div>
       <AppHeader />
-      <main className={styles.Main}>
-        {!state.loading ? (
-          <BurgerIngredients
-            data={state.productData}
-            setModalActive={setModalActive}
-            setModal={setModal}
-          />
-        ) : null}
-        {!state.loading ? (
-          <BurgerConstructor
-            data={state.productData}
-            setModalActive={setModalActive}
-            setModal={setModal}
-          />
-        ) : null}
-      </main>
-        <Modal active={modalActive} setActive={setModalActive}>
+      <IngredientContext.Provider value={{ state, setState }}>
+        <main className={styles.Main}>
+          {!state.loading ? (
+            <BurgerIngredients
+              setModalActive={setModalActive}
+              setModal={setModal}
+            />
+          ) : null}
+          {!state.loading ? (
+            <BurgerConstructor
+              setModalActive={setModalActive}
+              setModal={setModal}
+           
+            />
+          ) : null}
+        </main>
+        <Modal
+          active={modalActive}
+          setActive={setModalActive}
+      
+        >
           {modal}
         </Modal>
+      </IngredientContext.Provider>
     </div>
   );
 };

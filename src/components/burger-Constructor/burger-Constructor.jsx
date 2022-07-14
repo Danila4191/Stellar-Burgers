@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
 import IngredientType from "../../utils/types";
+import { IngredientContext } from "../../services/appContext";
+import apiOrder from "../../services/api/api";
 import {
   DragIcon,
   CurrencyIcon,
@@ -16,14 +18,19 @@ const Item = ({ item, position }) => {
   return (
     <div className={item.type === "bun" ? `` : `${styles.Item} pr-5`}>
       {item.type !== "bun" && <DragIcon />}
-        <ConstructorElement
-          type={position}
-          isLocked={item.type === "bun" ? true : false}
-          text={position === "bottom" ? (`${item.name} (низ)`)  : (position === "top" ? `${item.name} (верх)` : item.name ) }
-          price={item.price}
-          thumbnail={item.image}
-        />
-  
+      <ConstructorElement
+        type={position}
+        isLocked={item.type === "bun" ? true : false}
+        text={
+          position === "bottom"
+            ? `${item.name} (низ)`
+            : position === "top"
+            ? `${item.name} (верх)`
+            : item.name
+        }
+        price={item.price}
+        thumbnail={item.image}
+      />
     </div>
   );
 };
@@ -32,33 +39,54 @@ Item.propTypes = {
   position: PropTypes.string,
 };
 
-const BurgerConstructor = ({ data, setModalActive, setModal }) => {
+const BurgerConstructor = ({ setModalActive, setModal }) => {
+  const { state, setState } = useContext(IngredientContext);
+  const [orderTotal, setTotal] = useState(0);
+  
+  let orderElements = [
+    state.productData[3],
+    state.productData[7],
+    state.productData[5],
+    state.productData[0],
+    state.productData[0],
+  ];
+  let main = [state.productData[3], state.productData[7], state.productData[5]];
+  let bun = [state.productData[0]];
+
   function openModal() {
-    setModal(<OrderInfo />);
-    setModalActive(true);
+    apiOrder({ ingredients: orderElements.map((item) => `${item._id}`) })
+      .then((dataFromServer) => {
+        setModal(<OrderInfo orderNumber={dataFromServer.order.number} />);
+        setModalActive(true);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
-  const [orderTotal, setTotal] = useState(0);
-  let orderElements = [data[3],data[7],data[5],data[0],data[0]]
   useEffect(() => {
-     let summ = orderElements.reduce((accumulator, currentValue) => accumulator + currentValue.price, 0)
-    setTotal(summ)
+    let summ = orderElements.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.price,
+      0
+    );
+    setTotal(summ);
   }, []);
 
   return (
     <div className={styles.BurgerConstructor}>
       <div className={`${styles.BurgerList} mt-25 mb-10 pl-4 `}>
         <div className={`${styles.EmpyBun} ${styles.EmpyBun_top} `}>
-          <Item item={data[0]} position="top" />
+          {bun.length > 0 ? <Item item={bun[0]} position="top" /> : null}
         </div>
         <div className={`${styles.BurgerListScroll}  pr-8 `}>
-          <Item item={data[3]} />
-          <Item item={data[5]} />
-          <Item item={data[7]} />
-         
+          {main
+            .filter((item) => item.type !== "bun")
+            .map((item, index) => (
+              <Item item={item} key={item._id} />
+            ))}
         </div>
         <div className={`${styles.EmpyBun} ${styles.EmpyBun_botton} `}>
-          <Item item={data[0]} position="bottom" />
+          {bun.length > 0 ? <Item item={bun[0]} position="bottom" /> : null}
         </div>
       </div>
       <div className={`${styles.Order}`}>
@@ -76,7 +104,6 @@ const BurgerConstructor = ({ data, setModalActive, setModal }) => {
   );
 };
 BurgerConstructor.propTypes = {
-  data: PropTypes.array.isRequired,
   setModal: PropTypes.func.isRequired,
   setModalActive: PropTypes.func.isRequired,
 };

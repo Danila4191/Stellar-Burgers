@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ReactDom from "react-dom";
 import IngredientType from "../../utils/types";
 import PropTypes from "prop-types";
+import { IngredientContext } from "../../services/appContext";
 import {
   Counter,
   Tab,
@@ -26,6 +27,7 @@ Grid.propTypes = {
 
 const Ingredient = ({ item, setModalActive, setModal }) => {
   const [count] = useState(0);
+
   function openModal() {
     setModal(<IngredientInfo item={item} />);
     setModalActive(true);
@@ -44,14 +46,14 @@ const Ingredient = ({ item, setModalActive, setModal }) => {
         <div className="text_type_digits-default">{item.price}</div>
         <CurrencyIcon />
       </div>
-      <h3 className={`${styles.Subtitle} text_type_main-small`}>
-        {item.name}
-      </h3>
+      <h3 className={`${styles.Subtitle} text_type_main-small`}>{item.name}</h3>
     </div>
   );
 };
 Ingredient.propTypes = { item: PropTypes.object.isRequired };
-const BurgerIngredients = ({ data, setModalActive, setModal }) => {
+
+  const BurgerIngredients = ({ setModalActive, setModal }) => {
+  const { state, setState } = useContext(IngredientContext);
   const [current, setCurrent] = useState("");
 
   function sroll(type) {
@@ -77,7 +79,7 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
       </div>
       <div className={styles.Ingredients}>
         <Grid id="bun" title="Булки">
-          {data
+          {state.productData
             .filter((item) => item.type == "bun")
             .map((item, index) => (
               <Ingredient
@@ -89,7 +91,7 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
             ))}
         </Grid>
         <Grid id="souce" title="Соусы">
-          {data
+          {state.productData
             .filter((item) => item.type == "sauce")
             .map((item, index) => (
               <Ingredient
@@ -101,7 +103,7 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
             ))}
         </Grid>
         <Grid id="main" title="Начинки">
-          {data
+          {state.productData
             .filter((item) => item.type == "main")
             .map((item, index) => (
               <Ingredient
@@ -117,7 +119,7 @@ const BurgerIngredients = ({ data, setModalActive, setModal }) => {
   );
 };
 BurgerIngredients.propTypes = {
-  data: PropTypes.array.isRequired,
+ 
   setModal: PropTypes.func.isRequired,
   setModalActive: PropTypes.func.isRequired,
 };
