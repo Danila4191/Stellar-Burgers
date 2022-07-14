@@ -6,10 +6,11 @@ import styles from "./app.module.css";
 import BurgerIngredients from "../burger-Ingredients/burger-Ingredients";
 import BurgerConstructor from "../burger-Constructor/burger-Constructor";
 import Modal from "../modal/modal";
+import baseUrl from "../../utils/utils"
 import { isConstructorDeclaration } from "typescript";
 import { IngredientContext } from "../../services/appContext";
 
-const http = `https://norma.nomoreparties.space/api/ingredients/`;
+
 const App = () => {
   const [modalActive, setModalActive] = useState(false);
   const [modal, setModal] = useState();
@@ -19,13 +20,17 @@ const App = () => {
   });
   useEffect(() => {
     const getProductData = async () => {
+      const onResponce = (res) => {
+        return res.ok ? res.json() : Promise.reject(res);
+      };
+      
       setState({ ...state, loading: true });
       try {
-        const res = await fetch(`${http}`);
+        const res = await fetch(`${baseUrl}/ingredients/`);
         if (!res.ok) {
           throw new Error(`Ошибка  ${res.status}`);
         }
-        const data = await res.json();
+        const data = await onResponce(res);
         setState({ productData: data.data, loading: false });
       } catch (err) {
         alert(`Ошибка ${err}`);
