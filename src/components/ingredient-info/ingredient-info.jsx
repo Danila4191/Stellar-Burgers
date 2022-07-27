@@ -3,11 +3,12 @@ import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import styles from "./ingredient-info.module.css";
 import IngredientType from "../../utils/types"
-const IngredientInfo = ({
-  item
-}) => {
+import { useDispatch, useSelector } from "react-redux";
+const IngredientInfo = () => {
+  const item = useSelector((state) => state.ingredient.data);
+ 
   return (
-    <div className={styles.ingredientInfo}>
+    item !==  null ? (<div className={styles.ingredientInfo}>
       <h1 className="text text_type_main-large ">Детали ингредиента</h1>
       <img className={`${styles.image} pr-4 pl-4 pb-1`} src={item.image} alt={item.name} />
       <h2 className="text text_type_main-medium pt-4 pb-8">{item.name}</h2>
@@ -29,11 +30,9 @@ const IngredientInfo = ({
           <p className="text text_type_digits-default">{item.carbohydrates}</p>
         </li>
       </ul>
-    </div>
+    </div>) : null
   );
 };
-IngredientInfo.propTypes = {
-  item:PropTypes.object.isRequired,
-}
+
 export default IngredientInfo;
 

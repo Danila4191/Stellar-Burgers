@@ -9,8 +9,7 @@ import Modal from "../modal/modal";
 import baseUrl from "../../utils/utils";
 import { IngredientContext } from "../../services/context/appContext";
 import { useDispatch, useSelector } from "react-redux";
-import {DndProvider} from "react-dnd"
-import {HTML5Backend} from "react-dnd-html5-backend"
+
 
 
 const App = () => {
@@ -48,7 +47,6 @@ const App = () => {
 
   return (
     <div>
-<DndProvider backend={HTML5Backend}>
 
         <AppHeader />
         <IngredientContext.Provider value={{ state, setState }}>
@@ -71,7 +69,7 @@ const App = () => {
             {modal}
           </Modal>
         </IngredientContext.Provider>
-        </DndProvider>
+   
     </div>
   );
 };

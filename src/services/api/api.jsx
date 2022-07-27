@@ -1,9 +1,9 @@
 import baseUrl from "../../utils/utils"
-  const onResponce = (res) => {
+export const onResponce = (res) => {
     return res.ok ? res.json() : Promise.reject(res);
   };
-
-const apiOrder = (data)=> {
+ 
+   export  const apiOrder = (data)=> {
     return fetch(`${baseUrl}/orders`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -11,4 +11,4 @@ const apiOrder = (data)=> {
     })
       .then(onResponce)
   }
-  export default apiOrder
+  

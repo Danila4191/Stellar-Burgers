@@ -2,9 +2,8 @@ import React, { useState, useEffect, useContext } from "react";
 import ReactDom from "react-dom";
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
-import IngredientType from "../../utils/types";
-import { IngredientContext } from "../../services/appContext";
-import apiOrder from "../../services/api/api";
+import { IngredientContext } from "../../services/context/appContext";
+import { apiOrder } from "../../services/api/api";
 import {
   DragIcon,
   CurrencyIcon,
@@ -13,12 +12,73 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-Constructor.module.css";
 import { isMetaProperty } from "typescript";
+import { useDispatch, useSelector } from "react-redux";
+import { useDrop, useDrag } from "react-dnd";
 
 const Item = ({ item, position }) => {
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.ingredientsConstructor.items);
+  const total = useSelector((state) => state.total.total);
+
+  function itemsDelete(item) {
+    let itemsNew = Array.from(items);
+    let itemDelete = itemsNew.indexOf(item);
+    itemsNew.splice(itemDelete, 1);
+    let summ = itemsNew.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.price,
+      0
+    );
+    dispatch({ type: "SET_TOTAL", payload: summ });
+    dispatch({ type: "DELETE_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+  }
+
+  const [{ isDrag, isTypeDrag }, constructorDragRef] = useDrag({
+    type: "new",
+    item: item,
+    collect: (monitor) => ({
+      isTypeDrag: monitor.getItemType(),
+      isDrag: monitor.isDragging(),
+    }),
+  });
+
+  function move() {
+    let itemsNew = Array.from(items);
+    let newItem = itemsNew.indexOf(isItem); // держу в руке
+    let oldItem = itemsNew.indexOf(item); // снизу
+    itemsNew.splice(oldItem, 1, isItem);
+    itemsNew.splice(newItem, 1, item);
+    dispatch({ type: "TOOGLE_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+  }
+
+  const [{ isItem, isOverItem }, constructorToggle] = useDrop({
+    accept: "new",
+    hover(Item) {
+      move();
+    },
+    drop(Item) {
+      move();
+    },
+    collect: (monitor) => ({
+      isItem: monitor.getItem(),
+      isOverItem: monitor.isOver(),
+    }),
+  });
+
   return (
-    <div className={item.type === "bun" ? `` : `${styles.Item} pr-5`}>
+    <div
+      ref={
+        item.type !== "bun"
+          ? isTypeDrag == "new"
+            ? constructorToggle
+            : constructorDragRef
+          : null
+      }
+      className={item.type === "bun" ? `` : `${styles.Item}  pr-5`}
+      style={isOverItem ? { opacity: "0" } : null}
+    >
       {item.type !== "bun" && <DragIcon />}
       <ConstructorElement
+        handleClose={() => itemsDelete(item)}
         type={position}
         isLocked={item.type === "bun" ? true : false}
         text={
@@ -40,23 +100,68 @@ Item.propTypes = {
 };
 
 const BurgerConstructor = ({ setModalActive, setModal }) => {
-  const { state, setState } = useContext(IngredientContext);
-  const [orderTotal, setTotal] = useState(0);
-  
-  let orderElements = [
-    state.productData[3],
-    state.productData[7],
-    state.productData[5],
-    state.productData[0],
-    state.productData[0],
-  ];
-  let main = [state.productData[3], state.productData[7], state.productData[5]];
-  let bun = [state.productData[0]];
+  // const [orderTotal, setTotal] = useState(0); старое
+
+  const dispatch = useDispatch();
+  const items = useSelector((state) => state.ingredientsConstructor.items);
+  const total = useSelector((state) => state.total.total);
+
+  const [{ isHoverMain, isTypeMain }, dropTargetMain] = useDrop({
+    accept: "main",
+    drop(item) {
+      let itemsNew = Array.from(items);
+      item.idKey = item._id + Math.random() + itemsNew.length;
+      let itemCopy = Object.assign({}, item);
+      itemsNew.push(itemCopy);
+      let summ = itemsNew.reduce(
+        (accumulator, currentValue) => accumulator + currentValue.price,
+        0
+      );
+      dispatch({ type: "SET_TOTAL", payload: summ });
+      dispatch({ type: "ADD_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+    },
+
+    collect: (monitor) => ({
+      isHoverMain: monitor.isOver(),
+      isTypeMain: monitor.getItemType(),
+    }),
+  });
+
+  function addBun(itemsNew, item) {
+    itemsNew.push(item);
+    itemsNew.push(item);
+    let summ = itemsNew.reduce(
+      (accumulator, currentValue) => accumulator + currentValue.price,
+      0
+    );
+    dispatch({ type: "SET_TOTAL", payload: summ });
+    dispatch({ type: "ADD_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+  }
+
+  const [{ isHover, isHoverBun }, dropTargetBun] = useDrop({
+    accept: "bun",
+    drop(item) {
+      if (items.some((item) => item.type == "bun")) {
+        let itemsNew = Array.from(items).filter((item) => item.type !== "bun");
+        addBun(itemsNew, item);
+      } else {
+        let itemsNew = Array.from(items);
+        addBun(itemsNew, item);
+      }
+    },
+    collect: (monitor) => ({
+      isHover: monitor.isOver(),
+      isHoverBun: monitor.getItemType(),
+    }),
+  });
+
+  //let bun = items.filter((item) => item.type == "bun"); старое
 
   function openModal() {
-    apiOrder({ ingredients: orderElements.map((item) => `${item._id}`) })
+    apiOrder({ ingredients: items.map((item) => `${item._id}`) })
       .then((dataFromServer) => {
-        setModal(<OrderInfo orderNumber={dataFromServer.order.number} />);
+        dispatch({ type: "GET_ORDER", payload: dataFromServer.order.number });
+        setModal(<OrderInfo />);
         setModalActive(true);
       })
       .catch((err) => {
@@ -64,35 +169,94 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
       });
   }
 
-  useEffect(() => {
-    let summ = orderElements.reduce(
-      (accumulator, currentValue) => accumulator + currentValue.price,
-      0
-    );
-    setTotal(summ);
-  }, []);
-
   return (
     <div className={styles.BurgerConstructor}>
-      <div className={`${styles.BurgerList} mt-25 mb-10 pl-4 `}>
-        <div className={`${styles.EmpyBun} ${styles.EmpyBun_top} `}>
-          {bun.length > 0 ? <Item item={bun[0]} position="top" /> : null}
+      <div
+        ref={dropTargetBun}
+        className={`${styles.BurgerList} mt-25 mb-10 pl-4 `}
+      >
+        <div
+          className={`${styles.EmpyBun} ${styles.EmpyBun_top} ${
+            isHover && isHoverBun == "bun" && styles.EmpyBun_active
+          }`}
+        >
+          {" "}
+          {items.filter((item) => item.type == "bun").length > 0 ? (
+            <Item
+              item={items.filter((item) => item.type == "bun")[0]}
+              position="top"
+            />
+          ) : null}
         </div>
-        <div className={`${styles.BurgerListScroll}  pr-8 `}>
-          {main
-            .filter((item) => item.type !== "bun")
-            .map((item, index) => (
-              <Item item={item} key={item._id} />
-            ))}
+
+        <div
+          ref={dropTargetMain}
+          className={`${styles.BurgerListScroll}  pr-8 `}
+        >
+          {items.length == 0
+            ? null
+            : items
+                .filter((item) => item.type !== "bun")
+                .map((item, index) => (
+                  <Item item={item} key={item._id + index} />
+                ))}
+
+          {items.filter((item) => item.type !== "bun").length > 0 ? null : (
+            <div
+              className={`${styles.EmpyBun} ${styles.EmpyBun_main} ${
+                isHoverMain && isTypeMain !== "bun" && styles.EmpyBun_active
+              }`}
+            ></div>
+          )}
+          {items.filter((item) => item.type !== "bun").length > 1 ? null : (
+            <div
+              className={`${styles.EmpyBun} ${styles.EmpyBun_main} ${
+                isHoverMain && isTypeMain !== "bun" && styles.EmpyBun_active
+              }`}
+            ></div>
+          )}
+          {items.filter((item) => item.type !== "bun").length > 2 ? null : (
+            <div
+              className={`${styles.EmpyBun} ${styles.EmpyBun_main} ${
+                isHoverMain && isTypeMain !== "bun" && styles.EmpyBun_active
+              }`}
+            ></div>
+          )}
+          {items.filter((item) => item.type !== "bun").length > 3 ? null : (
+            <div
+              className={`${styles.EmpyBun} ${styles.EmpyBun_main} ${
+                isHoverMain && isTypeMain !== "bun" && styles.EmpyBun_active
+              }`}
+            ></div>
+          )}
+          {items.filter((item) => item.type !== "bun").length > 4 ? null : (
+            <div
+              className={`${styles.EmpyBun} ${styles.EmpyBun_main} ${
+                isHoverMain && isTypeMain !== "bun" && styles.EmpyBun_active
+              }`}
+            ></div>
+          )}
         </div>
-        <div className={`${styles.EmpyBun} ${styles.EmpyBun_botton} `}>
-          {bun.length > 0 ? <Item item={bun[0]} position="bottom" /> : null}
+
+        <div
+          className={`${styles.EmpyBun} ${styles.EmpyBun_botton} ${
+            isHover && isHoverBun == "bun" && styles.EmpyBun_active
+          }`}
+        >
+          {" "}
+          {items.filter((item) => item.type == "bun").length > 0 ? (
+            <Item
+              item={items.filter((item) => item.type == "bun")[0]}
+              position="bottom"
+            />
+          ) : null}
         </div>
       </div>
+
       <div className={`${styles.Order}`}>
         <div className={`${styles.Total}`}>
           <p className={`${styles.Total__Count} pr-2  text_type_digits-medium`}>
-            {orderTotal}
+            {total}
           </p>
           <CurrencyIcon />
         </div>

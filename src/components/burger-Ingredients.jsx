@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import ReactDom from "react-dom";
 import IngredientType from "../../utils/types";
 import PropTypes from "prop-types";
@@ -11,8 +11,7 @@ import {
 import styles from "./burger-Ingredients.module.css";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 import { useDispatch, useSelector } from "react-redux";
-import { useDrag } from "react-dnd";
-
+//import { useDrag } from "react-dnd";
 const Grid = (props) => {
   return (
     <ul id={`${props.id}`} className={`${styles.Section} pt-10`}>
@@ -28,28 +27,25 @@ Grid.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
+
 const Ingredient = ({ item, setModalActive, setModal }) => {
-  const dispatch = useDispatch();
-  const itemsConstructor = useSelector(
-    (state) => state.ingredientsConstructor.items
-  );
-  let count = itemsConstructor.filter(
-    (itemsConstructor) => item._id == itemsConstructor._id
-  ).length;
-
-  const [, dragRef] = useDrag({
-    type: item.type == "bun" ? "bun" : "main",
-    item: item,
-  });
-
+  const [count] = useState(0);
+  const dispatch = useDispatch()
+ /* const [, dragRef] = useDrag({
+      type: item.type,
+      item: item,
+      collect: monitor => ({
+      isDrag: monitor.isDragging()
+    })});
+*/
   function openModal() {
     setModal(<IngredientInfo />);
     setModalActive(true);
-    dispatch({ type: "ADD_INGREDIENT", payload: item });
+    dispatch({type:"ADD_INGREDIENT", payload:item})
+ 
   }
-
   return (
-    <div ref={dragRef} onClick={openModal} className={styles.Item}>
+    <div onClick={openModal} className={styles.Item}>
       <div className={count === 0 ? styles.Counter : styles.none}>
         <Counter count={count} size="default" />
       </div>
@@ -68,10 +64,9 @@ const Ingredient = ({ item, setModalActive, setModal }) => {
 };
 Ingredient.propTypes = { item: PropTypes.object.isRequired };
 
+
 const BurgerIngredients = ({ setModalActive, setModal }) => {
   const items = useSelector((state) => state.ingredients.productData);
-
-  const [cursorPosition, setCursorPosition] = React.useState({});
   const [current, setCurrent] = useState("");
 
   function sroll(type) {
@@ -80,24 +75,6 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
       .querySelector(`#${type}`)
       .scrollIntoView({ block: "start", behavior: "smooth" });
   }
-
-  const OnScrol = (e) => {
-    const bun = document.querySelector(`#${"bun"}`).offsetTop;
-    const main = document.querySelector(`#${"main"}`).offsetTop;
-    const souse = document.querySelector(`#${"souce"}`).offsetTop;
-    const scrollTop = document.querySelector(`#${"list"}`).scrollTop;
-    setCursorPosition({
-      ...cursorPosition,
-      y: scrollTop,
-    });
-    if (cursorPosition.y < bun) {
-      setCurrent("bun");
-    } else if (cursorPosition.y > bun && cursorPosition.y < souse) {
-      setCurrent("souce");
-    } else if (cursorPosition.y > main) {
-      setCurrent("main");
-    }
-  };
 
   return (
     <div className={styles.BurgerIngredients}>
@@ -113,19 +90,14 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
           Начинки
         </Tab>
       </div>
-      <div
-        id="list"
-        onScroll={(e) => {
-          OnScrol(e);
-        }}
-        className={styles.Ingredients}
-      >
+      <div className={styles.Ingredients}>
+        
         <Grid id="bun" title="Булки">
           {items
             .filter((item) => item.type == "bun")
             .map((item, index) => (
               <Ingredient
-                key={item._id + index}
+                key={item._id}
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
@@ -138,7 +110,7 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
             .filter((item) => item.type == "sauce")
             .map((item, index) => (
               <Ingredient
-                key={item._id + index}
+                key={item._id}
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
@@ -151,7 +123,7 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
             .filter((item) => item.type == "main")
             .map((item, index) => (
               <Ingredient
-                key={item._id + index}
+                key={item._id}
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}

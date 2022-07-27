@@ -6,7 +6,7 @@
   width: 100%;
   display: grid;
   column-gap: 8px;
-  grid-template-columns: min-content 520px;
+  grid-template-columns: min-content 530px;
   height: min-content;
   align-items: center;
 }
@@ -51,7 +51,7 @@
 .EmpyBun {
   margin-left: 30px;
   height: 76px;
-  width: 520px;
+  width: 530px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -62,4 +62,11 @@
 }
 .EmpyBun_botton {
   border-radius: 40px 40px 88px 88px;
+}
+.EmpyBun_main {
+  border-radius: 40px;
+
+}
+.EmpyBun_active {
+  border: 2px solid  #801AB3;
 }
