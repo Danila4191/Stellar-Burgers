@@ -1,73 +1,57 @@
-import React, { useState, useEffect } from "react";
-import ReactDom from "react-dom";
+import  { useState, useEffect } from "react";
 import AppHeader from "../app-header/app-header";
-import { onResponce } from "../../services/api/api";
 import styles from "./app.module.css";
 import BurgerIngredients from "../burger-Ingredients/burger-Ingredients";
 import BurgerConstructor from "../burger-Constructor/burger-Constructor";
 import Modal from "../modal/modal";
-import baseUrl from "../../utils/utils";
 import { IngredientContext } from "../../services/context/appContext";
 import { useDispatch, useSelector } from "react-redux";
 import {DndProvider} from "react-dnd"
 import {HTML5Backend} from "react-dnd-html5-backend"
-
+import {getIngredients} from "../../services/actions/actions"
 
 const App = () => {
-  const dispatch = useDispatch();
-  const loading = useSelector((state) => state.ingredients.loading);
+ 
   const [modalActive, setModalActive] = useState(false);
   const [modal, setModal] = useState();
+  const [onCloseFunc, setOnCloseFunc] = useState();
   const [state, setState] = useState({
     productData: [null],
     loading: true,
   });
 
+  const {loading,failed,} = useSelector((state) => state.ingredients);
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    const getProductData = async () => {
-      dispatch({
-        type: "GET_INGREDIENTS",
-        payload: { productData: null, loading: true },
-      });
-      try {
-        const res = await fetch(`${baseUrl}/ingredients/`);
-        if (!res.ok) {
-          throw new Error(`Ошибка  ${res.status}`);
-        }
-        const data = await onResponce(res);
-        dispatch({
-          type: "GET_INGREDIENTS",
-          payload: { productData: data.data, loading: false },
-        });
-      } catch (err) {
-        alert(`Ошибка ${err}`);
-      }
-    };
-    getProductData();
+    dispatch(getIngredients())
   }, []);
+
 
   return (
     <div>
 <DndProvider backend={HTML5Backend}>
-
         <AppHeader />
-        <IngredientContext.Provider value={{ state, setState }}>
+      <IngredientContext.Provider value={{ state, setState }}>
           <main className={styles.Main}>
-            {!loading ? (
-              <BurgerIngredients
+            {(!loading && !failed ) ? (
+              <BurgerIngredients 
+                setOnCloseFunc={setOnCloseFunc}
                 setModalActive={setModalActive}
                 setModal={setModal}
+                modalActive={modalActive}
               />
             ) : null}
-            {!loading ? (
+            {(!loading && !failed) ? (
              
               <BurgerConstructor
+              setOnCloseFunc={setOnCloseFunc}
                 setModalActive={setModalActive}
                 setModal={setModal}
               />
             ) : null}
           </main>
-          <Modal active={modalActive} setActive={setModalActive}>
+          <Modal active={modalActive} setActive={setModalActive} onCloseFunc={onCloseFunc} >
             {modal}
           </Modal>
         </IngredientContext.Provider>

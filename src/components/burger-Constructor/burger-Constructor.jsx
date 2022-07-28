@@ -1,9 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
-import ReactDom from "react-dom";
+
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
-import { IngredientContext } from "../../services/context/appContext";
-import { apiOrder } from "../../services/api/api";
 import {
   DragIcon,
   CurrencyIcon,
@@ -11,9 +8,16 @@ import {
   Button,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-Constructor.module.css";
-import { isMetaProperty } from "typescript";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop, useDrag } from "react-dnd";
+import {
+  DELETE_INGREDIENTS_CONSTRUCTOR,
+  ADD_INGREDIENTS_CONSTRUCTOR,
+  SET_TOTAL,
+  TOOGLE_INGREDIENTS_CONSTRUCTOR,
+  getOrderNumber,
+
+} from "../../services/actions/actions";
 
 const Item = ({ item, position }) => {
   const dispatch = useDispatch();
@@ -28,8 +32,8 @@ const Item = ({ item, position }) => {
       (accumulator, currentValue) => accumulator + currentValue.price,
       0
     );
-    dispatch({ type: "SET_TOTAL", payload: summ });
-    dispatch({ type: "DELETE_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+    dispatch({ type: SET_TOTAL, payload: summ });
+    dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
   const [{ isDrag, isTypeDrag }, constructorDragRef] = useDrag({
@@ -47,7 +51,7 @@ const Item = ({ item, position }) => {
     let oldItem = itemsNew.indexOf(item); // снизу
     itemsNew.splice(oldItem, 1, isItem);
     itemsNew.splice(newItem, 1, item);
-    dispatch({ type: "TOOGLE_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+    dispatch({ type: TOOGLE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
   const [{ isItem, isOverItem }, constructorToggle] = useDrop({
@@ -99,12 +103,16 @@ Item.propTypes = {
   position: PropTypes.string,
 };
 
-const BurgerConstructor = ({ setModalActive, setModal }) => {
-  // const [orderTotal, setTotal] = useState(0); старое
+const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
 
   const dispatch = useDispatch();
   const items = useSelector((state) => state.ingredientsConstructor.items);
   const total = useSelector((state) => state.total.total);
+  const {data,loading,failed,} = useSelector(state => state.order);
+  
+  
+ 
+
 
   const [{ isHoverMain, isTypeMain }, dropTargetMain] = useDrop({
     accept: "main",
@@ -117,8 +125,8 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
         (accumulator, currentValue) => accumulator + currentValue.price,
         0
       );
-      dispatch({ type: "SET_TOTAL", payload: summ });
-      dispatch({ type: "ADD_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+      dispatch({ type: SET_TOTAL, payload: summ });
+      dispatch({ type: ADD_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
     },
 
     collect: (monitor) => ({
@@ -127,6 +135,7 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
     }),
   });
 
+   
   function addBun(itemsNew, item) {
     itemsNew.push(item);
     itemsNew.push(item);
@@ -134,8 +143,8 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
       (accumulator, currentValue) => accumulator + currentValue.price,
       0
     );
-    dispatch({ type: "SET_TOTAL", payload: summ });
-    dispatch({ type: "ADD_INGREDIENTS_CONSTRUCTOR", payload: itemsNew });
+    dispatch({ type: SET_TOTAL, payload: summ });
+    dispatch({ type: ADD_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
   const [{ isHover, isHoverBun }, dropTargetBun] = useDrop({
@@ -155,19 +164,52 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
     }),
   });
 
-  //let bun = items.filter((item) => item.type == "bun"); старое
 
+
+
+
+
+
+
+
+
+
+
+
+////открытие и закрытие  модального окна с номером заказа
+
+  const close = () => {
+    dispatch({ type: SET_TOTAL, payload: 0 });
+    dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: [] });
+    setModalActive(false);
+  };
   function openModal() {
-    apiOrder({ ingredients: items.map((item) => `${item._id}`) })
-      .then((dataFromServer) => {
-        dispatch({ type: "GET_ORDER", payload: dataFromServer.order.number });
-        setModal(<OrderInfo />);
-        setModalActive(true);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    dispatch(getOrderNumber({ ingredients: items.map((item) => `${item._id}`) }))  
+    ///окно открывается до получения номера 
+   if (loading === false){
+    setModal(<OrderInfo />);
+    setOnCloseFunc(() => close); //устанавливаю функцию закрытия в стейт что бы потом
+                                  // передать через пропс в modal
+    setModalActive(true);
   }
+}
+//////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   return (
     <div className={styles.BurgerConstructor}>
@@ -198,7 +240,7 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
             : items
                 .filter((item) => item.type !== "bun")
                 .map((item, index) => (
-                  <Item item={item} key={item._id + index} />
+                  <Item item={item} key={item._id + Math.random()} />
                 ))}
 
           {items.filter((item) => item.type !== "bun").length > 0 ? null : (
@@ -260,8 +302,13 @@ const BurgerConstructor = ({ setModalActive, setModal }) => {
           </p>
           <CurrencyIcon />
         </div>
-        <Button onClick={openModal} type="primary" size="large">
-          Оформить заказ
+        <Button
+          disabled={!items.some((item) => item.type == "bun") ? true : false}
+          onClick={openModal}
+          type="primary"
+          size="large"
+        >
+          {loading  ? "Wait..." : "Оформить заказ"}
         </Button>
       </div>
     </div>

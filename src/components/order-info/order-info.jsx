@@ -1,8 +1,5 @@
-import React, { useState } from "react";
-import ReactDom from "react-dom";
-import PropTypes from "prop-types";
 import styles from "./order-info.module.css";
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 const OrderInfo = () => {
   const orderNumber = useSelector(state => state.order.data);
   return (

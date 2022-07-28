@@ -12,7 +12,10 @@ import styles from "./burger-Ingredients.module.css";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
-
+import {
+  ADD_INGREDIENT,
+  DELETE_INGREDIENT,
+} from "../../services/actions/actions";
 const Grid = (props) => {
   return (
     <ul id={`${props.id}`} className={`${styles.Section} pt-10`}>
@@ -28,8 +31,14 @@ Grid.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const Ingredient = ({ item, setModalActive, setModal }) => {
-  const dispatch = useDispatch();
+const Ingredient = ({
+  item,
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  modalActive,
+}) => {
+ 
   const itemsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
   );
@@ -42,11 +51,36 @@ const Ingredient = ({ item, setModalActive, setModal }) => {
     item: item,
   });
 
+
+
+
+//закрытие и открытие модального окна ингредиента//////////
+
+  const dispatch = useDispatch();
+  const ingredientData = useSelector((state) => state.ingredient.data); //изначально ingredientData : null
+
+ 
+  const close = () => { 
+    setModalActive(false) 
+    //данные удаляются до закрытия модального окна
+    if(modalActive  == false){ 
+       (dispatch({type:DELETE_INGREDIENT}))} //устанавливаю ingredientData : null
+  };
+
   function openModal() {
-    setModal(<IngredientInfo />);
-    setModalActive(true);
-    dispatch({ type: "ADD_INGREDIENT", payload: item });
+    //окно открывается до удаления данных 
+    if (ingredientData == null) {  
+      dispatch({ type: ADD_INGREDIENT, payload: item });
+      setModal(<IngredientInfo />);
+      setModalActive(true);
+      setOnCloseFunc(() => close);//устанавливаю функцию закрытия в стейт что бы потом
+                                  // передать через пропс в modal
+    }
   }
+
+////////////////////////////////////////////////////////
+
+
 
   return (
     <div ref={dragRef} onClick={openModal} className={styles.Item}>
@@ -68,7 +102,15 @@ const Ingredient = ({ item, setModalActive, setModal }) => {
 };
 Ingredient.propTypes = { item: PropTypes.object.isRequired };
 
-const BurgerIngredients = ({ setModalActive, setModal }) => {
+
+
+
+const BurgerIngredients = ({
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  modalActive,
+}) => {
   const items = useSelector((state) => state.ingredients.productData);
 
   const [cursorPosition, setCursorPosition] = React.useState({});
@@ -129,6 +171,8 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
+                setOnCloseFunc={setOnCloseFunc}
+                modalActive={modalActive}
               />
             ))}
         </Grid>
@@ -142,6 +186,8 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
+                setOnCloseFunc={setOnCloseFunc}
+                modalActive={modalActive}
               />
             ))}
         </Grid>
@@ -155,6 +201,8 @@ const BurgerIngredients = ({ setModalActive, setModal }) => {
                 item={item}
                 setModalActive={setModalActive}
                 setModal={setModal}
+                setOnCloseFunc={setOnCloseFunc}
+                modalActive={modalActive}
               />
             ))}
         </Grid>
