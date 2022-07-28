@@ -13,7 +13,7 @@ const ModalOverlay = ({ active, setActive, children,onCloseFunc }) => {
         active ? `${styles.overlay} ${styles.overlay_opened}` : styles.overlay
       }
       onClick={() =>{
-         onCloseFunc()
+        if (active==true)  {onCloseFunc()}
         }}
     >
       {children}

@@ -15,7 +15,6 @@ export const TOOGLE_INGREDIENTS_CONSTRUCTOR = "TOOGLE_INGREDIENTS_CONSTRUCTOR";
 
 
 
-///////////// получения номера
 export function getOrderNumber(data) {
   return function (dispatch) {
     dispatch({
@@ -23,6 +22,7 @@ export function getOrderNumber(data) {
     });
     getOrderNumberApi(data).then((dataFromServer) =>{
     if(dataFromServer){
+    
           dispatch({
             type: GET_ORDER,
             payload: {
@@ -38,7 +38,7 @@ export function getOrderNumber(data) {
           })
     };
 };
-////////////////
+
 
 
 

@@ -25,6 +25,7 @@ const ingredientState = {
   data: null,
 };
 const orderState = {
+
   data: "",
   loading: false,
   failed: false,
@@ -89,15 +90,23 @@ const orderReducer = (state = orderState, action) => {
         ...state,
         loading: true,
         failed: false,
-        data: ""
+        data: "",
+  
       };
     case GET_ORDER:
-      return { ...state, data: action.payload.data, loading: false, failed: false,};
+      return {
+        ...state,
+        data: action.payload.data,
+        loading: false,
+        failed: false,
+ 
+      };
     case GET_ORDER_FAILED:
       return {
         ...state,
         loading: false,
         failed: true,
+   
       };
     default:
       return state;

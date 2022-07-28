@@ -38,7 +38,6 @@ const Ingredient = ({
   setOnCloseFunc,
   modalActive,
 }) => {
- 
   const itemsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
   );
@@ -51,36 +50,26 @@ const Ingredient = ({
     item: item,
   });
 
-
-
-
-//закрытие и открытие модального окна ингредиента//////////
-
   const dispatch = useDispatch();
-  const ingredientData = useSelector((state) => state.ingredient.data); //изначально ingredientData : null
+  const ingredientData = useSelector((state) => state.ingredient.data);
 
- 
-  const close = () => { 
-    setModalActive(false) 
-    //данные удаляются до закрытия модального окна
-    if(modalActive  == false){ 
-       (dispatch({type:DELETE_INGREDIENT}))} //устанавливаю ingredientData : null
+  function close () {
+    setModalActive(false);
+    setTimeout(() => {
+      if (modalActive == false) {
+        dispatch({ type: DELETE_INGREDIENT });
+      }
+    }, 500);
   };
 
   function openModal() {
-    //окно открывается до удаления данных 
-    if (ingredientData == null) {  
+    if (ingredientData == null) {
       dispatch({ type: ADD_INGREDIENT, payload: item });
       setModal(<IngredientInfo />);
       setModalActive(true);
-      setOnCloseFunc(() => close);//устанавливаю функцию закрытия в стейт что бы потом
-                                  // передать через пропс в modal
+      setOnCloseFunc(() => close);
     }
   }
-
-////////////////////////////////////////////////////////
-
-
 
   return (
     <div ref={dragRef} onClick={openModal} className={styles.Item}>
@@ -101,9 +90,6 @@ const Ingredient = ({
   );
 };
 Ingredient.propTypes = { item: PropTypes.object.isRequired };
-
-
-
 
 const BurgerIngredients = ({
   setModalActive,

@@ -1,4 +1,4 @@
-
+import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
 import {
@@ -16,8 +16,8 @@ import {
   SET_TOTAL,
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
   getOrderNumber,
-
 } from "../../services/actions/actions";
+
 
 const Item = ({ item, position }) => {
   const dispatch = useDispatch();
@@ -104,21 +104,16 @@ Item.propTypes = {
 };
 
 const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
-
   const dispatch = useDispatch();
   const items = useSelector((state) => state.ingredientsConstructor.items);
   const total = useSelector((state) => state.total.total);
-  const {data,loading,failed,} = useSelector(state => state.order);
   
-  
- 
-
 
   const [{ isHoverMain, isTypeMain }, dropTargetMain] = useDrop({
     accept: "main",
     drop(item) {
       let itemsNew = Array.from(items);
-      item.idKey = item._id + Math.random() + itemsNew.length;
+      item.idKey = uuidv4();
       let itemCopy = Object.assign({}, item);
       itemsNew.push(itemCopy);
       let summ = itemsNew.reduce(
@@ -135,7 +130,6 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
     }),
   });
 
-   
   function addBun(itemsNew, item) {
     itemsNew.push(item);
     itemsNew.push(item);
@@ -164,19 +158,8 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
     }),
   });
 
+  const { data, loading, failed } = useSelector((state) => state.order);
 
-
-
-
-
-
-
-
-
-
-
-
-////открытие и закрытие  модального окна с номером заказа
 
   const close = () => {
     dispatch({ type: SET_TOTAL, payload: 0 });
@@ -184,32 +167,17 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
     setModalActive(false);
   };
   function openModal() {
-    dispatch(getOrderNumber({ ingredients: items.map((item) => `${item._id}`) }))  
-    ///окно открывается до получения номера 
-   if (loading === false){
-    setModal(<OrderInfo />);
-    setOnCloseFunc(() => close); //устанавливаю функцию закрытия в стейт что бы потом
-                                  // передать через пропс в modal
-    setModalActive(true);
+    dispatch(
+      getOrderNumber({ ingredients: items.map((item) => `${item._id}`) })
+    );
+    setTimeout(()=>{ 
+       if (loading == false) {
+      setModal(<OrderInfo />);
+      setOnCloseFunc(() => close);
+      setModalActive(true);
+    }},200)
+  
   }
-}
-//////////////////////////////////////////////
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <div className={styles.BurgerConstructor}>
@@ -239,9 +207,7 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
             ? null
             : items
                 .filter((item) => item.type !== "bun")
-                .map((item, index) => (
-                  <Item item={item} key={item._id + Math.random()} />
-                ))}
+                .map((item, index) => <Item item={item} key={item.idKey} />)}
 
           {items.filter((item) => item.type !== "bun").length > 0 ? null : (
             <div
@@ -308,7 +274,7 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
           type="primary"
           size="large"
         >
-          {loading  ? "Wait..." : "Оформить заказ"}
+          {loading ? "Wait..." : "Оформить заказ"}
         </Button>
       </div>
     </div>

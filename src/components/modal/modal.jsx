@@ -6,42 +6,46 @@ import ModalOverlay from "../modalOverlay/modalOverlay";
 
 const modalRoot = document.getElementById("react-modals");
 const Modal = ({ active, setActive, children, onCloseFunc }) => {
-  const ESC = 27;
- 
-  useEffect(() => { 
+const ESC = 27;
+
+  useEffect(() => {
     const handleEscapeClose = (evt) => {
       if (evt.keyCode === ESC) {
-        //в useEffect функцию почему-то не видно 
-        onCloseFunc()
-          document.removeEventListener("keydown", handleEscapeClose);
+        if (active == true) {
+          onCloseFunc();
+        }
       }
     };
-    document.addEventListener("keydown", handleEscapeClose);
+      document.addEventListener("keydown", handleEscapeClose);
     return () => {
-    
+      document.removeEventListener("keydown", handleEscapeClose);
     };
-  }, []);
+  });
   return ReactDom.createPortal(
-    <ModalOverlay active={active} setActive={setActive} onCloseFunc ={onCloseFunc}>
-    <div
+    <ModalOverlay
+      active={active}
+      setActive={setActive}
+      onCloseFunc={onCloseFunc}
+    >
+      <div
         onClick={(e) => e.stopPropagation()}
         className={`${styles.modal} pt-10 pr-10 pl-10 pb-15`}
       >
         <button
-          onClick={() =>{
-            onCloseFunc()
-          }
-          }
+          onClick={() => {
+            if (active == true) {
+              onCloseFunc();
+            }
+          }}
           className={`${styles.close} `}
         ></button>
         {children}
       </div>
     </ModalOverlay>,
-  modalRoot
-  )
+    modalRoot
+  );
 };
 Modal.propTypes = {
   setActive: PropTypes.func.isRequired,
- 
 };
 export default Modal;
