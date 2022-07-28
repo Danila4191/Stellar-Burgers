@@ -1,0 +1,32 @@
+.Container {
+  display: flex;
+  align-items: center;
+  column-gap: 8px;
+  height: 24px;
+ text-decoration: none;
+  list-style: none;
+  color: #8585ad;
+  background-color: inherit;
+  border: none;
+}
+.Nav {
+  width: 1280px;
+  display: flex;
+  flex-basis: 35%;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+.Header {
+  background: #1c1c21;
+  max-width: 100%;
+  height: 88px;
+}
+.Logo {
+  text-align: center;
+}
+.Links {
+  display: flex;
+}
+.Active {
+  color: #f2f2f3;
+}

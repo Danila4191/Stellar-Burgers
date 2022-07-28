@@ -1,0 +1,72 @@
+.BurgerConstructor {
+  width: 600px;
+  height: 912px;
+}
+.Item {
+  width: 100%;
+  display: grid;
+  column-gap: 8px;
+  grid-template-columns: min-content 530px;
+  height: min-content;
+  align-items: center;
+}
+
+.BurgerListScroll {
+  height: 464px;
+  overflow: scroll;
+  align-content: start;
+  display: grid;
+  row-gap: 16px;
+}
+.BurgerList {
+  display: grid;
+  grid-template-rows: 80px 464px 80px;
+  row-gap: 16px;
+}
+.BurgerListScroll::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+.BurgerListScroll::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.BurgerListScroll::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+.Order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: min-content;
+  gap: 40px;
+}
+.Total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.Total__Count {
+  margin: 0;
+}
+.EmpyBun {
+  margin-left: 30px;
+  height: 76px;
+  width: 530px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #1c1c21;
+}
+.EmpyBun_top {
+  border-radius: 88px 88px 40px 40px;
+}
+.EmpyBun_botton {
+  border-radius: 40px 40px 88px 88px;
+}
+.EmpyBun_main {
+  border-radius: 40px;
+
+}
+.EmpyBun_active {
+  border: 2px solid  #801AB3;
+}
