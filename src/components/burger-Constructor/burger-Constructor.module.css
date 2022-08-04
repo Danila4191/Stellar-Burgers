@@ -1,54 +1,46 @@
-.BurgerConstructor {
+.burger__constructor {
   width: 600px;
   height: 912px;
 }
-.Item {
-  width: 100%;
-  display: grid;
-  column-gap: 8px;
-  grid-template-columns: min-content 530px;
-  height: min-content;
-  align-items: center;
-}
 
-.BurgerListScroll {
+.burger__list {
+  display: grid;
+  grid-template-rows: 80px 464px 80px;
+  row-gap: 16px;
+}
+.burger__list__scroll {
   height: 464px;
   overflow: scroll;
   align-content: start;
   display: grid;
   row-gap: 16px;
 }
-.BurgerList {
-  display: grid;
-  grid-template-rows: 80px 464px 80px;
-  row-gap: 16px;
-}
-.BurgerListScroll::-webkit-scrollbar {
+.burger__list__scroll::-webkit-scrollbar {
   width: 8px;
   height: 0px;
 }
-.BurgerListScroll::-webkit-scrollbar-track {
+.burger__list__scroll::-webkit-scrollbar-track {
   background: #2f2f37;
 }
-.BurgerListScroll::-webkit-scrollbar-thumb {
+.burger__list__scroll::-webkit-scrollbar-thumb {
   background: #8585ad;
 }
-.Order {
+.order {
   display: flex;
   justify-content: flex-end;
   align-items: center;
   height: min-content;
   gap: 40px;
 }
-.Total {
+.total__container {
   display: flex;
   justify-content: flex-end;
   align-items: center;
 }
-.Total__Count {
+.total {
   margin: 0;
 }
-.EmpyBun {
+.empy {
   margin-left: 30px;
   height: 76px;
   width: 530px;
@@ -57,16 +49,68 @@
   align-items: center;
   border: 2px solid #1c1c21;
 }
-.EmpyBun_top {
+.empy_top {
   border-radius: 88px 88px 40px 40px;
 }
-.EmpyBun_botton {
+.empy_botton {
   border-radius: 40px 40px 88px 88px;
 }
-.EmpyBun_main {
+.empy__main {
   border-radius: 40px;
-
 }
-.EmpyBun_active {
-  border: 2px solid  #801AB3;
+.empy_active {
+  border: 2px solid #801ab3;
+}
+
+.modile__list{
+  padding-top: 64px;
+  padding-bottom: 64px;
+  height: 100%;
+  overflow: scroll;
+  align-content: start;
+  display: grid;
+  row-gap: 1px;
+}
+.modile__list::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+.modile__list::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.modile__list::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+
+@media (max-width: 700px) {
+  .burger__constructor {
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    height: 70%;
+    width: 100%;
+    top: 0px;
+    right: 0;
+    left: 0;
+    bottom: 0px;
+  }
+
+  .order {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #1c1c21;
+    height: 72px;
+    right: 0;
+    gap: 0px;
+    left: 0;
+    padding-right: 10px;
+  }
+  .total__container {
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+  }
 }

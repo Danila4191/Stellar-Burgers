@@ -1,32 +1,40 @@
-.Container {
-  display: flex;
-  align-items: center;
-  column-gap: 8px;
-  height: 24px;
- text-decoration: none;
-  list-style: none;
-  color: #8585ad;
-  background-color: inherit;
-  border: none;
-}
-.Nav {
-  width: 1280px;
-  display: flex;
-  flex-basis: 35%;
-  justify-content: space-between;
-  margin: 0 auto;
-}
-.Header {
+
+.header {
   background: #1c1c21;
-  max-width: 100%;
+  width: 100%;
+  min-width: min-content;
   height: 88px;
 }
-.Logo {
-  text-align: center;
-}
-.Links {
+
+
+.header__container_mobile {
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 64px;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
-.Active {
-  color: #f2f2f3;
+.logo_mobile {
+  background-image: url(../../images/logo.svg);
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+}
+.burger {
+  background-image: url(../../images/burgerMenu.svg);
+  background-color: inherit;
+  border: none;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 9;
+}
+
+@media (max-width: 700px) {
+  .header {
+    height: 64px;
+
+  }
 }

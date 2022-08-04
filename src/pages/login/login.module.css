@@ -1,0 +1,36 @@
+.input__container{
+  display: flex;
+  justify-content: center;
+}
+
+.container {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.text {
+  margin: 0;
+  color: #8585ad;
+  text-align: center;
+}
+.span {
+  color: #4c4cff;
+}
+.link {
+  text-decoration: none;
+  list-style: none;
+}
+@media (max-width: 700px) {
+  .text  {
+    width:  90%;
+    padding-left: 15px;
+    padding-right: 15px;
+    overflow-wrap: normal;
+  }
+  .container {
+    align-items: start;
+    padding-top: 30px;
+  }
+}

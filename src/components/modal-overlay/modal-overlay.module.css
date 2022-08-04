@@ -17,3 +17,10 @@
     visibility: visible;
     opacity: 1;
   }
+    
+  @media (max-width: 700px) {
+    .overlay {
+      z-index: 14;
+    }
+  }
+  

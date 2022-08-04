@@ -1,0 +1,38 @@
+.text {
+    margin: 0;
+    opacity: 0.4;
+    color: #8585AD;
+    text-align: center;
+    width: 260px;
+    text-align: left;
+  }
+  
+  .link {
+    text-decoration: none;
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+    color: #8585AD;
+  }
+  .active{
+    color: #F2F2F3;
+  }
+  .link:hover{
+    color:rgb(47, 175, 214);
+  }
+  
+  .nav {
+    display: grid;
+    row-gap: 20px;
+  }
+  
+@media (max-width: 700px) {
+  .text {
+    margin: 0;
+    opacity: 0.4;
+    color: #8585AD;
+    text-align: center;
+    width: 100px;
+    text-align: left;
+  }
+}

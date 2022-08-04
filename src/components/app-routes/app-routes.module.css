@@ -1,0 +1,68 @@
+.app__routes {
+  text-align: center;
+}
+.link {
+  text-decoration: none;
+  list-style: none;
+}
+.main {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  gap: 60px;
+  padding-right: 20px;
+  padding-left: 20px;
+  height: min-content;
+}
+.scrollbar {
+  position: fixed;
+  bottom: 0;
+  display: flex;
+  justify-content: flex-end;
+  background-color: #1c1c21;
+  height: 72px;
+  right: 0;
+  left: 0;
+}
+.scrollbar__container {
+  display: flex;
+  align-items: center;
+  padding-right: 20px;
+}
+.button {
+  height: 32px;
+ 
+}
+.scrollbar__container__constructor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.button__close {
+  height: 25px;
+  width: 25px;
+  background-image: url(../../images/Close__conctructor.svg);
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  background-color: inherit;
+}
+.scrollbar__constructor {
+  position: fixed;
+  z-index: 12;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1c1c21;
+  height: 64px;
+  right: 0;
+  left: 0;
+}
+@media (max-width: 700px) {
+  .main {
+    display: flex;
+    gap: 0px;
+    justify-content: center;
+  }
+}

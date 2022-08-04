@@ -1,0 +1,25 @@
+.menu {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    position: fixed;
+    background-color: #1c1c21;
+    z-index: 10;
+    width: 100%;
+}
+.button__close {
+    height: 25px;
+    width: 25px;
+    background-image: url(../../images/Close__conctructor.svg);
+    background-repeat: no-repeat;
+    border: none;
+    background-color: inherit;
+    cursor: pointer;
+  }
+  .menu__container {
+    display: flex;
+    justify-content: space-between;
+    
+  }
