@@ -10,6 +10,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useContext } from "react";
 import { useDrop, useDrag } from "react-dnd";
 import { isMobileContext } from "../../services/context/appContext";
+import SwipeToDelete from "react-swipe-to-delete-component";
+import "react-swipe-to-delete-component/dist/swipe-to-delete.css";
 import {
   DELETE_INGREDIENTS_CONSTRUCTOR,
   SET_TOTAL,
@@ -25,8 +27,16 @@ const IngredientConctructor = ({ ingredient, position }) => {
 
   function itemsDelete(ingredient) {
     let itemsNew = Array.from(ingredientsConstructor);
-    let itemDelete = itemsNew.indexOf(ingredient);
-    itemsNew.splice(itemDelete, 1);
+
+    if (ingredient.type !== "bun") {
+      let itemDelete = itemsNew.indexOf(ingredient);
+      itemsNew.splice(itemDelete, 1);
+    } else {
+      itemsNew = ingredientsConstructor.filter(
+        (ingredient) => ingredient.type !== "bun"
+      );
+    }
+
     let summ = itemsNew.reduce(
       (accumulator, currentValue) => accumulator + currentValue.price,
       0
@@ -35,11 +45,13 @@ const IngredientConctructor = ({ ingredient, position }) => {
     dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
-  const [{ isTypeDrag }, constructorDragRef] = useDrag({
+  const [{ isCanDrag, isDrag, isTypeDrag }, constructorDragRef] = useDrag({
     type: "new",
     item: ingredient,
     collect: (monitor) => ({
       isTypeDrag: monitor.getItemType(),
+      isDrag: monitor.isDragging(),
+      isCanDrag: monitor.canDrag(),
     }),
   });
 
@@ -66,67 +78,96 @@ const IngredientConctructor = ({ ingredient, position }) => {
     }),
   });
 
-
   return (
-    <div 
-      ref={
-        ingredient.type !== "bun"
-          ? isTypeDrag == "new"
-            ? constructorToggle
-            : constructorDragRef
-          : null
-      }
-      className={
-        ingredient.type !== "bun" || isMobile ? `${styles.item}  ` : undefined
-      }
-      style={isOverItem ? { opacity: "0" } : undefined}
-    >
-      {" "}
-      {(ingredient.type !== "bun" || isMobile) && <DragIcon />}
+    <div>
       {!isMobile ? (
-        <ConstructorElement
-          handleClose={() => itemsDelete(ingredient)}
-          type={position}
-          isLocked={ingredient.type === "bun" ? true : false}
-          text={
-            position === "bottom"
-              ? `${ingredient.name} (низ)`
-              : position === "top"
-              ? `${ingredient.name} (верх)`
-              : ingredient.name
+        <div
+          ref={
+            ingredient.type !== "bun"
+              ? isTypeDrag == "new"
+                ? constructorToggle
+                : constructorDragRef
+              : null
           }
-          price={ingredient.price}
-          thumbnail={ingredient.image}
-        />
+          className={ingredient.type !== "bun" ? `${styles.item}  ` : undefined}
+          style={isOverItem ? { opacity: "0" } : undefined}
+        >
+          {ingredient.type !== "bun" && !isMobile && <DragIcon />}
+          <ConstructorElement
+            handleClose={() => itemsDelete(ingredient)}
+            type={position}
+            isLocked={ingredient.type === "bun" ? true : false}
+            text={
+              position === "bottom"
+                ? `${ingredient.name} (низ)`
+                : position === "top"
+                ? `${ingredient.name} (верх)`
+                : ingredient.name
+            }
+            price={ingredient.price}
+            thumbnail={ingredient.image}
+          />
+        </div>
       ) : (
-        <div className={`${styles.constructor__element}  `}>
-          <div className={`${styles.constructor__element__container}  `}>
-            <div className={`${styles.constructor__element__img__container}`}>
-              <div className={`${styles.image__container__flex}`}>
+        <SwipeToDelete
+
+          background={
+            <div
+              className={`${
+                 styles.draging  
+              } ${styles.draging_active}`}
+            >
+             <DeleteIcon />
+            </div>
+          }
+          onDelete={() => itemsDelete(ingredient)}
+        >
+          <div
+            ref={
+              ingredient.type !== "bun"
+                ? isTypeDrag == "new"
+                  ? constructorToggle
+                  : constructorDragRef
+                : null
+            }
+            className={
+              ingredient.type !== "bun" || isMobile
+                ? `${styles.item}  `
+                : undefined
+            }
+            style={isOverItem ? { opacity: "1" } : undefined}
+          >
+            {isMobile && <DragIcon />}
+
+            <div className={`${styles.constructor__element}  `}>
+              <div className={`${styles.constructor__element__container}  `}>
                 <div
-                  style={{ backgroundImage: `url(${ingredient.image_mobile})` }}
-                  className={`${styles.constructor__element__img}  `}
-                ></div>
+                  className={`${styles.constructor__element__img__container}`}
+                >
+                  <div className={`${styles.image__container__flex}`}>
+                    <div
+                      style={{
+                        backgroundImage: `url(${ingredient.image_mobile})`,
+                      }}
+                      className={`${styles.constructor__element__img}  `}
+                    ></div>
+                  </div>
+                </div>
+                <p
+                  className={` ${styles.constructor__element__title} text text_type_main-small pt-4 pt-4 pb-4`}
+                >
+                  {ingredient.name}
+                </p>
+                <p className={`text text_type_digits-default pt-4`}>
+                  {ingredient.price}
+                </p>
+                <div className={` pt-4`}>
+                  <CurrencyIcon />
+                </div>
               </div>
             </div>
-            <p
-              className={` ${styles.constructor__element__title} text text_type_main-small pt-4 pt-4 pb-4`}
-            >
-              {ingredient.name}
-            </p>
-            <p className={`text text_type_digits-default pt-4`}>
-              {ingredient.price}
-            </p>
-            <div className={` pt-4`}>
-              <CurrencyIcon />
-            </div>
           </div>
-          <div  className={`${styles.delete}`}>
-         
-              <DeleteIcon />
-        
-          </div>
-        </div>
+        </SwipeToDelete>
       )}
     </div>
   );

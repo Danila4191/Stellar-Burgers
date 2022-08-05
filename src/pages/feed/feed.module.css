@@ -75,11 +75,13 @@
     width: 100%;
     padding-right: 0px;
     padding-left: 0px;
+    display: block;
   }
   .feed {
-    width: 100%;
+    width: 95%;
     padding-right: 8px;
     padding-left: 8px;
+   
   }
   .grid {
     display: flex;
