@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from "uuid";
 import PropTypes from "prop-types";
 import OrderInfo from "../order-info/order-info";
-import React, { useContext, useState } from "react";
+import { useContext } from "react";
 import {
   CurrencyIcon,
   Button,
@@ -18,7 +18,12 @@ import {
 } from "../../services/actions/actions";
 import IngredientConctructor from "../burger-constructor-ingredient/burger-conctructor-ingredient";
 
-const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
+const BurgerConstructor = ({
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  pageChange,
+}) => {
   const dispatch = useDispatch();
   const ingredientsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
@@ -210,7 +215,6 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
               ingredient={
                 ingredientsConstructor.filter((item) => item.type == "bun")[0]
               }
-            
             />
           ) : null}
           {ingredientsConstructor.length == 0
@@ -226,7 +230,6 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
               ingredient={
                 ingredientsConstructor.filter((item) => item.type == "bun")[0]
               }
-              
             />
           ) : null}
         </div>
@@ -259,6 +262,17 @@ const BurgerConstructor = ({ setModalActive, setModal, setOnCloseFunc }) => {
           </p>
         </Button>
       </div>
+      {isMobile && (
+        <div className={`${styles.scrollbar__constructor}`}>
+          <div className={`${styles.scrollbar__container__constructor}`}>
+            <h2 className={`pl-10 text text_type_main-large `}>Заказ</h2>
+            <button
+              onClick={pageChange}
+              className={` ${styles.button__close} pr-8`}
+            ></button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

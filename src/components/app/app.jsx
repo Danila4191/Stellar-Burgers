@@ -6,15 +6,14 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 import { getIngredients } from "../../services/actions/actions";
 import AppRoutes from "../app-routes/app-routes";
 import { isMobileContext } from "../../services/context/appContext";
-import MediaQuery, { useMediaQuery } from "react-responsive";
-import {  TouchBackend } from 'react-dnd-touch-backend';
+import { useMediaQuery } from "react-responsive";
+import { TouchBackend } from "react-dnd-touch-backend";
 const App = () => {
   const [modalActive, setModalActive] = useState(false);
   const [modal, setModal] = useState();
   const [onCloseFunc, setOnCloseFunc] = useState();
   const dispatch = useDispatch();
 
- 
   const isMobile = useMediaQuery({
     query: "(max-width: 700px)",
   });
@@ -23,15 +22,12 @@ const App = () => {
     dispatch(getIngredients());
   }, []);
 
-
- 
   const auth = true;
   const userId = "1";
   return (
     <div>
-      <isMobileContext.Provider value={{ isMobile}}>
+      <isMobileContext.Provider value={{ isMobile }}>
         <DndProvider backend={!isMobile ? HTML5Backend : TouchBackend}>
-       
           <AppRoutes
             userId={userId}
             auth={auth}
@@ -43,8 +39,7 @@ const App = () => {
           <Modal active={modalActive} onCloseFunc={onCloseFunc}>
             {modal}
           </Modal>
-          </DndProvider>
-        
+        </DndProvider>
       </isMobileContext.Provider>
     </div>
   );

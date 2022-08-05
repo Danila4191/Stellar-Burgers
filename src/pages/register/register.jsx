@@ -6,9 +6,6 @@ import Form from "../../components/form/form";
 const Register = () => {
   const [inputType, setInputType] = useState("password");
   const [ RegisterState, setRegisterState]= useState(false)
- function onChange (){
-  setRegisterState(true)
- }
 
   function setInputTypeClick() {
     if (inputType == "password") {
@@ -17,6 +14,12 @@ const Register = () => {
       setInputType("password");
     }
   }
+
+  //вызывается при изменении импута
+  function onChange (){
+    setRegisterState(true)
+   }
+
 
   return (
     <div className={`${styles.container} `}>

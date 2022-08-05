@@ -3,17 +3,15 @@ import { useState, useContext, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 
-const Menu = ({ text,  setMenuActive }) => {
+const Menu = ({ text, setMenuActive }) => {
   const [link, setLink] = useState("");
   const { isMobile } = useContext(isMobileContext);
   const location = useLocation();
+
   useEffect(() => {
     setLink(location.pathname);
   }, []);
 
-  function setLinkClick(item) {
-    setLink(item);
-  }
   return (
     <div className={`${styles.nav_container} `}>
       <nav className={`${styles.nav} `}>
@@ -34,6 +32,7 @@ const Menu = ({ text,  setMenuActive }) => {
             Профиль
           </h3>
         </NavLink>
+
         <NavLink
           onClick={() => {
             setMenuActive(false);

@@ -61,7 +61,6 @@
 .empy_active {
   border: 2px solid #801ab3;
 }
-
 .modile__list{
   padding-top: 64px;
   padding-bottom: 64px;
@@ -80,6 +79,33 @@
 }
 .modile__list::-webkit-scrollbar-thumb {
   background: #8585ad;
+}
+
+.scrollbar__container__constructor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.button__close {
+  height: 25px;
+  width: 25px;
+  background-image: url(../../images/Close__conctructor.svg);
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  background-color: inherit;
+}
+.scrollbar__constructor {
+  position: fixed;
+  z-index: 12;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1c1c21;
+  height: 64px;
+  right: 0;
+  left: 0;
 }
 
 

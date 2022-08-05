@@ -1,12 +1,13 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./login.module.css";
-import { useState,useContext } from "react";
-import { isMobileContext } from "../../services/context/appContext";
+import { useState } from "react";
 import Form from "../../components/form/form";
 import { NavLink } from "react-router-dom";
 const Login = () => {
+  
   const [inputType, setInputType] = useState("password");
-  const { isMobile } = useContext(isMobileContext);
+  const [LoginState, setLoginState] = useState(false);
+
   function setInputTypeClick() {
     if (inputType == "password") {
       setInputType("text");
@@ -14,17 +15,20 @@ const Login = () => {
       setInputType("password");
     }
   }
-  const [ LoginState, setLoginState]= useState(false)
- function onChange (){
-  setLoginState(true)
- }
+  //вызывается при изменении импута
+  function onChange (){
+    setLoginState(true)
+   }
 
   return (
     <div className={`${styles.container} `}>
       <div>
-        <Form title={"Вход"} button={"Войти"} 
-              buttonState={LoginState}
-              buttonFunc={setLoginState}> 
+        <Form
+          title={"Вход"}
+          button={"Войти"}
+          buttonState={LoginState}
+          buttonFunc={setLoginState}
+        >
           <div className={`${styles.input__container}  pt-6`}>
             <Input type={"email"} placeholder={"E-mail"} size={"default"} />
           </div>
@@ -47,12 +51,10 @@ const Login = () => {
         </p>
         <p className={`${styles.text} pt-4 text_type_main-small`}>
           Забыли пароль?
-        <NavLink className={`${styles.link} `} to="/forgot-password">
-          <span className={`${styles.span} `}> Восстановить пароль</span>
+          <NavLink className={`${styles.link} `} to="/forgot-password">
+            <span className={`${styles.span} `}> Восстановить пароль</span>
           </NavLink>
-
         </p>
-  
       </div>
     </div>
   );

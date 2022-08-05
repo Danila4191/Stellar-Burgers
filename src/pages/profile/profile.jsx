@@ -9,6 +9,8 @@ import Menu from "../../components/menu/menu";
 import { isMobileContext } from "../../services/context/appContext";
 const Profile = () => {
   const [inputType, setInputType] = useState("password");
+  const [profileState, setProfileState] = useState(false);
+  const { isMobile } = useContext(isMobileContext);
 
   function setInputTypeClick() {
     if (inputType == "password") {
@@ -17,12 +19,12 @@ const Profile = () => {
       setInputType("password");
     }
   }
-  const [profileState, setProfileState] = useState(false);
+  //вызывается при изменении импута
   function onChange() {
     setProfileState(true);
   }
 
-  const { isMobile } = useContext(isMobileContext);
+  
   const name = "123";
   const login = "123";
   const password = "123";
@@ -30,11 +32,9 @@ const Profile = () => {
     <div className={`${styles.container} `}>
       {!isMobile && (
         <Menu
-        
           text={" В этом разделе вы можете изменить свои персональные данные"}
         />
       )}
-
       <Form
         button={"Сохранить"}
         buttonState={profileState}
@@ -44,6 +44,7 @@ const Profile = () => {
         <div className={`${styles.input__container}  pt-6`}>
           <Input
             disabled={false}
+            onChange={onChange}
             value={name}
             icon={"EditIcon"}
             type={"text"}

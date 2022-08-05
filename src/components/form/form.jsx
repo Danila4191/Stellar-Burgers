@@ -1,9 +1,9 @@
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./form.module.css";
-import { useContext } from "react";
-import { isMobileContext } from "../../services/context/appContext";
+
 const Form = (props) => {
-  const { isMobile } = useContext(isMobileContext);
+
+  //сохранить изменение отключить кнопку
   function onClick(){
     props.buttonFunc()
   }

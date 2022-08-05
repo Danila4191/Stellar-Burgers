@@ -10,9 +10,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../menu/menu";
 
-const Navigation = ({ auth, setMenuActive }) => {
+const Navigation = ({ auth, setMenuActive, menuActive }) => {
   const { isMobile } = useContext(isMobileContext);
-
   const [link, setLink] = useState("");
   const [menuActiveProfile, setMenuActiveProfile] = useState(false);
   const location = useLocation();
@@ -21,10 +20,6 @@ const Navigation = ({ auth, setMenuActive }) => {
     setLink(location.pathname);
   }, []);
 
-
-  function setLinkClick(link) {
-    setLink(link);
-  }
   function menuActiveChange() {
     if (menuActiveProfile == false) {
       setMenuActiveProfile(true);
@@ -32,6 +27,7 @@ const Navigation = ({ auth, setMenuActive }) => {
       setMenuActiveProfile(false);
     }
   }
+  
   return (
     <nav className={`${styles.nav} `}>
       <div className={`${styles.links} `}>
@@ -43,7 +39,7 @@ const Navigation = ({ auth, setMenuActive }) => {
           }}
         >
           <div
-            className={`${styles.container}   ${
+            className={`${styles.container} ${
               "/" == link ? styles.active : null
             }  mt-4 pl-5 pr-5 pt-4 pb-4 text_type_main-small `}
           >
@@ -51,6 +47,7 @@ const Navigation = ({ auth, setMenuActive }) => {
             Конструктор
           </div>
         </NavLink>
+
         <NavLink
           to="/feed"
           className={`${styles.link}`}
@@ -75,16 +72,21 @@ const Navigation = ({ auth, setMenuActive }) => {
           </NavLink>
         </div>
       )}
-      {isMobile && menuActiveProfile && (
+      {isMobile && menuActiveProfile && auth && (
         <div className="pl-10 ml-3">
           <Menu setMenuActive={setMenuActive} />
         </div>
       )}
+
       <NavLink
-        to={!isMobile && (auth ? "/profile" : "/Login")}
+        to={ !menuActive && (auth ? "/profile" : "/Login")}
         className={`${styles.link}  `}
         onClick={
-          !isMobile ? () => setLinkClick("/Login") : () => menuActiveChange()
+          !isMobile
+            ? () => setLink("/profile")
+            : !auth
+            ? () => setMenuActive(false)
+            : () => menuActiveChange()
         }
       >
         <div
@@ -96,13 +98,15 @@ const Navigation = ({ auth, setMenuActive }) => {
         >
           <ProfileIcon
             type={
-             ( "/Login" == link || "/profile" == link || "/profile/orders" == link )
+              "/Login" == link ||
+              "/profile" == link ||
+              "/profile/orders" == link
                 ? "primary"
                 : "secondary"
             }
           />
           Личный кабинет
-          {isMobile && (
+          {isMobile && auth && (
             <button
               onClick={menuActiveChange}
               className={`${styles.open__menu} ${

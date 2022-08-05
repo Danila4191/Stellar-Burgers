@@ -1,6 +1,7 @@
 import React, { useContext, useState } from "react";
+import { isMobileContext } from "../../services/context/appContext";
 import PropTypes from "prop-types";
-import { Tab } from "@ya.praktikum/react-developer-burger-ui-components";
+import {  CurrencyIcon,  Button,} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 import { useSelector } from "react-redux";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
@@ -25,13 +26,15 @@ const BurgerIngredients = ({
   setModal,
   setOnCloseFunc,
   modalActive,
+  pageChange,
 }) => {
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
   );
   const [cursorPosition, setCursorPosition] = React.useState({});
   const [current, setCurrent] = useState("");
-
+  const { isMobile } = useContext(isMobileContext);
+  const total = useSelector((state) => state.total.total);
   function sroll(type) {
     setCurrent(type);
     document
@@ -55,7 +58,6 @@ const BurgerIngredients = ({
     } else if (cursorPosition.y < main) {
       setCurrent("main");
     }
-  
   };
 
   return (
@@ -155,6 +157,22 @@ const BurgerIngredients = ({
           </Grid>
         </div>
       </div>
+
+      {isMobile && (
+        <div className={`${styles.scrollbar__mobile }`}>
+          <div className={`${styles.scrollbar__mobile__container} pl-2`}>
+            <p className={`pr-2 text text_type_digits-default `}>{total}</p>
+            <CurrencyIcon />
+          </div>
+          <div className={`${styles.scrollbar__button__mobile } pt-4 pr-3`}>
+            <Button onClick={pageChange} type="primary" size="small">
+              <p className={` text text_type_main-small `}>
+                {"Смотреть заказ "}
+              </p>
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

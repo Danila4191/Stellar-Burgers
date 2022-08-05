@@ -14,6 +14,8 @@ const ResetPassword = () => {
     }
   }
   const [ ResetPasswordState, setResetPasswordState]= useState(false)
+
+   //вызывается при изменении импута
  function onChange (){
   setResetPasswordState(true)
  }

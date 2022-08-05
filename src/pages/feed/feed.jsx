@@ -1,10 +1,10 @@
 import styles from "./feed.module.css";
 import FeedOrders from "../../components/feed-orders/feed-orders";
-import { useState, useEffect, useContext } from "react";
-import { isMobileContext } from "../../services/context/appContext";
-import { useDispatch, useSelector } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
-import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
+import { isMobileContext } from "../../services/context/appContext";
+import { useState, useEffect, useContext } from "react";
+//import { useDispatch, useSelector } from "react-redux";
+
 //import { getFeedOrders } from "../../services/actions/actions";
 /*
   const dispatch = useDispatch();
@@ -26,95 +26,105 @@ const Feed = ({ orders }) => {
 
   return (
     <div className={` ${styles.feed__container} `}>
-      <h1 className={` ${styles.title} pl-5 mt-10 ${isMobile ? "mb-2" : "mb-10"} text_type_main-large`}>Лента заказов</h1>
-     
-   {isMobile &&   (
-       <div className={`${styles.scrollbar} pb-4`}>
-        <div
-          className={`${styles.line} ${
-            current === "orders" && styles.line_active
-          } pb-4 pt-4`}
-        >
-          <p
-            onClick={() => setCurrent("orders")}
-            className={`${styles.tab__button} text text_type_main-small`}
+      <h1
+        className={` ${styles.title} pl-5 mt-10 ${
+          isMobile ? "mb-2" : "mb-10"
+        } text_type_main-large`}
+      >
+        Лента заказов
+      </h1>
+
+      {isMobile && (
+        <div className={`${styles.scrollbar} pb-4`}>
+          <div
+            className={`${styles.line} ${
+              current === "orders" && styles.line_active
+            } pb-4 pt-4`}
           >
-         Заказы
-          </p>
-        </div>
-        <div
-          className={`${styles.line} ${
-            current === "status" && styles.line_active
-          } pb-4 pt-4`}
-        >
-          <p
-            onClick={() => setCurrent("status")}
-            className={`${styles.tab__button}  text text_type_main-small`}
+            <p
+              onClick={() => setCurrent("orders")}
+              className={`${styles.tab__button} text text_type_main-small`}
+            >
+              Заказы
+            </p>
+          </div>
+          <div
+            className={`${styles.line} ${
+              current === "status" && styles.line_active
+            } pb-4 pt-4`}
           >
+            <p
+              onClick={() => setCurrent("status")}
+              className={`${styles.tab__button}  text text_type_main-small`}
+            >
               Статистика
-          </p>
+            </p>
+          </div>
         </div>
-      </div>)}
-     
+      )}
+
       <main className={styles.main}>
-     {(current ==="orders" || !isMobile) &&  (<div>
+        {(current === "orders" || !isMobile) && (
+          <div>
             <div className={styles.feed__list__container}>
               <FeedOrders orders={newOrders} />
             </div>
-        </div>)}
-        {(current ==="status" || !isMobile) && 
-        <div className={`${styles.feed} `}>
-          <div className={`${styles.grid} `}>
-            <div>
-              <p className={`text text_type_main-medium pb-5`}>Готовы:</p>
-              <ul className={`${styles.list}  text_type_digits-default`}>
-                {orders
-                  .filter((item) => item.status == "ready")
-                  .map((item) => (
-                    <li key={uuidv4()}>{item.orderId}</li>
-                  ))}
-              </ul>
-            </div>
-            <div>
-              <p className={`text text_type_main-medium pb-5`}>В работе:</p>
-              <ul className={`${styles.list} text_type_digits-default`}>
-                {orders
-                  .filter((item) => item.status == "noready")
-                  .map((item) => (
-                    <li key={uuidv4()}>{item.orderId}</li>
-                  ))}
-              </ul>
-            </div>
           </div>
+        )}
+        {(current === "status" || !isMobile) && (
+          <div className={`${styles.feed} `}>
+            <div className={`${styles.grid} `}>
+              <div>
+                <p className={`text text_type_main-medium pb-5`}>Готовы:</p>
+                <ul className={`${styles.list}  text_type_digits-default`}>
+                  {orders
+                    .filter((item) => item.status == "ready")
+                    .map((item) => (
+                      <li key={uuidv4()}>{item.orderId}</li>
+                    ))}
+                </ul>
+              </div>
+              <div>
+                <p className={`text text_type_main-medium pb-5`}>В работе:</p>
+                <ul className={`${styles.list} text_type_digits-default`}>
+                  {orders
+                    .filter((item) => item.status == "noready")
+                    .map((item) => (
+                      <li key={uuidv4()}>{item.orderId}</li>
+                    ))}
+                </ul>
+              </div>
+            </div>
 
-          <div>
-            <h2 className={`text text_type_main-medium`}>
-              Выполнено за все время:
-            </h2>
-            <p className={`   ${styles.count} text text_type_digits-large`}>
-              {ordersReady.length}
-            </p>
-          </div>
-          <div>
-            <h2
-              className={`
+            <div>
+              <h2 className={`text text_type_main-medium`}>
+                Выполнено за все время:
+              </h2>
+              <p className={`   ${styles.count} text text_type_digits-large`}>
+                {ordersReady.length}
+              </p>
+            </div>
+            <div>
+              <h2
+                className={`
             text
            text_type_main-medium`}
-            >
-              Выполнено за сегодня:
-            </h2>
-            <p
-              className={`
+              >
+                Выполнено за сегодня:
+              </h2>
+              <p
+                className={`
             ${styles.count} text
            text_type_digits-large`}
-            >
-              {
-                ordersReady.filter((data) => !~data.time.indexOf("Cегодня,"))
-                  .length
-              }
-            </p>
+              >
+                {
+                  ordersReady.filter((data) => !~data.time.indexOf("Cегодня,"))
+                    .length
+                }
+              </p>
+            </div>
           </div>
-        </div>}
+        )}
       </main>
     </div>
   );

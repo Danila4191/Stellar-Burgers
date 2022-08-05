@@ -5,6 +5,8 @@ import Form from "../../components/form/form";
 import { useState } from "react";
 const ForgotPassword = () => {
   const [ ForgotPasswordState, setForgotPasswordState]= useState(false)
+  
+  //вызывается при изменении импута
   function onChange (){
    setForgotPasswordState(true)
   }

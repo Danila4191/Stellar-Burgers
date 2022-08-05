@@ -18,12 +18,37 @@ import {
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
 } from "../../services/actions/actions";
 
+
 const IngredientConctructor = ({ ingredient, position }) => {
   const dispatch = useDispatch();
+  const { isMobile } = useContext(isMobileContext);
   const ingredientsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
   );
-  const { isMobile } = useContext(isMobileContext);
+
+  const [{ isCanDrag, isDrag, isTypeDrag }, constructorDragRef] = useDrag({
+    type: "new",
+    item: ingredient,
+    collect: (monitor) => ({
+      isTypeDrag: monitor.getItemType(),
+      isDrag: monitor.isDragging(),
+      isCanDrag: monitor.canDrag(),
+    }),
+  });
+
+  const [{ isItem, isOverItem }, constructorToggle] = useDrop({
+    accept: "new",
+    hover() {
+      move();
+    },
+    drop() {
+      move();
+    },
+    collect: (monitor) => ({
+      isItem: monitor.getItem(),
+      isOverItem: monitor.isOver(),
+    }),
+  });
 
   function itemsDelete(ingredient) {
     let itemsNew = Array.from(ingredientsConstructor);
@@ -45,16 +70,6 @@ const IngredientConctructor = ({ ingredient, position }) => {
     dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
-  const [{ isCanDrag, isDrag, isTypeDrag }, constructorDragRef] = useDrag({
-    type: "new",
-    item: ingredient,
-    collect: (monitor) => ({
-      isTypeDrag: monitor.getItemType(),
-      isDrag: monitor.isDragging(),
-      isCanDrag: monitor.canDrag(),
-    }),
-  });
-
   function move() {
     let itemsNew = Array.from(ingredientsConstructor);
     let newItem = itemsNew.indexOf(isItem); // держу в руке
@@ -64,19 +79,6 @@ const IngredientConctructor = ({ ingredient, position }) => {
     dispatch({ type: TOOGLE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
-  const [{ isItem, isOverItem }, constructorToggle] = useDrop({
-    accept: "new",
-    hover() {
-      move();
-    },
-    drop() {
-      move();
-    },
-    collect: (monitor) => ({
-      isItem: monitor.getItem(),
-      isOverItem: monitor.isOver(),
-    }),
-  });
 
   return (
     <div>
@@ -109,8 +111,8 @@ const IngredientConctructor = ({ ingredient, position }) => {
           />
         </div>
       ) : (
-        <SwipeToDelete
 
+        <SwipeToDelete
           background={
             <div
               className={`${
@@ -168,6 +170,16 @@ const IngredientConctructor = ({ ingredient, position }) => {
             </div>
           </div>
         </SwipeToDelete>
+
+
+
+
+
+
+
+
+
+
       )}
     </div>
   );

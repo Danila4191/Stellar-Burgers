@@ -1,11 +1,7 @@
 import styles from "./mobile-menu.module.css";
 import Navigation from "../navigation/navigation";
-import { useState, useContext } from "react";
-import { isMobileContext } from "../../services/context/appContext";
 
-const MobileMenu = ({ auth, setMenuActive }) => {
-  const { isMobile } = useContext(isMobileContext);
- 
+const MobileMenu = ({ auth, setMenuActive,  menuActive }) => {
   return (
     <div className={` ${styles.menu} `}>
       <div className={` ${styles.menu__container} pt-4`}>
@@ -16,7 +12,7 @@ const MobileMenu = ({ auth, setMenuActive }) => {
         ></button>
       </div>
       <div className={`  pl-10 pt-10`}>
-        <Navigation setMenuActive={setMenuActive} auth={auth} />
+        <Navigation setMenuActive={setMenuActive} auth={auth} menuActive={menuActive} />
       </div>
     </div>
   );

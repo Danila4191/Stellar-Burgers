@@ -15,13 +15,12 @@ const AppHeader = ({ auth }) => {
            <NavLink to="/" className={`${styles.link} `}>
            <div className={`${styles.logo_mobile}`}></div>
           </NavLink>
-          
           <button onClick={()=>setMenuActive(true)}  className={`${styles.burger}`}></button>
+          { menuActive && <MobileMenu setMenuActive={setMenuActive} auth={auth} menuActive={menuActive} />}
         </div>
       ) : (
         <Navigation  auth={auth} />
       )}
-      {(isMobile && menuActive) && <MobileMenu setMenuActive={setMenuActive} auth={auth} />}
     </header>
   );
 };
