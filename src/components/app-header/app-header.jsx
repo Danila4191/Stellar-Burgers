@@ -6,7 +6,7 @@ import MobileMenu from "../mobile-menu/mobile-menu";
 import { NavLink} from "react-router-dom";
 const AppHeader = ({ auth }) => {
   const { isMobile } = useContext(isMobileContext);
-  const [menuActive,setMenuActive] = useState(false)
+  const [menuMobileActive,setMenuMobileActive] = useState(false)
 
   return (
     <header className={styles.header}>
@@ -15,8 +15,8 @@ const AppHeader = ({ auth }) => {
            <NavLink to="/" className={`${styles.link} `}>
            <div className={`${styles.logo_mobile}`}></div>
           </NavLink>
-          <button onClick={()=>setMenuActive(true)}  className={`${styles.burger}`}></button>
-          { menuActive && <MobileMenu setMenuActive={setMenuActive} auth={auth} menuActive={menuActive} />}
+          <button onClick={()=>setMenuMobileActive(true)}  className={`${styles.burger}`}></button>
+          { menuMobileActive && <MobileMenu setMenuMobileActive={setMenuMobileActive} auth={auth} menuMobileActive={menuMobileActive} />}
         </div>
       ) : (
         <Navigation  auth={auth} />

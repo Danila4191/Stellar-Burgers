@@ -3,7 +3,7 @@ import { useState, useContext, useEffect } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 
-const Menu = ({ text, setMenuActive }) => {
+const Menu = ({ text, setMenuMobileActive }) => {
   const [link, setLink] = useState("");
   const { isMobile } = useContext(isMobileContext);
   const location = useLocation();
@@ -16,9 +16,12 @@ const Menu = ({ text, setMenuActive }) => {
     <div className={`${styles.nav_container} `}>
       <nav className={`${styles.nav} `}>
         <NavLink
-          onClick={() => {
-            setMenuActive(false);
-          }}
+          onClick={
+            isMobile &&
+            (() => {
+              setMenuMobileActive(false);
+            })
+          }
           to={link !== "/profile" && "/profile"}
           className={`${styles.link}  
         ${isMobile ? "text_type_main-small" : "text_type_main-medium"}
@@ -34,9 +37,12 @@ const Menu = ({ text, setMenuActive }) => {
         </NavLink>
 
         <NavLink
-          onClick={() => {
-            setMenuActive(false);
-          }}
+          onClick={
+            isMobile &&
+            (() => {
+              setMenuMobileActive(false);
+            })
+          }
           to={link !== "/profile/orders" && "/profile/orders"}
           className={`${styles.link} 
 
@@ -51,9 +57,12 @@ const Menu = ({ text, setMenuActive }) => {
           </h3>
         </NavLink>
         <NavLink
-          onClick={() => {
-            setMenuActive(false);
-          }}
+          onClick={
+            isMobile &&
+            (() => {
+              setMenuMobileActive(false);
+            })
+          }
           to={link !== "/out" && "/out"}
           className={`${styles.link} 
 

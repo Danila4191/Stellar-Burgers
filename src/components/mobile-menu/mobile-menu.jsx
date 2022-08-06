@@ -1,18 +1,18 @@
 import styles from "./mobile-menu.module.css";
 import Navigation from "../navigation/navigation";
 
-const MobileMenu = ({ auth, setMenuActive,  menuActive }) => {
+const MobileMenu = ({ auth, setMenuMobileActive,  menuMobileActive }) => {
   return (
     <div className={` ${styles.menu} `}>
       <div className={` ${styles.menu__container} pt-4`}>
         <h2 className={` text text_type_main-large pl-10 `}>Меню</h2>
         <button
-          onClick={() => setMenuActive(false)}
+          onClick={() => setMenuMobileActive(false)}
           className={` ${styles.button__close} mt-3 pr-10`}
         ></button>
       </div>
       <div className={`  pl-10 pt-10`}>
-        <Navigation setMenuActive={setMenuActive} auth={auth} menuActive={menuActive} />
+        <Navigation setMenuMobileActive={setMenuMobileActive} auth={auth} menuMobileActive={menuMobileActive} />
       </div>
     </div>
   );

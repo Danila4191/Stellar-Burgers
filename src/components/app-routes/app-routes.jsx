@@ -2,7 +2,7 @@ import AppHeader from "../app-header/app-header";
 import styles from "./app-routes.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, HashRouter } from "react-router-dom";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Feed from "../../pages/feed/feed";
 import Profile from "../../pages/profile/profile";
@@ -39,7 +39,7 @@ const AppRoutes = ({
   }
 
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AppHeader auth={auth} />
       <Routes>
         <Route
@@ -69,10 +69,10 @@ const AppRoutes = ({
         />
         <Route path="/Login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
-        <Route exact path="/feed" element={<Feed orders={orders} />} />
-        <Route exact path="/profile" element={<Profile />} />
+        <Route  path="/feed" element={<Feed orders={orders} />} />
+        <Route  path="/profile" element={<Profile />} />
         <Route
-          exact
+         
           path="/profile/orders"
           element={<ProfileOrders orders={userOrders} />}
         />
@@ -81,7 +81,7 @@ const AppRoutes = ({
         <Route path="/feed/:id" element={<FeedId />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </BrowserRouter>
+    </HashRouter>
   );
 };
 export default AppRoutes;

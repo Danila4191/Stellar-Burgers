@@ -16,9 +16,6 @@
   column-gap: 22px;
   row-gap: 36px;
 }
-.scrollbar {
-  display: flex;
-}
 .ingredients__list {
   width: 600px;
   height: 636px;
@@ -34,31 +31,6 @@
 .ingredients__list::-webkit-scrollbar-thumb {
   background: #8585ad;
 }
-.line {
-  box-shadow: inset 0px -1px 0px #2f2f37;
-  background-color:  #131316;
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  color: #8585ad;
-  transition: 0.4s;
-}
-.line_active {
-  box-shadow: inset 0px -2px 0px #4c4cff;
-  pointer-events: none;
-  color: #f2f2f3;
-}
-.tab__button {
-  cursor: pointer;
-}
-
-
-
-
-
-
-
-
 .scrollbar__mobile {
   position: fixed;
   bottom: 0;
@@ -74,25 +46,29 @@
   align-items: center;
   padding-right: 20px;
 }
-.button__mobile  {
+.button__mobile {
   height: 32px;
- 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+.scrollbar {
+  display: flex;
+}
+.line {
+  box-shadow: inset 0px -1px 0px #2f2f37;
+  background-color: #131316;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  color: #8585ad;
+  transition: 0.4s;
+}
+.line_active {
+  box-shadow: inset 0px -2px 0px #4c4cff;
+  pointer-events: none;
+  color: #f2f2f3;
+}
+.tab__button {
+  cursor: pointer;
+}
 
 @media (max-width: 700px) {
   .burger__ingredients {

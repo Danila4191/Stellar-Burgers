@@ -14,7 +14,9 @@ const ResetPassword = () => {
     }
   }
   const [ ResetPasswordState, setResetPasswordState]= useState(false)
-
+  const [passwordValueOne, setpasswordValueOne] = useState("");
+  const [passwordValueTwo, setpasswordValueTwo] = useState("");
+  const [codValue, setCodValue] = useState("");
    //вызывается при изменении импута
  function onChange (){
   setResetPasswordState(true)
@@ -29,6 +31,8 @@ const ResetPassword = () => {
         >
           <div className={`${styles.input__container}  pt-6`}>
             <Input
+            onChange={onChange}
+            value={passwordValueOne}
               type={inputType}
               success={true}
               placeholder={"Введите новый пароль"}
@@ -37,6 +41,8 @@ const ResetPassword = () => {
           </div>
           <div className={`${styles.input__container}  pt-6`}>
             <Input
+              onChange={onChange}
+                value={passwordValueTwo}
               onIconClick={setInputTypeClick}
               type={inputType}
               success={true}
@@ -47,6 +53,8 @@ const ResetPassword = () => {
           </div>
           <div className={`${styles.input__container}  pt-6`}>
             <Input
+              onChange={onChange}
+            value={codValue}
               type={"text"}
               placeholder={"Введите код из письма"}
               size={"default"}

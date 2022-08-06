@@ -5,7 +5,8 @@ import Form from "../../components/form/form";
 import { useState } from "react";
 const ForgotPassword = () => {
   const [ ForgotPasswordState, setForgotPasswordState]= useState(false)
-  
+ 
+  const [loginValue, setLoginValue] = useState("");
   //вызывается при изменении импута
   function onChange (){
    setForgotPasswordState(true)
@@ -21,7 +22,7 @@ const ForgotPassword = () => {
           buttonFunc={setForgotPasswordState}
         >
           <div className={`${styles.input__container}  pt-6`}>
-            <Input type={"email"} placeholder={"E-mail"} size={"default"} />
+            <Input  onChange={onChange} value={loginValue} type={"email"} placeholder={"E-mail"} size={"default"} />
           </div>
         </Form>
         <p className={`${styles.text} pt-15 text_type_main-small`}>

@@ -2,7 +2,11 @@
   display: flex;
   justify-content: center;
 }
-
+.cansel_button{
+  border: 0;
+background-color: inherit;
+cursor: pointer;
+}
 .form {
   width: 100%;
   max-width: 560px;

@@ -19,7 +19,7 @@ const Form = (props) => {
            onClick={onClick} 
           size="medium">{props.button}</Button>
         </div>
-     {props.buttonState  && <p className={`${styles.cansel} pt-4 text text_type_main-small`}>Отменить</p>}
+     {props.buttonState  && <button className={`${styles.cansel_button} `}><p className={`${styles.cansel} pt-4 text text_type_main-small`}>Отменить</p></button>}
     </form>
   );
 };

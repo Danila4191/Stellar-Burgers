@@ -7,6 +7,8 @@ const Login = () => {
   
   const [inputType, setInputType] = useState("password");
   const [LoginState, setLoginState] = useState(false);
+  const [passwordValue, setpasswordValue] = useState("");
+  const [loginValue, setLoginValue] = useState("");
 
   function setInputTypeClick() {
     if (inputType == "password") {
@@ -30,13 +32,15 @@ const Login = () => {
           buttonFunc={setLoginState}
         >
           <div className={`${styles.input__container}  pt-6`}>
-            <Input type={"email"} placeholder={"E-mail"} size={"default"} />
+            <Input value={loginValue} onChange={onChange}  type={"email"} placeholder={"E-mail"} size={"default"} />
           </div>
-          <div className={`${styles.input__container}      pt-6`}>
+          <div className={`${styles.input__container}   pt-6`}>
             <Input
               onIconClick={setInputTypeClick}
+              onChange={onChange} 
               type={inputType}
               success={true}
+              value={passwordValue}
               icon={"ShowIcon"}
               placeholder={"Пароль"}
               size={"default"}

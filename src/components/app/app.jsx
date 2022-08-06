@@ -22,7 +22,7 @@ const App = () => {
     dispatch(getIngredients());
   }, []);
 
-  const auth = true;
+  const auth = false;
   const userId = "1";
   return (
     <div>

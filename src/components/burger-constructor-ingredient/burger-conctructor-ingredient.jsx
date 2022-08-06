@@ -18,7 +18,6 @@ import {
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
 } from "../../services/actions/actions";
 
-
 const IngredientConctructor = ({ ingredient, position }) => {
   const dispatch = useDispatch();
   const { isMobile } = useContext(isMobileContext);
@@ -79,7 +78,6 @@ const IngredientConctructor = ({ ingredient, position }) => {
     dispatch({ type: TOOGLE_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
   }
 
-
   return (
     <div>
       {!isMobile ? (
@@ -111,15 +109,10 @@ const IngredientConctructor = ({ ingredient, position }) => {
           />
         </div>
       ) : (
-
         <SwipeToDelete
           background={
-            <div
-              className={`${
-                 styles.draging  
-              } ${styles.draging_active}`}
-            >
-             <DeleteIcon />
+            <div className={`${styles.draging} ${styles.draging_active}`}>
+              <DeleteIcon />
             </div>
           }
           onDelete={() => itemsDelete(ingredient)}
@@ -128,7 +121,7 @@ const IngredientConctructor = ({ ingredient, position }) => {
             ref={
               ingredient.type !== "bun"
                 ? isTypeDrag == "new"
-                  ? constructorToggle
+                  ? null
                   : constructorDragRef
                 : null
             }
@@ -156,7 +149,14 @@ const IngredientConctructor = ({ ingredient, position }) => {
                   </div>
                 </div>
                 <p
-                  className={` ${styles.constructor__element__title} text text_type_main-small pt-4 pt-4 pb-4`}
+                  ref={
+                    ingredient.type !== "bun"
+                      ? isTypeDrag == "new"
+                        ? constructorToggle
+                        : null
+                      : null
+                  }
+                  className={` ${styles.constructor__element__title} text text_type_main-small mt-4 mb-4`}
                 >
                   {ingredient.name}
                 </p>
@@ -170,16 +170,6 @@ const IngredientConctructor = ({ ingredient, position }) => {
             </div>
           </div>
         </SwipeToDelete>
-
-
-
-
-
-
-
-
-
-
       )}
     </div>
   );
