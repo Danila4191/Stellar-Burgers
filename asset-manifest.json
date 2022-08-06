@@ -1,27 +1,27 @@
 {
   "files": {
-    "main.css": "/static/css/main.37a9b13e.css",
-    "main.js": "/static/js/main.c3487aea.js",
-    "static/media/JetBrainsMono-Bold.woff2": "/static/media/JetBrainsMono-Bold.c232d532ea5a5189a278.woff2",
-    "static/media/JetBrainsMono-Regular.woff2": "/static/media/JetBrainsMono-Regular.b60380891bcf2eb241ca.woff2",
-    "static/media/JetBrainsMono-Bold.woff": "/static/media/JetBrainsMono-Bold.3914674f1cb2335acf26.woff",
-    "static/media/JetBrainsMono-Regular.woff": "/static/media/JetBrainsMono-Regular.f52bee61d00ce995b89f.woff",
-    "static/media/done.svg": "/static/media/done.fd977731a4c2e670ac18.svg",
-    "static/media/done__mobile.svg": "/static/media/done__mobile.a10e9f58f07ade93b76a.svg",
-    "static/media/iceland.woff": "/static/media/iceland.77ad7fc2baffd9305538.woff",
-    "static/media/iceland.woff2": "/static/media/iceland.4ae67a017a5ff82bbbb7.woff2",
-    "static/media/logo.svg": "/static/media/logo.2a1cbce5ca044f79cfb8.svg",
-    "static/media/Vector (Stroke).svg": "/static/media/Vector (Stroke).3e080984fa353df1b876.svg",
-    "static/media/Close__conctructor.svg": "/static/media/Close__conctructor.c4c517b0a1656e7eaaae.svg",
-    "index.html": "/index.html",
-    "static/media/menu__open.svg": "/static/media/menu__open.2d15030e46fa73843efc.svg",
-    "static/media/menu__close.svg": "/static/media/menu__close.11b9b068151b844d36e5.svg",
-    "static/media/burgerMenu.svg": "/static/media/burgerMenu.fea70713d74c58492ef1.svg",
-    "main.37a9b13e.css.map": "/static/css/main.37a9b13e.css.map",
-    "main.c3487aea.js.map": "/static/js/main.c3487aea.js.map"
+    "main.css": "/Stellar-Burgers/static/css/main.5cd68837.css",
+    "main.js": "/Stellar-Burgers/static/js/main.c7e56c40.js",
+    "static/media/JetBrainsMono-Bold.woff2": "/Stellar-Burgers/static/media/JetBrainsMono-Bold.c232d532ea5a5189a278.woff2",
+    "static/media/JetBrainsMono-Regular.woff2": "/Stellar-Burgers/static/media/JetBrainsMono-Regular.b60380891bcf2eb241ca.woff2",
+    "static/media/JetBrainsMono-Bold.woff": "/Stellar-Burgers/static/media/JetBrainsMono-Bold.3914674f1cb2335acf26.woff",
+    "static/media/JetBrainsMono-Regular.woff": "/Stellar-Burgers/static/media/JetBrainsMono-Regular.f52bee61d00ce995b89f.woff",
+    "static/media/done.svg": "/Stellar-Burgers/static/media/done.fd977731a4c2e670ac18.svg",
+    "static/media/done__mobile.svg": "/Stellar-Burgers/static/media/done__mobile.a10e9f58f07ade93b76a.svg",
+    "static/media/iceland.woff": "/Stellar-Burgers/static/media/iceland.77ad7fc2baffd9305538.woff",
+    "static/media/iceland.woff2": "/Stellar-Burgers/static/media/iceland.4ae67a017a5ff82bbbb7.woff2",
+    "static/media/logo.svg": "/Stellar-Burgers/static/media/logo.2a1cbce5ca044f79cfb8.svg",
+    "static/media/Vector (Stroke).svg": "/Stellar-Burgers/static/media/Vector (Stroke).3e080984fa353df1b876.svg",
+    "static/media/Close__conctructor.svg": "/Stellar-Burgers/static/media/Close__conctructor.c4c517b0a1656e7eaaae.svg",
+    "index.html": "/Stellar-Burgers/index.html",
+    "static/media/menu__open.svg": "/Stellar-Burgers/static/media/menu__open.2d15030e46fa73843efc.svg",
+    "static/media/menu__close.svg": "/Stellar-Burgers/static/media/menu__close.11b9b068151b844d36e5.svg",
+    "static/media/burgerMenu.svg": "/Stellar-Burgers/static/media/burgerMenu.fea70713d74c58492ef1.svg",
+    "main.5cd68837.css.map": "/Stellar-Burgers/static/css/main.5cd68837.css.map",
+    "main.c7e56c40.js.map": "/Stellar-Burgers/static/js/main.c7e56c40.js.map"
   },
   "entrypoints": [
-    "static/css/main.37a9b13e.css",
-    "static/js/main.c3487aea.js"
+    "static/css/main.5cd68837.css",
+    "static/js/main.c7e56c40.js"
   ]
 }
