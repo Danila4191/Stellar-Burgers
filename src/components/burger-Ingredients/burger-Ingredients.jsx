@@ -1,7 +1,10 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import PropTypes from "prop-types";
-import {  CurrencyIcon,  Button,} from "@ya.praktikum/react-developer-burger-ui-components";
+import {
+  CurrencyIcon,
+  Button,
+} from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 import { useSelector } from "react-redux";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
@@ -27,6 +30,7 @@ const BurgerIngredients = ({
   setOnCloseFunc,
   modalActive,
   pageChange,
+
 }) => {
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
@@ -35,11 +39,15 @@ const BurgerIngredients = ({
   const [current, setCurrent] = useState("");
   const { isMobile } = useContext(isMobileContext);
   const total = useSelector((state) => state.total.total);
+
+
+
+
   function sroll(type) {
-    setCurrent(type);
     document
       .querySelector(`#${type}`)
       .scrollIntoView({ block: "start", behavior: "smooth" });
+      OnScrol()
   }
 
   const OnScrol = (e) => {
@@ -51,6 +59,7 @@ const BurgerIngredients = ({
       ...cursorPosition,
       y: scrollTop,
     });
+
     if (cursorPosition.y < bun) {
       setCurrent("bun");
     } else if (cursorPosition.y > bun && cursorPosition.y < souse) {
@@ -67,8 +76,9 @@ const BurgerIngredients = ({
       </h1>
       <div className={`${styles.scrollbar} pb-10`}>
         <div
+        
           className={`${styles.line} ${
-            current === "bun" && styles.line_active
+            current == "bun" && styles.line_active
           } pb-4 pt-4`}
         >
           <p
@@ -80,7 +90,7 @@ const BurgerIngredients = ({
         </div>
         <div
           className={`${styles.line} ${
-            current === "souce" && styles.line_active
+            current == "souce" && styles.line_active
           } pb-4 pt-4`}
         >
           <p
@@ -92,7 +102,7 @@ const BurgerIngredients = ({
         </div>
         <div
           className={`${styles.line}  ${
-            current === "main" && styles.line_active
+            current == "main" && styles.line_active
           } pb-4 pt-4`}
         >
           <p
@@ -159,12 +169,12 @@ const BurgerIngredients = ({
       </div>
 
       {isMobile && (
-        <div className={`${styles.scrollbar__mobile }`}>
+        <div className={`${styles.scrollbar__mobile}`}>
           <div className={`${styles.scrollbar__mobile__container} pl-2`}>
             <p className={`pr-2 text text_type_digits-default `}>{total}</p>
             <CurrencyIcon />
           </div>
-          <div className={`${styles.scrollbar__button__mobile } pt-4 pr-3`}>
+          <div className={`${styles.scrollbar__button__mobile} pt-4 pr-3`}>
             <Button onClick={pageChange} type="primary" size="small">
               <p className={` text text_type_main-small `}>
                 {"Смотреть заказ "}

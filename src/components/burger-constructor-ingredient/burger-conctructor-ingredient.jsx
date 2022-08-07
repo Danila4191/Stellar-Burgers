@@ -110,6 +110,7 @@ const IngredientConctructor = ({ ingredient, position }) => {
         </div>
       ) : (
         <SwipeToDelete
+        deleteSwipe = {0.3}
           background={
             <div className={`${styles.draging} ${styles.draging_active}`}>
               <DeleteIcon />
@@ -118,13 +119,6 @@ const IngredientConctructor = ({ ingredient, position }) => {
           onDelete={() => itemsDelete(ingredient)}
         >
           <div
-            ref={
-              ingredient.type !== "bun"
-                ? isTypeDrag == "new"
-                  ? null
-                  : constructorDragRef
-                : null
-            }
             className={
               ingredient.type !== "bun" || isMobile
                 ? `${styles.item}  `
@@ -132,7 +126,11 @@ const IngredientConctructor = ({ ingredient, position }) => {
             }
             style={isOverItem ? { opacity: "1" } : undefined}
           >
-            {isMobile && <DragIcon />}
+            {isMobile && (
+      
+                <DragIcon />
+          
+            )}
 
             <div className={`${styles.constructor__element}  `}>
               <div className={`${styles.constructor__element__container}  `}>
@@ -141,6 +139,7 @@ const IngredientConctructor = ({ ingredient, position }) => {
                 >
                   <div className={`${styles.image__container__flex}`}>
                     <div
+                    
                       style={{
                         backgroundImage: `url(${ingredient.image_mobile})`,
                       }}
@@ -153,7 +152,7 @@ const IngredientConctructor = ({ ingredient, position }) => {
                     ingredient.type !== "bun"
                       ? isTypeDrag == "new"
                         ? constructorToggle
-                        : null
+                        : constructorDragRef
                       : null
                   }
                   className={` ${styles.constructor__element__title} text text_type_main-small mt-4 mb-4`}

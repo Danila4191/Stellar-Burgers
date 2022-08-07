@@ -252,7 +252,8 @@ const BurgerConstructor = ({
               ? true
               : false
           }
-          onClick={openModal}
+          onClick={openModal 
+            }
           type="primary"
           size={isMobile ? "small" : "large"}
         >
@@ -267,7 +268,8 @@ const BurgerConstructor = ({
           <div className={`${styles.scrollbar__container__constructor}`}>
             <h2 className={`pl-10 text text_type_main-large `}>Заказ</h2>
             <button
-              onClick={pageChange}
+              onClick={pageChange
+            }
               className={` ${styles.button__close} pr-8`}
             ></button>
           </div>

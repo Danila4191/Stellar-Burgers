@@ -28,19 +28,22 @@ const AppRoutes = ({
   const { loading, failed } = useSelector((state) => state.ingredients);
   const { isMobile } = useContext(isMobileContext);
   const [page, setPage] = useState("ingredients");
+  const [headerActive, setHeaderActive] = useState(true);
   let userOrders = orders.filter((item) => item.userId == userId);
 
   function pageChange() {
     if (page == "ingredients") {
       setPage("constructor");
+      setHeaderActive(false);
     } else {
       setPage("ingredients");
+      setHeaderActive(true);
     }
   }
 
   return (
     <HashRouter>
-      <AppHeader auth={auth} />
+      {headerActive && <AppHeader auth={auth} />}
       <Routes>
         <Route
           path="/"
@@ -69,10 +72,9 @@ const AppRoutes = ({
         />
         <Route path="/Login" element={<Login />} />
         <Route path="/registration" element={<Register />} />
-        <Route  path="/feed" element={<Feed orders={orders} />} />
-        <Route  path="/profile" element={<Profile />} />
+        <Route path="/feed" element={<Feed orders={orders} />} />
+        <Route path="/profile" element={<Profile />} />
         <Route
-         
           path="/profile/orders"
           element={<ProfileOrders orders={userOrders} />}
         />
