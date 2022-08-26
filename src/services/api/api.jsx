@@ -1,18 +1,8 @@
 import baseUrl from "../../utils/utils";
+import { getCookie } from "../../utils/cookie/cookie";
 export const onResponce = (res) => {
   return res.ok ? res.json() : Promise.reject(res);
 };
-
-function getCookie(name) {
-  const matches = document.cookie.match(
-    new RegExp(
-      "(?:^|; )" +
-        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
-        "=([^;]*)"
-    )
-  );
-  return matches ? decodeURIComponent(matches[1]) : undefined;
-}
 
 export function getIngredientsApi() {
   return fetch(`${baseUrl}/ingredients`).then((res) => onResponce(res));
@@ -25,7 +15,6 @@ export const getOrderNumberApi = (data) => {
       "Content-Type": "application/json",
       Authorization: "Bearer " + getCookie("token"),
     },
-
     body: JSON.stringify(data),
   }).then((res) => onResponce(res));
 };

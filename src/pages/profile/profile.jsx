@@ -1,7 +1,5 @@
 import {
   Input,
-  EmailInput,
-  ShowIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
 import { useState, useContext, useEffect } from "react";
@@ -9,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Form from "../../components/form/form";
 import Menu from "../../components/menu/menu";
 import { isMobileContext } from "../../services/context/appContext";
-import { getUser } from "../../services/actions/actions";
+import { getUser } from "../../services/actions/userActions/userActions";
 import { userFixApi } from "../../services/api/api";
 //import { getCookie } from "../../services/actions/actions";
 const Profile = () => {

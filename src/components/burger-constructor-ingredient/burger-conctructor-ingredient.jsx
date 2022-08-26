@@ -16,7 +16,7 @@ import {
   DELETE_INGREDIENTS_CONSTRUCTOR,
   SET_TOTAL,
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
-} from "../../services/actions/actions";
+} from "../../services/actions/ingredientsActions/ingredientsActions";
 
 const IngredientConctructor = ({ ingredient, position }) => {
   const dispatch = useDispatch();

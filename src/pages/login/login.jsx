@@ -3,9 +3,9 @@ import styles from "./login.module.css";
 import { useState, useEffect } from "react";
 import Form from "../../components/form/form";
 import { NavLink, useNavigate,} from "react-router-dom";
-import { authLogin } from "../../services/actions/actions";
+import { authLogin } from "../../services/actions/userActions/userActions";
 import { useDispatch, useSelector } from "react-redux";
-import { getCookie } from "../../services/actions/actions";
+import { getCookie } from "../../utils/cookie/cookie";
 const Login = ({ lastPage, auth,  setlastPage }) => {
   const [inputType, setInputType] = useState("password");
   const [LoginButtonActive, setLoginButtonActive] = useState(false);

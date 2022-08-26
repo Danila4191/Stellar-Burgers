@@ -1,14 +1,10 @@
 import styles from "./out.module.css";
-import {
-  Button,
-} from "@ya.praktikum/react-developer-burger-ui-components";
-
+import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import { authOutApi } from "../../services/api/api";
 import { useSelector, useDispatch } from "react-redux";
-import { deleteCookie } from "../../services/actions/actions";
-import { GET_USER, AUTH_LOGIN } from "../../services/actions/actions";
-import { getCookie } from "../../services/actions/actions";
+import { GET_USER, AUTH_LOGIN } from "../../services/actions/userActions/userActions";
+import { getCookie, deleteCookie } from "../../utils/cookie/cookie";
 import { useContext } from "react";
 import { codeSendContext } from "../../services/context/appContext";
 
@@ -19,14 +15,17 @@ const Out = () => {
   let navigate = useNavigate();
   function onClick() {
     authOutApi({
-      token: getCookie('refreshToken'), // refreshToken
+      token: getCookie("refreshToken"), // refreshToken
     });
-    dispatch({ type: GET_USER, payload: {userData: null} });
-    dispatch({ type: AUTH_LOGIN, payload: {user: null, accessToken: null,refreshToken : null} });
-    deleteCookie('token');
-    deleteCookie('refreshToken');
+    dispatch({ type: GET_USER, payload: { userData: null } });
+    dispatch({
+      type: AUTH_LOGIN,
+      payload: { user: null, accessToken: null, refreshToken: null },
+    });
+    deleteCookie("token");
+    deleteCookie("refreshToken");
     navigate("/Login");
-    setCodeSend(false)
+    setCodeSend(false);
   }
   const dispatch = useDispatch();
   return (

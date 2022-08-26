@@ -16,7 +16,7 @@ import {
   ADD_INGREDIENTS_CONSTRUCTOR,
   SET_TOTAL,
   getOrderNumber,
-} from "../../services/actions/actions";
+} from "../../services/actions/ingredientsActions/ingredientsActions";
 import IngredientConctructor from "../burger-constructor-ingredient/burger-conctructor-ingredient";
 
 const BurgerConstructor = ({

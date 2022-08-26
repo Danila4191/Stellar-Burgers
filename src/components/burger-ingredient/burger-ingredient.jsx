@@ -15,7 +15,7 @@ import {
   DELETE_INGREDIENTS_CONSTRUCTOR,
   ADD_INGREDIENTS_CONSTRUCTOR,
   SET_TOTAL,
-} from "../../services/actions/actions";
+} from "../../services/actions/ingredientsActions/ingredientsActions";
 import { useContext, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import { v4 as uuidv4 } from "uuid";

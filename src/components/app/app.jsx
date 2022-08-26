@@ -3,13 +3,14 @@ import Modal from "../modal/modal";
 import { useDispatch, useSelector } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import { getIngredients, getToken } from "../../services/actions/actions";
+import { getIngredients } from "../../services/actions/ingredientsActions/ingredientsActions";
+import { getToken,getUser  } from "../../services/actions/userActions/userActions";
 import AppRoutes from "../app-routes/app-routes";
 import { isMobileContext } from "../../services/context/appContext";
 import { useMediaQuery } from "react-responsive";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { getUser } from "../../services/actions/actions";
-import { getCookie } from "../../services/actions/actions";
+
+import { getCookie } from "../../utils/cookie/cookie";
 import { codeSendContext } from "../../services/context/appContext";
 import { HashRouter } from "react-router-dom";
 const App = () => {
