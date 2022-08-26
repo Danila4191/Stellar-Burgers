@@ -2,11 +2,7 @@ import AppHeader from "../app-header/app-header";
 import styles from "./app-routes.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import {
-  Route,
-  Routes,
-  useLocation,
-} from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Feed from "../../pages/feed/feed";
 import Profile from "../../pages/profile/profile";
@@ -54,20 +50,20 @@ const AppRoutes = ({
   }
 
   let location = useLocation();
-  let background = location.state && location.state.background;
-  //console.log(background);
+  let state = location.state;
 
   return (
     <div>
       {headerActive && <AppHeader auth={auth} />}
-      <Routes location={background || location}>
+      <Routes
+        location={modalActive == true ? state?.backgroundLocation : location}
+      >
         <Route
           path="/"
           element={
             <main className={styles.main}>
               {!loading && !failed && (!isMobile || page == "ingredients") && (
                 <BurgerIngredients
-                  background={background}
                   setOnCloseFunc={setOnCloseFunc}
                   setModalActive={setModalActive}
                   setModal={setModal}
@@ -191,15 +187,18 @@ const AppRoutes = ({
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      {background && (
-        <Route
-          path="/ingredients/:id"
-          element={
-            <Modal active={modalActive} onCloseFunc={onCloseFunc}>
-              {modal}
-            </Modal>
-          }
-        />
+
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/ingredients/:id"
+            element={
+              <Modal active={modalActive} onCloseFunc={onCloseFunc}>
+                {modal}
+              </Modal>
+            }
+          />
+        </Routes>
       )}
     </div>
   );

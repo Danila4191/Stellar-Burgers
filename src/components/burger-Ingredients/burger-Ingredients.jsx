@@ -27,7 +27,6 @@ Grid.propTypes = {
 };
 
 const BurgerIngredients = ({
-  background,
   setModalActive,
   setModal,
   setOnCloseFunc,

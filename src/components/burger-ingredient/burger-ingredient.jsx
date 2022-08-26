@@ -26,8 +26,6 @@ const BurgerIngredient = ({
   setModal,
   setOnCloseFunc,
   modalActive,
-  to,
-  state,
 }) => {
   const ingredientsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
@@ -108,11 +106,8 @@ const BurgerIngredient = ({
     >
       <NavLink
         className={styles.links}
-        state={location}
-        to={{
-          pathname: `/ingredients/${ingredient._id}`,
-          state: { background: location },
-        }}
+        to={ `/ingredients/${ingredient._id}`}
+        state = {{ backgroundLocation: location }}
       >
         <div className={count === 0 ? styles.counter : undefined}>
           <Counter count={count} size={!isMobile ? "default" : "small"} />
