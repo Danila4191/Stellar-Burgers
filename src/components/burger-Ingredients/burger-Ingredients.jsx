@@ -69,10 +69,6 @@ const BurgerIngredients = ({
     }
   };
 
-
- 
-
-
   return (
     <div className={styles.burger__ingredients}>
       <h1 className={`${styles.title} mt-10 mb-5 text text_type_main-large`}>
@@ -134,7 +130,7 @@ const BurgerIngredients = ({
                 //to={`/ingredients/${ingredient._id}`}
                 to={{
                   pathname: `/ingredients/${ingredient._id}`,
-                  state: { background: location }
+                  state: { background: location },
                 }}
                 key={ingredient._id + index}
               >
@@ -153,21 +149,16 @@ const BurgerIngredients = ({
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "sauce")
             .map((ingredient, index) => (
-              <BurgerIngredient
+              <NavLink
+                className={styles.links}
+                state={location}
+                //to={`/ingredients/${ingredient._id}`}
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location },
+                }}
                 key={ingredient._id + index}
-                ingredient={ingredient}
-                setModalActive={setModalActive}
-                setModal={setModal}
-                setOnCloseFunc={setOnCloseFunc}
-                modalActive={modalActive}
-              />
-            ))}
-        </Grid>
-        <div className="pb-15">
-          <Grid id="main" title="Начинки">
-            {ingredientsFromSetver
-              .filter((ingredient) => ingredient.type == "main")
-              .map((ingredient, index) => (
+              >
                 <BurgerIngredient
                   key={ingredient._id + index}
                   ingredient={ingredient}
@@ -176,6 +167,33 @@ const BurgerIngredients = ({
                   setOnCloseFunc={setOnCloseFunc}
                   modalActive={modalActive}
                 />
+              </NavLink>
+            ))}
+        </Grid>
+        <div className="pb-15">
+          <Grid id="main" title="Начинки">
+            {ingredientsFromSetver
+              .filter((ingredient) => ingredient.type == "main")
+              .map((ingredient, index) => (
+                <NavLink
+                  className={styles.links}
+                  state={location}
+                  //to={`/ingredients/${ingredient._id}`}
+                  to={{
+                    pathname: `/ingredients/${ingredient._id}`,
+                    state: { background: location },
+                  }}
+                  key={ingredient._id + index}
+                >
+                  <BurgerIngredient
+                    key={ingredient._id + index}
+                    ingredient={ingredient}
+                    setModalActive={setModalActive}
+                    setModal={setModal}
+                    setOnCloseFunc={setOnCloseFunc}
+                    modalActive={modalActive}
+                  />
+                </NavLink>
               ))}
           </Grid>
         </div>

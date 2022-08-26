@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Modal from "../modal/modal";
 import { useDispatch, useSelector } from "react-redux";
-import OrderInfo from "../order-info/order-info";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { getIngredients, getToken } from "../../services/actions/actions";
@@ -68,6 +67,7 @@ const App = () => {
                 onCloseFunc={onCloseFunc}
                 modal={modal}
               />
+
               <Modal active={modalActive} onCloseFunc={onCloseFunc}>
                 {modal}
               </Modal>

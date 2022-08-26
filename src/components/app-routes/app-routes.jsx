@@ -3,10 +3,8 @@ import styles from "./app-routes.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
 import {
-  BrowserRouter,
   Route,
   Routes,
-  HashRouter,
   useLocation,
 } from "react-router-dom";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
@@ -57,6 +55,7 @@ const AppRoutes = ({
 
   let location = useLocation();
   let background = location.state && location.state.background;
+  console.log(background);
 
   return (
     <div>
@@ -68,7 +67,7 @@ const AppRoutes = ({
             <main className={styles.main}>
               {!loading && !failed && (!isMobile || page == "ingredients") && (
                 <BurgerIngredients
-                background={background}
+                  background={background}
                   setOnCloseFunc={setOnCloseFunc}
                   setModalActive={setModalActive}
                   setModal={setModal}
@@ -180,19 +179,18 @@ const AppRoutes = ({
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/ingredients/:id"
           element={
-           <IngredientInfo/>
+            <div className={`${isMobile ? null : "pt-20"}`}>
+              <IngredientInfo />
+            </div>
           }
         />
 
-
-
         <Route path="*" element={<NotFound />} />
       </Routes>
-
-
       {background && (
         <Route
           path="/ingredients/:id"
@@ -203,8 +201,14 @@ const AppRoutes = ({
           }
         />
       )}
-
     </div>
   );
 };
 export default AppRoutes;
+/*
+<Route
+path="/ingredients/:id"
+element={
+ <IngredientInfo/>
+}
+/>*/
