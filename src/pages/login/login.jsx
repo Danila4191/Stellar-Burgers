@@ -53,7 +53,7 @@ const Login = ({ lastPage, auth,  setlastPage }) => {
     if (user !== null && (!failed == true) && (lastPage == null)) {
       navigate("/");
     }
-  }, [user]);
+  });
  
 
   return (
