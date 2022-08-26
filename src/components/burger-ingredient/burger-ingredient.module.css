@@ -30,10 +30,14 @@
   min-height: 208px;
   position: relative;
 }
-.item:hover {
+
+.links{
+  text-decoration: none;
+  color: #F2F2F3;
+}
+.links:hover {
   color: rgb(47, 175, 214);
 }
-
 .counter {
   display: none;
 }

@@ -55,7 +55,7 @@ const AppRoutes = ({
 
   let location = useLocation();
   let background = location.state && location.state.background;
-  console.log(background);
+  //console.log(background);
 
   return (
     <div>

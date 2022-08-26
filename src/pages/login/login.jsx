@@ -2,7 +2,7 @@ import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./login.module.css";
 import { useState, useEffect } from "react";
 import Form from "../../components/form/form";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate,} from "react-router-dom";
 import { authLogin } from "../../services/actions/actions";
 import { useDispatch, useSelector } from "react-redux";
 import { getCookie } from "../../services/actions/actions";
@@ -13,6 +13,7 @@ const Login = ({ lastPage, auth,  setlastPage }) => {
   const { user, loading, failed } = useSelector((state) => state.Login);
   const dispatch = useDispatch();
   let navigate = useNavigate();
+
 
   function setInputTypeClick() {
     if (inputType == "password") {
@@ -40,16 +41,20 @@ const Login = ({ lastPage, auth,  setlastPage }) => {
       })
     );
   }
-  
+
   useEffect(() => {
-    if (auth) {
-      navigate("/");
-      setlastPage(null)
-    } else if (user !== null) {
+    if (user !== null && (!failed == true)  && (lastPage !== null)) {
       navigate(lastPage);
       setlastPage(null)
     }
   }, [user]);
+ 
+  useEffect(() => {
+    if (user !== null && (!failed == true) && (lastPage == null)) {
+      navigate("/");
+    }
+  }, [user]);
+ 
 
   return (
     user == null && (

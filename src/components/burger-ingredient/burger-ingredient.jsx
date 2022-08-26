@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
+import { NavLink, useLocation } from "react-router-dom";
 import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
@@ -25,6 +26,8 @@ const BurgerIngredient = ({
   setModal,
   setOnCloseFunc,
   modalActive,
+  to,
+  state,
 }) => {
   const ingredientsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
@@ -39,6 +42,7 @@ const BurgerIngredient = ({
   const { isMobile } = useContext(isMobileContext);
   const dispatch = useDispatch();
   const ingredientData = useSelector((state) => state.ingredient.data);
+  const location = useLocation();
 
   let navigate = useNavigate();
   function back() {
@@ -102,21 +106,32 @@ const BurgerIngredient = ({
       onClick={openModal}
       className={styles.item}
     >
-      <div className={count === 0 ? styles.counter : undefined}>
-        <Counter count={count} size={!isMobile ? "default" : "small"} />
-      </div>
-      <img
-        className={`${styles.image} pr-4 pl-4 pb-1`}
-        src={ingredient.image}
-        alt={ingredient.name}
-      />
-      <div className={`${styles.price} pb-1`}>
-        <div className="text text_type_digits-default">{ingredient.price}</div>
-        <CurrencyIcon />
-      </div>
-      <h3 className={`${styles.subtitle} text_type_main-small`}>
-        {ingredient.name}
-      </h3>
+      <NavLink
+        className={styles.links}
+        state={location}
+        to={{
+          pathname: `/ingredients/${ingredient._id}`,
+          state: { background: location },
+        }}
+      >
+        <div className={count === 0 ? styles.counter : undefined}>
+          <Counter count={count} size={!isMobile ? "default" : "small"} />
+        </div>
+        <img
+          className={`${styles.image} pr-4 pl-4 pb-1`}
+          src={ingredient.image}
+          alt={ingredient.name}
+        />
+        <div className={`${styles.price} pb-1`}>
+          <div className="text text_type_digits-default">
+            {ingredient.price}
+          </div>
+          <CurrencyIcon />
+        </div>
+        <h3 className={`${styles.subtitle} text_type_main-small`}>
+          {ingredient.name}
+        </h3>
+      </NavLink>
       {isMobile && (
         <p
           onClick={(e) => {

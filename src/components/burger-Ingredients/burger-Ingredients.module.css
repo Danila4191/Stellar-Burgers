@@ -69,13 +69,7 @@
 .tab__button {
   cursor: pointer;
 }
-.links{
-  text-decoration: none;
-  color: #F2F2F3;
-}
-.links:hover {
-  color: rgb(47, 175, 214);
-}
+
 
 @media (max-width: 700px) {
   .burger__ingredients {

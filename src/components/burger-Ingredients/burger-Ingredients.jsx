@@ -41,7 +41,7 @@ const BurgerIngredients = ({
   const [current, setCurrent] = useState("");
   const { isMobile } = useContext(isMobileContext);
   const total = useSelector((state) => state.total.total);
-  const location = useLocation();
+  
 
   function sroll(type) {
     document
@@ -124,24 +124,17 @@ const BurgerIngredients = ({
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "bun")
             .map((ingredient, index) => (
-              <NavLink
-                className={styles.links}
-                state={location}
-                //to={`/ingredients/${ingredient._id}`}
-                to={{
-                  pathname: `/ingredients/${ingredient._id}`,
-                  state: { background: location },
-                }}
-                key={ingredient._id + index}
-              >
+       
                 <BurgerIngredient
                   ingredient={ingredient}
                   setModalActive={setModalActive}
                   setModal={setModal}
+              
                   setOnCloseFunc={setOnCloseFunc}
                   modalActive={modalActive}
+                  key={ingredient._id + index}
                 />
-              </NavLink>
+            
             ))}
         </Grid>
 
@@ -149,25 +142,17 @@ const BurgerIngredients = ({
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "sauce")
             .map((ingredient, index) => (
-              <NavLink
-                className={styles.links}
-                state={location}
-                //to={`/ingredients/${ingredient._id}`}
-                to={{
-                  pathname: `/ingredients/${ingredient._id}`,
-                  state: { background: location },
-                }}
-                key={ingredient._id + index}
-              >
+      
                 <BurgerIngredient
                   key={ingredient._id + index}
                   ingredient={ingredient}
                   setModalActive={setModalActive}
                   setModal={setModal}
+           
                   setOnCloseFunc={setOnCloseFunc}
                   modalActive={modalActive}
                 />
-              </NavLink>
+      
             ))}
         </Grid>
         <div className="pb-15">
@@ -175,25 +160,17 @@ const BurgerIngredients = ({
             {ingredientsFromSetver
               .filter((ingredient) => ingredient.type == "main")
               .map((ingredient, index) => (
-                <NavLink
-                  className={styles.links}
-                  state={location}
-                  //to={`/ingredients/${ingredient._id}`}
-                  to={{
-                    pathname: `/ingredients/${ingredient._id}`,
-                    state: { background: location },
-                  }}
-                  key={ingredient._id + index}
-                >
+         
                   <BurgerIngredient
                     key={ingredient._id + index}
                     ingredient={ingredient}
                     setModalActive={setModalActive}
                     setModal={setModal}
+                
                     setOnCloseFunc={setOnCloseFunc}
                     modalActive={modalActive}
                   />
-                </NavLink>
+             
               ))}
           </Grid>
         </div>

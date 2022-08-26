@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import {
   getIngredientsApi,
   getOrderNumberApi,
@@ -151,6 +152,7 @@ export function authLogin(data) {
           setCookie("refreshToken", refreshToken);
         }
         dispatch(getUser());
+   
       })
       .catch((err) => {
         dispatch({
