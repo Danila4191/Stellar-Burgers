@@ -19,6 +19,7 @@ const Navigation = ({ auth, setMenuMobileActive, menuMobileActive }) => {
 
   useEffect(() => {
     setLink(location.pathname);
+ 
   }, );
 
   function menuActiveChange() {
@@ -44,7 +45,7 @@ const Navigation = ({ auth, setMenuMobileActive, menuMobileActive }) => {
         >
           <div
             className={`${styles.container} ${
-              "/" == link ? styles.active : null
+              "/" == link  ? styles.active : null
             }  mt-4 pl-5 pr-5 pt-4 pb-4 text_type_main-small `}
           >
             <BurgerIcon type={"/" == link ? "primary" : "secondary"} />

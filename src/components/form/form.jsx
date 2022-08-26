@@ -4,7 +4,8 @@ import styles from "./form.module.css";
 const Form = (props) => {
 
   //сохранить изменение отключить кнопку
-  function onClick(){
+  function onSubmit(e){
+    e.preventDefault();
     props.buttonFunc()
   }
   return (
@@ -16,10 +17,10 @@ const Form = (props) => {
         <div className={`${styles.button}  pt-6`}>
           <Button 
            disabled={!props.buttonState}
-           onClick={onClick} 
-          size="medium">{props.button}</Button>
+           onClick={onSubmit} 
+           size="medium">{props.button}</Button>
         </div>
-     {props.buttonState  && <button className={`${styles.cansel_button} `}><p className={`${styles.cansel} pt-4 text text_type_main-small`}>Отменить</p></button>}
+     {props.buttonState  && <button onClick= {props.buttonCansel}className={`${styles.cansel_button} `}><p className={`${styles.cansel} pt-4 text text_type_main-small`}>Отменить</p></button>}
     </form>
   );
 };

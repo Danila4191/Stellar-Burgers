@@ -10,6 +10,7 @@ import styles from "./burger-constructor.module.css";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrop } from "react-dnd";
 import { isMobileContext } from "../../services/context/appContext";
+import { useNavigate } from "react-router-dom";
 import {
   DELETE_INGREDIENTS_CONSTRUCTOR,
   ADD_INGREDIENTS_CONSTRUCTOR,
@@ -81,13 +82,16 @@ const BurgerConstructor = ({
       isHoverBun: monitor.getItemType(),
     }),
   });
-
+  let navigate = useNavigate();
+  const  user = useSelector((state) => state.User);
   const close = () => {
     dispatch({ type: SET_TOTAL, payload: 0 });
     dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: [] });
     setModalActive(false);
   };
+  
   function openModal() {
+    if(user.userData !== null){
     dispatch(
       getOrderNumber({
         ingredients: ingredientsConstructor.map((item) => `${item._id}`),
@@ -99,7 +103,9 @@ const BurgerConstructor = ({
         setOnCloseFunc(() => close);
         setModalActive(true);
       }
-    }, 200);
+    }, 200);} else {
+      navigate("/Login");
+    }
   }
 
   return (

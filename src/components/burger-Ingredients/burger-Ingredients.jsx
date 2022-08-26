@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import PropTypes from "prop-types";
+import { NavLink, useLocation } from "react-router-dom";
+
 import {
   CurrencyIcon,
   Button,
@@ -25,12 +27,12 @@ Grid.propTypes = {
 };
 
 const BurgerIngredients = ({
+  background,
   setModalActive,
   setModal,
   setOnCloseFunc,
   modalActive,
   pageChange,
-
 }) => {
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
@@ -39,15 +41,13 @@ const BurgerIngredients = ({
   const [current, setCurrent] = useState("");
   const { isMobile } = useContext(isMobileContext);
   const total = useSelector((state) => state.total.total);
-
-
-
+  const location = useLocation();
 
   function sroll(type) {
     document
       .querySelector(`#${type}`)
       .scrollIntoView({ block: "start", behavior: "smooth" });
-      OnScrol()
+    OnScrol();
   }
 
   const OnScrol = (e) => {
@@ -69,6 +69,10 @@ const BurgerIngredients = ({
     }
   };
 
+
+ 
+
+
   return (
     <div className={styles.burger__ingredients}>
       <h1 className={`${styles.title} mt-10 mb-5 text text_type_main-large`}>
@@ -76,7 +80,6 @@ const BurgerIngredients = ({
       </h1>
       <div className={`${styles.scrollbar} pb-10`}>
         <div
-        
           className={`${styles.line} ${
             current == "bun" && styles.line_active
           } pb-4 pt-4`}
@@ -125,14 +128,24 @@ const BurgerIngredients = ({
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "bun")
             .map((ingredient, index) => (
-              <BurgerIngredient
+              <NavLink
+                className={styles.links}
+                state={location}
+                //to={`/ingredients/${ingredient._id}`}
+                to={{
+                  pathname: `/ingredients/${ingredient._id}`,
+                  state: { background: location }
+                }}
                 key={ingredient._id + index}
-                ingredient={ingredient}
-                setModalActive={setModalActive}
-                setModal={setModal}
-                setOnCloseFunc={setOnCloseFunc}
-                modalActive={modalActive}
-              />
+              >
+                <BurgerIngredient
+                  ingredient={ingredient}
+                  setModalActive={setModalActive}
+                  setModal={setModal}
+                  setOnCloseFunc={setOnCloseFunc}
+                  modalActive={modalActive}
+                />
+              </NavLink>
             ))}
         </Grid>
 

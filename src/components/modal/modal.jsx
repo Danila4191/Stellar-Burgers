@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import ReactDom from "react-dom";
+
 import PropTypes from "prop-types";
 import styles from "./modal.module.css";
 import ModalOverlay from "../modal-overlay/modal-overlay";
@@ -7,6 +8,7 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 const modalRoot = document.getElementById("react-modals");
 const Modal = ({ active, children, onCloseFunc }) => {
   const ESC = 27;
+  
 
   useEffect(() => {
     const handleEscapeClose = (evt) => {

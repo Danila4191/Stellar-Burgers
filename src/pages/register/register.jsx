@@ -1,14 +1,15 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink , useNavigate} from "react-router-dom";
 import { useState } from "react";
 import Form from "../../components/form/form";
+import { registrationApi } from "../../services/api/api";
 const Register = () => {
   const [inputType, setInputType] = useState("password");
-  const [RegisterState, setRegisterState] = useState(false);
-  const [passwordValue, setpasswordValue] = useState("");
-  const [loginValue, setLoginValue] = useState("");
-  const [nameValue, setnNameValue] = useState("");
+  const [RegisterButtonActive, setRegisterButtonActive] = useState(false);
+  const [form, setValue] = useState({ email: "", name: "", password: "" });
+  let navigate = useNavigate();
+
   function setInputTypeClick() {
     if (inputType == "password") {
       setInputType("text");
@@ -18,8 +19,30 @@ const Register = () => {
   }
 
   //вызывается при изменении импута
-  function onChange() {
-    setRegisterState(true);
+
+  const onChange = (e) => {
+    setValue({ ...form, [e.target.name]: e.target.value });
+    setRegisterButtonActive(true);
+  };
+  function cansel() {
+    setValue({ email: "", name: "", password: "" });
+    setRegisterButtonActive(false);
+  }
+
+  function confirm() {
+    registrationApi({
+      email: form.email, 
+      password: form.password, 
+      name: form.name
+  } )
+      .then((data) => {
+        if (data.success) {
+          navigate("/Login");
+        }
+      })
+      .catch((err) => {
+        alert(`Ошибка ${err.status}`);
+      });
   }
 
   return (
@@ -28,8 +51,9 @@ const Register = () => {
         <Form
           title={"Регистрация"}
           button={"Зарегистрироваться"}
-          buttonState={RegisterState}
-          buttonFunc={setRegisterState}
+          buttonState={RegisterButtonActive}
+          buttonFunc={confirm}
+          buttonCansel={cansel}
         >
           <div className={`${styles.input__container}  pt-6`}>
             <Input
@@ -37,7 +61,8 @@ const Register = () => {
               type={"text"}
               placeholder={"Имя"}
               size={"default"}
-              value={nameValue}
+              value={form.name}
+              name="name"
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -46,7 +71,8 @@ const Register = () => {
               type={"email"}
               placeholder={"E-mail"}
               size={"default"}
-              value={loginValue}
+              value={form.email}
+              name="email"
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -58,7 +84,8 @@ const Register = () => {
               icon={"ShowIcon"}
               placeholder={"Пароль"}
               size={"default"}
-              value={passwordValue}
+              value={form.password}
+              name="password"
             />
           </div>
         </Form>

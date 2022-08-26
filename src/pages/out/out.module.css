@@ -1,0 +1,18 @@
+.out {
+  display: flex;
+  justify-content: center;
+  padding-top: 200px;
+}
+
+.container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: min-content;
+}
+.link{
+    text-decoration: none;
+    list-style: none;
+    color: #4c4cff;
+}

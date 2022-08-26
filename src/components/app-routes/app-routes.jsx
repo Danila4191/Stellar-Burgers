@@ -2,7 +2,13 @@ import AppHeader from "../app-header/app-header";
 import styles from "./app-routes.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { BrowserRouter, Route, Routes, HashRouter } from "react-router-dom";
+import {
+  BrowserRouter,
+  Route,
+  Routes,
+  HashRouter,
+  useLocation,
+} from "react-router-dom";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Feed from "../../pages/feed/feed";
 import Profile from "../../pages/profile/profile";
@@ -16,6 +22,10 @@ import orders from "../../utils/orders";
 import { useContext, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import NotFound from "../../pages/not-found/not-found";
+import Out from "../../pages/out/out";
+import ProtectedRoute from "../protectedRoute/protectedRoute";
+import Modal from "../modal/modal";
+import IngredientInfo from "../ingredient-info/ingredient-info";
 
 const AppRoutes = ({
   userId,
@@ -24,10 +34,14 @@ const AppRoutes = ({
   setModalActive,
   setModal,
   modalActive,
+  active,
+  onCloseFunc,
+  modal,
 }) => {
   const { loading, failed } = useSelector((state) => state.ingredients);
   const { isMobile } = useContext(isMobileContext);
   const [page, setPage] = useState("ingredients");
+  const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
   let userOrders = orders.filter((item) => item.userId == userId);
 
@@ -41,16 +55,20 @@ const AppRoutes = ({
     }
   }
 
+  let location = useLocation();
+  let background = location.state && location.state.background;
+
   return (
-    <HashRouter>
+    <div>
       {headerActive && <AppHeader auth={auth} />}
-      <Routes>
+      <Routes location={background || location}>
         <Route
           path="/"
           element={
             <main className={styles.main}>
               {!loading && !failed && (!isMobile || page == "ingredients") && (
                 <BurgerIngredients
+                background={background}
                   setOnCloseFunc={setOnCloseFunc}
                   setModalActive={setModalActive}
                   setModal={setModal}
@@ -70,20 +88,123 @@ const AppRoutes = ({
             </main>
           }
         />
-        <Route path="/Login" element={<Login />} />
-        <Route path="/registration" element={<Register />} />
+        <Route
+          path="/Login"
+          element={
+            <Login setlastPage={setlastPage} auth={auth} lastPage={lastPage} />
+          }
+        />
+
+        <Route
+          path="/registration"
+          element={
+            <ProtectedRoute auth={!auth}>
+              <Register />{" "}
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/forgot-password"
+          element={
+            <ProtectedRoute auth={!auth}>
+              <ForgotPassword />{" "}
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/reset-password"
+          element={
+            <ProtectedRoute auth={!auth}>
+              <ResetPassword />{" "}
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/feed/:id" element={<FeedId />} />
+        <Route
+          path="/profile/orders/:id"
+          element={
+            <ProtectedRoute auth={auth}>
+              <FeedId />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/feed" element={<Feed orders={orders} />} />
-        <Route path="/profile" element={<Profile />} />
+
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute
+              link="/profile"
+              setlastPage={setlastPage}
+              auth={auth}
+            >
+              <Profile />{" "}
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/out"
+          element={
+            <ProtectedRoute link="/out" setlastPage={setlastPage} auth={auth}>
+              <Out />{" "}
+            </ProtectedRoute>
+          }
+        />
+
         <Route
           path="/profile/orders"
-          element={<ProfileOrders orders={userOrders} />}
+          element={
+            <ProtectedRoute
+              link="/profile/orders"
+              setlastPage={setlastPage}
+              auth={auth}
+            >
+              <ProfileOrders orders={userOrders} />{" "}
+            </ProtectedRoute>
+          }
         />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/feed/:id" element={<FeedId />} />
+
+        <Route
+          path="/profile/orders/:id"
+          element={
+            <ProtectedRoute
+              link="/profile/orders/:id"
+              setlastPage={setlastPage}
+              auth={auth}
+            >
+              <FeedId />{" "}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ingredients/:id"
+          element={
+           <IngredientInfo/>
+          }
+        />
+
+
+
         <Route path="*" element={<NotFound />} />
       </Routes>
-    </HashRouter>
+
+
+      {background && (
+        <Route
+          path="/ingredients/:id"
+          element={
+            <Modal active={modalActive} onCloseFunc={onCloseFunc}>
+              {modal}
+            </Modal>
+          }
+        />
+      )}
+
+    </div>
   );
 };
 export default AppRoutes;

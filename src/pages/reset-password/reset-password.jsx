@@ -1,10 +1,28 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./reset-password.module.css";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import Form from "../../components/form/form";
-import { useState } from "react";
+import { useState, useContext, useEffect } from "react";
+import { resetPasswordApi } from "../../services/api/api";
+import { codeSendContext } from "../../services/context/appContext";
+
 const ResetPassword = () => {
   const [inputType, setInputType] = useState("password");
+  const [ResetPasswordButtonActive, setResetPasswordButtonActive] =
+    useState(false);
+  const { codeSend, setCodeSend } = useContext(codeSendContext);
+  const [form, setValue] = useState({
+    passwordOne: "",
+    passwordTwo: "",
+    code: "",
+  });
+  let navigate = useNavigate();
+
+  useEffect(() => {
+    if (!codeSend) {
+      navigate("/forgot-password");
+    }
+  }, []);
 
   function setInputTypeClick() {
     if (inputType == "password") {
@@ -13,28 +31,52 @@ const ResetPassword = () => {
       setInputType("password");
     }
   }
-  const [ ResetPasswordState, setResetPasswordState]= useState(false)
-  const [passwordValueOne, setpasswordValueOne] = useState("");
-  const [passwordValueTwo, setpasswordValueTwo] = useState("");
-  const [codValue, setCodValue] = useState("");
-   //вызывается при изменении импута
- function onChange (){
-  setResetPasswordState(true)
- }
+
+  //вызывается при изменении импута
+
+  const onChange = (e) => {
+    setValue({ ...form, [e.target.name]: e.target.value });
+    setResetPasswordButtonActive(true);
+  };
+  function cansel() {
+    setValue({ passwordOne: "", passwordTwo: "", code: "" });
+    setResetPasswordButtonActive(false);
+  }
+
+  function confirm() {
+    resetPasswordApi({
+      password: form.passwordTwo,
+      token: form.code,
+    })
+      .then((data) => {
+        if (data.success) {
+          setCodeSend(false);
+          navigate("/Login");
+          console.log(data);
+        }
+      })
+      .catch((err) => {
+        alert(`Ошибка ${err.status}`);
+      });
+  }
 
   return (
     <div className={`${styles.container} `}>
       <div>
-        <Form    buttonState={ResetPasswordState}
-          buttonFunc={setResetPasswordState}
-          title={"Восстановление пароля"} button={"Сохранить"} 
+        <Form
+          buttonState={ResetPasswordButtonActive}
+          buttonFunc={confirm}
+          title={"Восстановление пароля"}
+          button={"Сохранить"}
+          buttonCansel={cansel}
         >
           <div className={`${styles.input__container}  pt-6`}>
             <Input
-            onChange={onChange}
-            value={passwordValueOne}
+              onChange={onChange}
+              value={form.passwordOne}
               type={inputType}
               success={true}
+              name="passwordOne"
               placeholder={"Введите новый пароль"}
               size={"default"}
             />
@@ -42,7 +84,8 @@ const ResetPassword = () => {
           <div className={`${styles.input__container}  pt-6`}>
             <Input
               onChange={onChange}
-                value={passwordValueTwo}
+              value={form.passwordTwo}
+              name="passwordTwo"
               onIconClick={setInputTypeClick}
               type={inputType}
               success={true}
@@ -54,7 +97,8 @@ const ResetPassword = () => {
           <div className={`${styles.input__container}  pt-6`}>
             <Input
               onChange={onChange}
-            value={codValue}
+              value={form.code}
+              name="code"
               type={"text"}
               placeholder={"Введите код из письма"}
               size={"default"}

@@ -4,6 +4,7 @@ import {
   CurrencyIcon,
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredient.module.css";
+import { useNavigate } from "react-router-dom";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
@@ -39,15 +40,20 @@ const BurgerIngredient = ({
   const dispatch = useDispatch();
   const ingredientData = useSelector((state) => state.ingredient.data);
 
-  function close() {
+  let navigate = useNavigate();
+  function back() {
+    navigate("/");
+  }
+
+  function close(e) {
     setModalActive(false);
     setTimeout(() => {
       if (modalActive == false) {
         dispatch({ type: DELETE_INGREDIENT });
       }
     }, 500);
+    back();
   }
-
   function openModal() {
     if (ingredientData == null) {
       dispatch({ type: ADD_INGREDIENT, payload: ingredient });
@@ -91,9 +97,11 @@ const BurgerIngredient = ({
     }
   }
   return (
-    <div ref={
-     !isMobile ? dragRef : undefined
-      } onClick={openModal} className={styles.item}>
+    <div
+      ref={!isMobile ? dragRef : undefined}
+      onClick={openModal}
+      className={styles.item}
+    >
       <div className={count === 0 ? styles.counter : undefined}>
         <Counter count={count} size={!isMobile ? "default" : "small"} />
       </div>
@@ -111,13 +119,13 @@ const BurgerIngredient = ({
       </h3>
       {isMobile && (
         <p
-          onClick={(e) =>
-           { e.stopPropagation()
-            
-           { ingredient.type == "bun" ? onClickAddBun() : addIngredient()}
-          }
-            
-          }
+          onClick={(e) => {
+            e.stopPropagation();
+
+            {
+              ingredient.type == "bun" ? onClickAddBun() : addIngredient();
+            }
+          }}
           className={`${styles.add} text text_type_main-default`}
         >
           Добавить

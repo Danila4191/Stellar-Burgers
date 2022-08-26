@@ -1,13 +1,19 @@
 import styles from "./feed-order.module.css";
 import {  useContext } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
+
 const FeedOrder = (props) => {
   const { isMobile } = useContext(isMobileContext);
+  const location = useLocation();
+  
   return (
     <NavLink
-    to={`/feed/${props.orderId}`}
+    to={location.pathname == "/feed" ?
+      `/feed/${props.orderId}`
+      : `/profile/orders/${props.orderId}`
+    }
     className={`${styles.link}`}
   >
     <div className={`${styles.feed__order}  `}>
