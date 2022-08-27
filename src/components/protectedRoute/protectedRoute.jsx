@@ -1,22 +1,32 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Navigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-function ProtectedRoute({ auth, link, setlastPage, children }) {
-  const user = useSelector((state) => state.User.loading);
-
+/* 
+ Как мне кажется такая функция проще читается и так же универсально работает.
+ Не дает доступ неавторизированным пользователям к страницам для авторизованных, а
+ в противоположной ситуации возвращает на главную, чтобы пользователь понял, что на ту страницу доступа нет.
+ Хранится последняя страница в стейте файла со всеми маршрутами поэтому из каждого компонента
+ удобно получить доступ к ней.
+ */
+ function ProtectedRoute({
+  auth,
+  link,
+  setlastPage,
+  children,
+}) {
   let navigate = useNavigate();
   useEffect(() => {
     if (!auth) {
       if (link) {
         setlastPage(link);
         requestAnimationFrame(() => {
-          navigate("/Login", { replace: true });
+          navigate("/Login");
         });
         return null;
       } else {
         requestAnimationFrame(() => {
-          navigate("/", { replace: true });
+          navigate("/");
         });
         return null;
       }

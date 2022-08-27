@@ -1,6 +1,4 @@
-import {
-  Input,
-} from "@ya.praktikum/react-developer-burger-ui-components";
+import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./profile.module.css";
 import { useState, useContext, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -16,15 +14,24 @@ const Profile = () => {
   const { isMobile } = useContext(isMobileContext);
   const [form, setValue] = useState({ email: "", name: "", password: "" });
   const user = useSelector((state) => state.User.userData);
+  const [errorName, setErrorName] = useState({ error: false, errorText: "" });
+  const [errorEmail, setErrorEmail] = useState({ error: false, errorText: "" });
+  const [errorPassword, setErrorPassword] = useState({
+    error: false,
+    errorText: "",
+  });
   const dispatch = useDispatch();
 
- 
   useEffect(() => {
-    if (user !== null) { 
+    if (user !== null) {
       setValue({ email: user.email, name: user.name, password: form.password });
-    } 
-  },[user]);
+    }
+  }, [user]);
 
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
   function setInputTypeClick() {
     if (inputType == "password") {
       setInputType("text");
@@ -35,13 +42,53 @@ const Profile = () => {
 
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
-    setProfileButtonActive(true);
+    // setProfileButtonActive(true);
   };
 
   function cansel() {
     setValue({ email: user.email, name: user.name, password: "" });
-    setProfileButtonActive(false);
+    //setProfileButtonActive(false);
   }
+ 
+  useEffect(() => {
+    if (
+      form.name == "" ||
+      form.email == "" ||
+      errorEmail.error ||
+      errorName.error ||
+      (user.name == form.name && form.email == user.email)
+    ) {
+      setProfileButtonActive(false);
+    } else {
+      setProfileButtonActive(true);
+    }
+  });
+
+  useEffect(() => {
+    if (form.name.length < 5 && form.name.length !== 0) {
+      setErrorName({ error: true, errorText: "Слишком короткое имя" });
+    } else {
+      setErrorName({ error: false, errorText: "" });
+    }
+  }, [form.name]);
+
+  useEffect(() => {
+    if (validateEmail(form.email)) {
+      setErrorEmail({ error: false, errorText: "" });
+    } else if (form.email.length !== 0) {
+      setErrorEmail({ error: true, errorText: "Некоректный email" });
+    } else {
+      setErrorEmail({ error: false, errorText: "" });
+    }
+  }, [form.email]);
+
+  useEffect(() => {
+    if (form.password.length < 8 && form.password.length !== 0) {
+      setErrorPassword({ error: true, errorText: "Слишком короткий пароль" });
+    } else {
+      setErrorPassword({ error: false, errorText: "" });
+    }
+  }, [form.password]);
 
   function confirm() {
     userFixApi({
@@ -67,7 +114,7 @@ const Profile = () => {
           text={" В этом разделе вы можете изменить свои персональные данные"}
         />
       ) : null}
-      {(user == null ) ? null : (
+      {user == null ? null : (
         <Form
           button={"Сохранить"}
           buttonState={profileButtonActive}
@@ -85,6 +132,8 @@ const Profile = () => {
               type={"text"}
               placeholder={"Имя"}
               size={"default"}
+              error={errorName.error}
+              errorText={errorName.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -98,6 +147,8 @@ const Profile = () => {
               icon={"EditIcon"}
               placeholder={"Email"}
               size={"default"}
+              error={errorEmail.error}
+              errorText={errorEmail.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -112,6 +163,8 @@ const Profile = () => {
               icon={"ShowIcon"}
               placeholder={"Пароль"}
               size={"default"}
+              error={errorPassword.error}
+              errorText={errorPassword.errorText}
             />
           </div>
         </Form>

@@ -2,27 +2,48 @@ import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./forgot-password.module.css";
 import { NavLink, useNavigate } from "react-router-dom";
 import Form from "../../components/form/form";
-import { useState,useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import { codeSendContext } from "../../services/context/appContext";
-import {getEmailCodeApi,  } from "../../services/api/api";
+import { getEmailCodeApi } from "../../services/api/api";
 const ForgotPassword = () => {
   const [ForgotPasswordButtonActive, setForgotPasswordButtonActive] =
     useState(false);
   const [form, setValue] = useState({ email: "" });
   const { setCodeSend } = useContext(codeSendContext);
+  const [errorEmail, setErrorEmail] = useState({ error: false, errorText: "" });
   let navigate = useNavigate();
   //вызывается при изменении импута
 
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
-    setForgotPasswordButtonActive(true);
+    //setForgotPasswordButtonActive(true);
   };
   function cansel() {
     setValue({ email: "" });
     setForgotPasswordButtonActive(false);
   }
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+ 
+  useEffect(() => {
+    if (form.email == "" || errorEmail.error) {
+      setForgotPasswordButtonActive(false);
+    } else {
+      setForgotPasswordButtonActive(true);
+    }
+  });
 
-
+  useEffect(() => {
+    if (validateEmail(form.email)) {
+      setErrorEmail({ error: false, errorText: "" });
+    } else if (form.email.length !== 0) {
+      setErrorEmail({ error: true, errorText: "Некоректный email" });
+    } else {
+      setErrorEmail({ error: false, errorText: "" });
+    }
+  }, [form.email]);
 
   function confirm() {
     getEmailCodeApi({
@@ -30,7 +51,7 @@ const ForgotPassword = () => {
     })
       .then((data) => {
         if (data.success) {
-          setCodeSend(true)
+          setCodeSend(true);
           navigate("/reset-password");
         }
       })
@@ -57,6 +78,8 @@ const ForgotPassword = () => {
               type={"email"}
               placeholder={"E-mail"}
               size={"default"}
+              error={errorEmail.error}
+              errorText={errorEmail.errorText}
             />
           </div>
         </Form>

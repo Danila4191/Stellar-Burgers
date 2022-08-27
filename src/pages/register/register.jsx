@@ -1,13 +1,20 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./register.module.css";
-import { NavLink , useNavigate} from "react-router-dom";
-import { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Form from "../../components/form/form";
 import { registrationApi } from "../../services/api/api";
 const Register = () => {
   const [inputType, setInputType] = useState("password");
+  const [errorName, setErrorName] = useState({ error: false, errorText: "" });
+  const [errorEmail, setErrorEmail] = useState({ error: false, errorText: "" });
+  const [errorPassword, setErrorPassword] = useState({
+    error: false,
+    errorText: "",
+  });
   const [RegisterButtonActive, setRegisterButtonActive] = useState(false);
   const [form, setValue] = useState({ email: "", name: "", password: "" });
+
   let navigate = useNavigate();
 
   function setInputTypeClick() {
@@ -21,27 +28,80 @@ const Register = () => {
   //вызывается при изменении импута
 
   const onChange = (e) => {
-    setValue({ ...form, [e.target.name]: e.target.value });
-    setRegisterButtonActive(true);
+    if (form.name.length < 40) {
+      setValue({ ...form, [e.target.name]: e.target.value });
+      // setRegisterButtonActive(true);
+    } else if (form.name.length == 40 && e.nativeEvent.data == null) {
+      setValue({ ...form, [e.target.name]: e.target.value });
+    }
   };
   function cansel() {
     setValue({ email: "", name: "", password: "" });
-    setRegisterButtonActive(false);
+    // setRegisterButtonActive(false);
   }
+  function validateEmail(email) {
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }
+
+  useEffect(() => {
+    if (
+      form.name == "" ||
+      form.email == "" ||
+      form.password == "" ||
+      errorEmail.error ||
+      errorName.error ||
+      errorPassword.error
+    ) {
+      setRegisterButtonActive(false);
+    } else {
+      setRegisterButtonActive(true);
+    }
+  });
+
+  useEffect(() => {
+    if (form.name.length < 5 && form.name.length !== 0) {
+      setErrorName({ error: true, errorText: "Слишком короткое имя" });
+    } else {
+      setErrorName({ error: false, errorText: "" });
+    }
+  }, [form.name]);
+
+  useEffect(() => {
+    if (validateEmail(form.email)) {
+      setErrorEmail({ error: false, errorText: "" });
+    } else if (form.email.length !== 0) {
+      setErrorEmail({ error: true, errorText: "Некоректный email" });
+    } else {
+      setErrorEmail({ error: false, errorText: "" });
+    }
+  }, [form.email]);
+
+  useEffect(() => {
+    if (form.password.length < 8 && form.password.length !== 0) {
+      setErrorPassword({ error: true, errorText: "Слишком короткий пароль" });
+    } else {
+      setErrorPassword({ error: false, errorText: "" });
+    }
+  }, [form.password]);
 
   function confirm() {
     registrationApi({
-      email: form.email, 
-      password: form.password, 
-      name: form.name
-  } )
+      email: form.email,
+      password: form.password,
+      name: form.name,
+    })
       .then((data) => {
         if (data.success) {
           navigate("/Login");
         }
       })
       .catch((err) => {
-        alert(`Ошибка ${err.status}`);
+        setErrorEmail({
+          error: true,
+          errorText: "Пользователь уже зарегистрирован",
+        });
+        //  alert(`Ошибка ${err.status}`);
       });
   }
 
@@ -63,6 +123,8 @@ const Register = () => {
               size={"default"}
               value={form.name}
               name="name"
+              error={errorName.error}
+              errorText={errorName.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -73,6 +135,8 @@ const Register = () => {
               size={"default"}
               value={form.email}
               name="email"
+              error={errorEmail.error}
+              errorText={errorEmail.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -86,6 +150,8 @@ const Register = () => {
               size={"default"}
               value={form.password}
               name="password"
+              error={errorPassword.error}
+              errorText={errorPassword.errorText}
             />
           </div>
         </Form>

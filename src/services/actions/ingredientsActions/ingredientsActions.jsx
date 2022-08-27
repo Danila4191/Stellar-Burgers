@@ -13,6 +13,7 @@ export const GET_ORDER_FAILED = "GET_ORDER_FAILED";
 export const SET_TOTAL = "SET_TOTAL";
 export const TOOGLE_INGREDIENTS_CONSTRUCTOR = "TOOGLE_INGREDIENTS_CONSTRUCTOR";
 
+
 export function getOrderNumber(data) {
   return function (dispatch) {
     dispatch({

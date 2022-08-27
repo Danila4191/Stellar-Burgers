@@ -14,7 +14,7 @@ export const GET_USER_FAILED = "GET_USER_FAILED";
 export const AUTH_OUT = "AUTH_OUT";
 export const AUTH_OUT_LOADING = "AUTH_OUT_LOADING";
 export const AUTH_OUT_FAILED = "AUTH_OUT_FAILED";
-
+export const AUTH_LOGIN_FAILED_RELOAD = "AUTH_LOGIN_FAILED_RELOAD"
 
 export function authLogin(data) {
     return function (dispatch) {
@@ -56,7 +56,7 @@ export function authLogin(data) {
           dispatch({
             type: AUTH_LOGIN_FAILED,
           });
-          alert(`Ошибка ${err.status}`);
+         if (err.status !== 401 ){ alert(`Ошибка ${err.status}`);}
         });
     };
   }
@@ -117,7 +117,7 @@ export function authLogin(data) {
             if (refreshToken) {
               setCookie("refreshToken", refreshToken);
             }
-            window.location.reload();
+            dispatch(getUser());
           }
         })
         .catch((err) => {
@@ -130,97 +130,3 @@ export function authLogin(data) {
   }
 
 
-
-  /*  
-export function authOut(data) {
-    return function (dispatch) {
-      dispatch({
-        type: AUTH_OUT_LOADING,
-      });
-      authLoginApi(data)
-        .then((dataFromServer) => {
-          if (dataFromServer) {
-            dispatch({
-              type: AUTH_OUT,
-              payload: {
-                user: dataFromServer.user,
-                accessToken: dataFromServer.accessToken,
-                refreshToken: dataFromServer.refreshToken,
-              },
-            });
-          }
-        
-          let authToken;
-          if (dataFromServer.accessToken.indexOf("Bearer") === 0) {
-            authToken = dataFromServer.accessToken.split("Bearer ")[1];
-          }
-          if (authToken) {
-            setCookie("token", authToken);
-          }
-         
-          dispatch({ type: GET_USER, payload:  });
-     
-        })
-        .catch((err) => {
-          dispatch({
-            type: AUTH_OUT_FAILED,
-          });
-          alert(`Ошибка ${err.status}`);
-        });
-    };
-  }
-  */
-  
-  /*
-  export function seacrchEmail() {
-    return function (dispatch) {
-      dispatch({
-        type: GET_INGREDIENTS_LOADING,
-  
-      });
-      getIngredientsApi().then((dataFromServer) =>{
-      if(dataFromServer){
-            dispatch({
-              type: GET_INGREDIENTS,
-              payload: {
-                productData: dataFromServer.data,
-              },
-            });}
-          })
-          .catch( (err)=> {
-              dispatch({
-                type: GET_INGREDIENTS_FAILED,
-          
-              });
-              alert(`Ошибка ${err.status}`);
-            })
-          };
-  };*/
-  
-  /*
-  export function registrationApi() {
-    return function (dispatch) {
-      dispatch({
-        type: GET_INGREDIENTS_LOADING,
-  
-      });
-      getIngredientsApi().then((dataFromServer) =>{
-      if(dataFromServer){
-            dispatch({
-              type: GET_INGREDIENTS,
-              payload: {
-                productData: dataFromServer.data,
-              },
-            });}
-          })
-          .catch( (err)=> {
-              dispatch({
-                type: GET_INGREDIENTS_FAILED,
-          
-              });
-              alert(`Ошибка ${err.status}`);
-            })
-          };
-  };
-  */
-  

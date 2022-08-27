@@ -8,6 +8,14 @@ import { codeSendContext } from "../../services/context/appContext";
 
 const ResetPassword = () => {
   const [inputType, setInputType] = useState("password");
+  const [errorPasswordOne, setErrorPasswordOne] = useState({
+    error: false,
+    errorText: "",
+  });
+  const [errorPasswordTwo, setErrorPasswordTwo] = useState({
+    error: false,
+    errorText: "",
+  });
   const [ResetPasswordButtonActive, setResetPasswordButtonActive] =
     useState(false);
   const { codeSend, setCodeSend } = useContext(codeSendContext);
@@ -24,6 +32,42 @@ const ResetPassword = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (
+      form.passwordOne == "" ||
+      errorPasswordOne.error ||
+      form.passwordTwo == "" ||
+      errorPasswordTwo.error ||
+      form.code == ""
+    ) {
+      setResetPasswordButtonActive(false);
+    } else {
+      setResetPasswordButtonActive(true);
+    }
+  });
+
+  useEffect(() => {
+    if (form.passwordOne.length < 8 && form.passwordOne.length !== 0) {
+      setErrorPasswordOne({
+        error: true,
+        errorText: "Слишком короткий пароль",
+      });
+    } else {
+      setErrorPasswordOne({ error: false, errorText: "" });
+    }
+  }, [form.passwordOne]);
+
+  useEffect(() => {
+    if (
+      form.passwordOne !== form.passwordTwo &&
+      form.passwordTwo.length !== 0
+    ) {
+      setErrorPasswordTwo({ error: true, errorText: "Пароль не совападает" });
+    } else {
+      setErrorPasswordTwo({ error: false, errorText: "" });
+    }
+  }, [form.passwordTwo]);
+
   function setInputTypeClick() {
     if (inputType == "password") {
       setInputType("text");
@@ -36,11 +80,12 @@ const ResetPassword = () => {
 
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
-    setResetPasswordButtonActive(true);
+
+    //setResetPasswordButtonActive(true);
   };
   function cansel() {
     setValue({ passwordOne: "", passwordTwo: "", code: "" });
-    setResetPasswordButtonActive(false);
+    //setResetPasswordButtonActive(false);
   }
 
   function confirm() {
@@ -79,6 +124,8 @@ const ResetPassword = () => {
               name="passwordOne"
               placeholder={"Введите новый пароль"}
               size={"default"}
+              error={errorPasswordOne.error}
+              errorText={errorPasswordOne.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>
@@ -92,6 +139,8 @@ const ResetPassword = () => {
               icon={"ShowIcon"}
               placeholder={"Повторите новый пароль"}
               size={"default"}
+              error={errorPasswordTwo.error}
+              errorText={errorPasswordTwo.errorText}
             />
           </div>
           <div className={`${styles.input__container}  pt-6`}>

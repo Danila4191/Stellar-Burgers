@@ -5,6 +5,7 @@ import {
   GET_USER,
   GET_USER_LOADING,
   GET_USER_FAILED,
+  AUTH_LOGIN_FAILED_RELOAD
 } from "../../actions/userActions/userActions";
 
 const loginState = {
@@ -43,6 +44,12 @@ export const loginReducer = (state = loginState, action) => {
         loading: false,
         failed: true,
       };
+      case AUTH_LOGIN_FAILED_RELOAD:
+        return {
+          ...state,
+          loading: false,
+          failed: false,
+        };
     default:
       return state;
   }
