@@ -1,4 +1,4 @@
-import { setCookie } from "../../../utils/cookie/cookie";
+import { setCookie,getCookie } from "../../../utils/cookie/cookie";
 import {
   authLoginApi,
   getUserApi,
@@ -60,7 +60,7 @@ export function authLogin(data) {
         });
     };
   }
-  
+
   export function getUser() {
     return function (dispatch) {
       dispatch({
@@ -81,6 +81,9 @@ export function authLogin(data) {
           dispatch({
             type: GET_USER_FAILED,
           });
+         // dispatch(  getToken({
+        //    token: getCookie("refreshToken"),
+        //  }));
          /* if (err.status !== "403") {
             dispatch({
               type: GET_USER_FAILED,
@@ -90,9 +93,9 @@ export function authLogin(data) {
         });
     };
   }
-  
   export function getToken(data) {
     return function (dispatch) {
+      console.log(data)
       getTokenApi(data)
         .then((dataFromServer) => {
           if (dataFromServer) {
@@ -103,6 +106,7 @@ export function authLogin(data) {
                 refreshToken: dataFromServer.refreshToken,
               },
             });
+            
             let authToken;
             if (dataFromServer.accessToken.indexOf("Bearer") === 0) {
               authToken = dataFromServer.accessToken.split("Bearer ")[1];
@@ -117,7 +121,7 @@ export function authLogin(data) {
             if (refreshToken) {
               setCookie("refreshToken", refreshToken);
             }
-            dispatch(getUser());
+           // dispatch(getUser());
           }
         })
         .catch((err) => {
@@ -129,4 +133,5 @@ export function authLogin(data) {
     };
   }
 
+ 
 

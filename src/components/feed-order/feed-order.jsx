@@ -25,7 +25,7 @@ const FeedOrder = (
     back();
   }
   function openModal() {
-    setModal(<FeedOrder />);
+  setModal(<FeedOrder />);
     setModalActive(true);
     setOnCloseFunc(() => close);
   }

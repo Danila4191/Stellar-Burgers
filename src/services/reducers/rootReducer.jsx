@@ -5,8 +5,12 @@ import {
   totalReducer,
   orderReducer,
   ingredientReducer,
+
 } from "./ingredientsReducers/ingredientsReducers";
-import { loginReducer, userReducer } from "./userReducers/userReducers";
+import { loginReducer, userReducer} from "./userReducers/userReducers";
+import { wsReducer } from "./soketReducer/soketReducer";
+
+
 
 export const rootReducer = combineReducers({
   ingredients: ingredientsReducer,
@@ -17,4 +21,5 @@ export const rootReducer = combineReducers({
   total: totalReducer,
   Login: loginReducer,
   User: userReducer,
+  ws: wsReducer,
 });

@@ -4,7 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { getIngredients } from "../../services/actions/ingredientsActions/ingredientsActions";
-import { getToken,getUser  } from "../../services/actions/userActions/userActions";
+import {
+  getToken,
+  getUser,
+} from "../../services/actions/userActions/userActions";
 import AppRoutes from "../app-routes/app-routes";
 import { isMobileContext } from "../../services/context/appContext";
 import { useMediaQuery } from "react-responsive";
@@ -39,11 +42,13 @@ const App = () => {
   useEffect(() => {
     if (getCookie("refreshToken") !== undefined && user.failed == true) {
       //  setTimeout(() => {
+      console.log("токент обновлен");
       dispatch(
         getToken({
           token: getCookie("refreshToken"),
         })
       );
+
       //   }, 600);
     }
   }, [user.failed]);
@@ -60,11 +65,9 @@ const App = () => {
               <AppRoutes
                 userId={userId}
                 auth={auth}
-
                 setOnCloseFunc={setOnCloseFunc}
                 setModalActive={setModalActive}
                 setModal={setModal}
-                
                 modalActive={modalActive}
                 onCloseFunc={onCloseFunc}
                 modal={modal}
