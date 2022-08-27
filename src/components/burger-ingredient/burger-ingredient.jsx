@@ -27,6 +27,7 @@ const BurgerIngredient = ({
   setOnCloseFunc,
   modalActive,
 }) => {
+  
   const ingredientsConstructor = useSelector(
     (state) => state.ingredientsConstructor.items
   );
@@ -58,6 +59,7 @@ const BurgerIngredient = ({
   }
   function openModal() {
     if (ingredientData == null) {
+      
       dispatch({ type: ADD_INGREDIENT, payload: ingredient });
       setModal(<IngredientInfo />);
       setModalActive(true);

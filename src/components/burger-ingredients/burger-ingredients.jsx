@@ -128,7 +128,6 @@ const BurgerIngredients = ({
                   ingredient={ingredient}
                   setModalActive={setModalActive}
                   setModal={setModal}
-              
                   setOnCloseFunc={setOnCloseFunc}
                   modalActive={modalActive}
                   key={ingredient._id + index}

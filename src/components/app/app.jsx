@@ -60,11 +60,12 @@ const App = () => {
               <AppRoutes
                 userId={userId}
                 auth={auth}
+
                 setOnCloseFunc={setOnCloseFunc}
                 setModalActive={setModalActive}
                 setModal={setModal}
+                
                 modalActive={modalActive}
-                active={modalActive}
                 onCloseFunc={onCloseFunc}
                 modal={modal}
               />

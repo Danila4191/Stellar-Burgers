@@ -3,7 +3,13 @@ import styles from "./profile-orders.module.css";
 import FeedOrders from "../../components/feed-orders/feed-orders";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
-const Orders = ({ orders }) => {
+const Orders = ({
+  orders,
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  modalActive,
+}) => {
   const { isMobile } = useContext(isMobileContext);
   return (
     <div className={`${styles.container} ${!isMobile && "pt-15"}`}>
@@ -21,7 +27,13 @@ const Orders = ({ orders }) => {
             История заказов
           </h2>
         )}
-        <FeedOrders orders={orders} />
+        <FeedOrders
+          setOnCloseFunc={setOnCloseFunc}
+          setModalActive={setModalActive}
+          setModal={setModal}
+          modalActive={modalActive}
+          orders={orders}
+        />
       </div>
     </div>
   );

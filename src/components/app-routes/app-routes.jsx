@@ -28,7 +28,6 @@ const AppRoutes = ({
   setModalActive,
   setModal,
   modalActive,
-  active,
   onCloseFunc,
   modal,
 }) => {
@@ -38,7 +37,7 @@ const AppRoutes = ({
   const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
   let userOrders = orders.filter((item) => item.userId == userId);
-
+  
   function pageChange() {
     if (page == "ingredients") {
       setPage("constructor");
@@ -117,16 +116,18 @@ const AppRoutes = ({
           }
         />
 
-        <Route path="/feed/:id" element={<FeedId />} />
         <Route
-          path="/profile/orders/:id"
+          path="/feed"
           element={
-            <ProtectedRoute auth={auth}>
-              <FeedId />
-            </ProtectedRoute>
+            <Feed
+              setOnCloseFunc={setOnCloseFunc}
+              setModalActive={setModalActive}
+              setModal={setModal}
+              modalActive={modalActive}
+              orders={orders}
+            />
           }
         />
-        <Route path="/feed" element={<Feed orders={orders} />} />
 
         <Route
           path="/profile"
@@ -154,6 +155,10 @@ const AppRoutes = ({
           path="/profile/orders"
           element={
             <ProtectedRoute
+              setOnCloseFunc={setOnCloseFunc}
+              setModalActive={setModalActive}
+              setModal={setModal}
+              modalActive={modalActive}
               link="/profile/orders"
               setlastPage={setlastPage}
               auth={auth}
@@ -175,6 +180,9 @@ const AppRoutes = ({
             </ProtectedRoute>
           }
         />
+        
+        <Route path="/feed/:id" element={<FeedId />} />
+
 
         <Route
           path="/ingredients/:id"
@@ -187,6 +195,34 @@ const AppRoutes = ({
 
         <Route path="*" element={<NotFound />} />
       </Routes>
+      
+
+
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/feed/:id"
+            element={
+              <Modal active={modalActive} onCloseFunc={onCloseFunc}>
+                {modal}
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
+      
+      {state?.backgroundLocation && (
+        <Routes>
+          <Route
+            path="/profile-orders/:id"
+            element={
+              <Modal active={modalActive} onCloseFunc={onCloseFunc}>
+                {modal}
+              </Modal>
+            }
+          />
+        </Routes>
+      )}
 
       {state?.backgroundLocation && (
         <Routes>

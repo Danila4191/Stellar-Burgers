@@ -12,7 +12,13 @@ import { useState, useEffect, useContext } from "react";
     dispatch(getIngredients());
   }, []);*/
 
-const Feed = ({ orders }) => {
+const Feed = ({
+  orders,
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  modalActive,
+}) => {
   let ordersReady = orders.filter((item) => item.status == "ready");
   let newOrders = orders.map((item) => ({
     orderId: item.orderId,
@@ -67,7 +73,13 @@ const Feed = ({ orders }) => {
         {(current === "orders" || !isMobile) && (
           <div>
             <div className={styles.feed__list__container}>
-              <FeedOrders orders={newOrders} />
+              <FeedOrders
+                setOnCloseFunc={setOnCloseFunc}
+                setModalActive={setModalActive}
+                setModal={setModal}
+                modalActive={modalActive}
+                orders={newOrders}
+              />
             </div>
           </div>
         )}

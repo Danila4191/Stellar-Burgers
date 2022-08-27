@@ -1,7 +1,9 @@
 import styles from "./feed-orders.module.css";
 import FeedOrder from "../feed-order/feed-order";
 import { v4 as uuidv4 } from "uuid";
-const FeedOrders = (props) => {
+const FeedOrders = (
+  props
+) => {
   return (
     <div className={`${styles.feed__orders}  `}>
       {props.orders.map((order) => (
@@ -16,6 +18,10 @@ const FeedOrders = (props) => {
           title={order.title}
           items={order.items}
           status={order.status}
+          setOnCloseFunc={ props.setOnCloseFunc}
+          setModalActive={props.setModalActive}
+          setModal={props.setModal}
+          modalActive={props.modalActive}
         />
       ))}
     </div>
