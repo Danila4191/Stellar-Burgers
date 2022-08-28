@@ -12,7 +12,7 @@ import AppRoutes from "../app-routes/app-routes";
 import { isMobileContext } from "../../services/context/appContext";
 import { useMediaQuery } from "react-responsive";
 import { TouchBackend } from "react-dnd-touch-backend";
-
+import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
 import { getCookie } from "../../utils/cookie/cookie";
 import { codeSendContext } from "../../services/context/appContext";
 import { HashRouter } from "react-router-dom";
@@ -31,6 +31,9 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
+    dispatch({
+      type: WS_CONNECTION_START,
+    })
   }, []);
 
   useEffect(() => {
@@ -46,12 +49,14 @@ const App = () => {
       dispatch(
         getToken({
           token: getCookie("refreshToken"),
-        })
+        }),
+        getUser()
       );
-
+ 
       //   }, 600);
     }
   }, [user.failed]);
+
 
   const auth = getCookie("refreshToken") == undefined ? false : true;
   const userId = user.userData == null ? null : user.userData.email;

@@ -79,7 +79,7 @@
 @media (max-width: 700px) {
   .feed__list {
     height: 400px;
-  width: 98%;
+    width: 98%;
   }
   .feed__number {
     text-align: start;
@@ -107,6 +107,6 @@
     bottom: 0;
     right: 0;
     left: 0;
-align-items: center;
+    align-items: center;
   }
 }

@@ -37,7 +37,7 @@ const AppRoutes = ({
   const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
   let userOrders = orders.filter((item) => item.userId == userId);
-  
+
   function pageChange() {
     if (page == "ingredients") {
       setPage("constructor");
@@ -155,15 +155,17 @@ const AppRoutes = ({
           path="/profile/orders"
           element={
             <ProtectedRoute
-              setOnCloseFunc={setOnCloseFunc}
-              setModalActive={setModalActive}
-              setModal={setModal}
-              modalActive={modalActive}
               link="/profile/orders"
               setlastPage={setlastPage}
               auth={auth}
             >
-              <ProfileOrders orders={userOrders} />{" "}
+              <ProfileOrders
+                setOnCloseFunc={setOnCloseFunc}
+                setModalActive={setModalActive}
+                setModal={setModal}
+                modalActive={modalActive}
+                orders={userOrders}
+              />{" "}
             </ProtectedRoute>
           }
         />
@@ -180,9 +182,8 @@ const AppRoutes = ({
             </ProtectedRoute>
           }
         />
-        
-        <Route path="/feed/:id" element={<FeedId />} />
 
+        <Route path="/feed/:id" element={<FeedId />} />
 
         <Route
           path="/ingredients/:id"
@@ -195,8 +196,6 @@ const AppRoutes = ({
 
         <Route path="*" element={<NotFound />} />
       </Routes>
-      
-
 
       {state?.backgroundLocation && (
         <Routes>
@@ -210,7 +209,7 @@ const AppRoutes = ({
           />
         </Routes>
       )}
-      
+
       {state?.backgroundLocation && (
         <Routes>
           <Route
@@ -240,10 +239,3 @@ const AppRoutes = ({
   );
 };
 export default AppRoutes;
-/*
-<Route
-path="/ingredients/:id"
-element={
- <IngredientInfo/>
-}
-/>*/

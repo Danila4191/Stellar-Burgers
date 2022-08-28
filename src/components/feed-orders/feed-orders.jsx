@@ -1,12 +1,18 @@
 import styles from "./feed-orders.module.css";
 import FeedOrder from "../feed-order/feed-order";
 import { v4 as uuidv4 } from "uuid";
-const FeedOrders = (
-  props
-) => {
+import { useLocation, useNavigate } from "react-router-dom";
+
+const FeedOrders = ({
+  setOnCloseFunc,
+  setModalActive,
+  setModal,
+  modalActive,
+  orders,
+}) => {
   return (
     <div className={`${styles.feed__orders}  `}>
-      {props.orders.map((order) => (
+      {orders.map((order) => (
         <FeedOrder
           price={order.items.reduce(
             (accumulator, currentValue) => accumulator + currentValue.price,
@@ -18,10 +24,11 @@ const FeedOrders = (
           title={order.title}
           items={order.items}
           status={order.status}
-          setOnCloseFunc={ props.setOnCloseFunc}
-          setModalActive={props.setModalActive}
-          setModal={props.setModal}
-          modalActive={props.modalActive}
+          order={order}
+          setOnCloseFunc={setOnCloseFunc}
+          setModalActive={setModalActive}
+          setModal={setModal}
+          modalActive={modalActive}
         />
       ))}
     </div>

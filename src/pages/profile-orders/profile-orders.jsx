@@ -3,7 +3,8 @@ import styles from "./profile-orders.module.css";
 import FeedOrders from "../../components/feed-orders/feed-orders";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
-const Orders = ({
+
+const ProfileOrders = ({
   orders,
   setModalActive,
   setModal,
@@ -38,4 +39,4 @@ const Orders = ({
     </div>
   );
 };
-export default Orders;
+export default ProfileOrders;

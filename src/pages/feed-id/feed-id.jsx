@@ -3,7 +3,7 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { useParams } from "react-router-dom";
 import orders from "../../utils/orders";
 import { v4 as uuidv4 } from "uuid";
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 const FeedIdElement = ({ title, count, price, img }) => {
   const { isMobile } = useContext(isMobileContext);
@@ -36,18 +36,37 @@ const FeedIdElement = ({ title, count, price, img }) => {
   );
 };
 
-const FeedId = () => {
+const FeedId = ({ modalActive }) => {
   const { isMobile } = useContext(isMobileContext);
-  const params = useParams();
-  let order = orders.filter((item) => item.orderId == params.id);
+  const params = useParams(); ///////////////////// поченить
+  let id = null;
+  let order = null;
+  let uniqueIngredient = null;
 
-  let uniqueIngredient = order[0].items.reduce(
-    (r, i) =>
-      !r.some((j) => JSON.stringify(i) === JSON.stringify(j)) ? [...r, i] : r,
-    []
-  );
+  //console.log(params.id !== undefined);
 
-  return (
+  useEffect(() => {
+    let orderItem2 = null
+    if (params.id !== undefined) {
+      let orderItem;
+      id = params.id;
+      orderItem = orders.filter((item) => item.orderId == id);
+      uniqueIngredient = orderItem[0].items.reduce(
+        (r, i) =>
+          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
+            ? [...r, i]
+            : r,
+        []
+      );
+      orderItem2 = orderItem
+      //console.log(orderItem)
+    }
+    order = orderItem2
+  //  console.log(orderItem2)
+  }, [params]);
+
+  console.log(order);
+  return order !== null ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
       <div
         className={`${styles.feed__order__container} ${
@@ -94,30 +113,25 @@ const FeedId = () => {
           ))}
         </div>
         <div className={`${styles.feed__data__container} `}>
-       
-            <p
-              className={`${styles.time} text pl-2 ${
-                isMobile
-                  ? "text_type_main-small "
-                  : "text_type_main-default"
-              } text_color_inactive`}
-            >
-              {order[0].time}
+          <p
+            className={`${styles.time} text pl-2 ${
+              isMobile ? "text_type_main-small " : "text_type_main-default"
+            } text_color_inactive`}
+          >
+            {order[0].time}
+          </p>
+          <div className={`${styles.feed__price__total} pr-2`}>
+            <p className={`text pr-2 text_type_digits-default`}>
+              {order[0].items.reduce(
+                (accumulator, currentValue) => accumulator + currentValue.price,
+                0
+              )}
             </p>
-            <div className={`${styles.feed__price__total} pr-2`}>
-              <p className={`text pr-2 text_type_digits-default`}>
-                {order[0].items.reduce(
-                  (accumulator, currentValue) =>
-                    accumulator + currentValue.price,
-                  0
-                )}
-              </p>
-              <CurrencyIcon />
-            </div>
-       
+            <CurrencyIcon />
+          </div>
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 export default FeedId;

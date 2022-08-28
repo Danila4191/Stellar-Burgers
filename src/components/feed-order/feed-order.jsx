@@ -3,29 +3,40 @@ import { useContext } from "react";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
-
-const FeedOrder = (
-  props,
-  { setModalActive, setModal, setOnCloseFunc, modalActive }
-) => {
+import FeedId from "../../pages/feed-id/feed-id";
+const FeedOrder = ({
+  price,
+  time,
+  orderId,
+  title,
+  items,
+  status,
+  order,
+  setModalActive,
+  setModal,
+  setOnCloseFunc,
+  modalActive,
+  openModal,
+}) => {
   const { isMobile } = useContext(isMobileContext);
-  const location = useLocation();
 
+  const location = useLocation();
   let navigate = useNavigate();
+
   function back() {
-    if (location.pathname == "/feed/:id") {
+    if (location.pathname == "/feed") {
       navigate("/feed");
-    } else if (location.pathname == "/profile-orders/:id") {
-      navigate("/profile-orders");
+    } else if (location.pathname == "/profile/orders") {
+      navigate("/profile/orders");
     }
   }
-
   function close(e) {
     setModalActive(false);
     back();
   }
+
   function openModal() {
-  setModal(<FeedOrder />);
+    setModal(<FeedId modalActive={modalActive} />);
     setModalActive(true);
     setOnCloseFunc(() => close);
   }
@@ -35,29 +46,28 @@ const FeedOrder = (
       <NavLink
         to={
           location.pathname == "/feed"
-            ? `/feed/${props.orderId}`
-            : `/profile/orders/${props.orderId}`
+            ? `/feed/${orderId}`
+            : `/profile/orders/${orderId}`
         }
+        state={{ backgroundLocation: location }}
         className={`${styles.link}`}
       >
         <div className={`${styles.feed__order}  `}>
           <div className={`${styles.feed__order__container}  `}>
-            <p className={` text  text_type_digits-default`}>
-              #{props.orderId}
-            </p>
+            <p className={` text  text_type_digits-default`}>#{orderId}</p>
             <p className={`${styles.time} text text_type_main-default`}>
-              {props.time}
+              {time}
             </p>
           </div>
-          <h2 className={` pt-6  text text_type_main-medium`}>{props.title}</h2>
+          <h2 className={` pt-6  text text_type_main-medium`}>{title}</h2>
 
-          {props.status !== undefined ? (
+          {status !== undefined ? (
             <p
               className={`${
-                props.status === "ready" && styles.color
+                status === "ready" && styles.color
               }  pt-2  text text_type_main-small`}
             >
-              {props.status}
+              {status}
             </p>
           ) : null}
 
@@ -77,12 +87,12 @@ const FeedOrder = (
                   <div
                     className={`${styles.images} `}
                     style={{
-                      backgroundImage: `url(${props.items[0].image_mobile})`,
+                      backgroundImage: `url(${items[0].image_mobile})`,
                     }}
                   ></div>
                 </div>
               </div>
-              {props.items.length > 1 ? (
+              {items.length > 1 ? (
                 <div
                   style={{
                     left: `${isMobile ? "25px" : " 50px"}`,
@@ -94,13 +104,13 @@ const FeedOrder = (
                     <div
                       className={`${styles.images} `}
                       style={{
-                        backgroundImage: `url(${props.items[1].image_mobile})`,
+                        backgroundImage: `url(${items[1].image_mobile})`,
                       }}
                     ></div>
                   </div>
                 </div>
               ) : null}
-              {props.items.length > 2 ? (
+              {items.length > 2 ? (
                 <div
                   style={{
                     left: `${isMobile ? "50px" : " 100px"}`,
@@ -112,13 +122,13 @@ const FeedOrder = (
                     <div
                       className={`${styles.images} `}
                       style={{
-                        backgroundImage: `url(${props.items[2].image_mobile})`,
+                        backgroundImage: `url(${items[2].image_mobile})`,
                       }}
                     ></div>
                   </div>
                 </div>
               ) : null}
-              {props.items.length > 3 ? (
+              {items.length > 3 ? (
                 <div
                   style={{
                     left: `${isMobile ? "75px" : " 150px"}`,
@@ -130,13 +140,13 @@ const FeedOrder = (
                     <div
                       className={`${styles.images} `}
                       style={{
-                        backgroundImage: `url(${props.items[3].image_mobile})`,
+                        backgroundImage: `url(${items[3].image_mobile})`,
                       }}
                     ></div>
                   </div>
                 </div>
               ) : null}
-              {props.items.length > 4 ? (
+              {items.length > 4 ? (
                 <div
                   style={{
                     left: `${isMobile ? "100px" : " 200px"}`,
@@ -148,13 +158,13 @@ const FeedOrder = (
                     <div
                       className={`${styles.images} `}
                       style={{
-                        backgroundImage: `url(${props.items[4].image_mobile})`,
+                        backgroundImage: `url(${items[4].image_mobile})`,
                       }}
                     ></div>
                   </div>
                 </div>
               ) : null}
-              {props.items.length > 5 ? (
+              {items.length > 5 ? (
                 <div
                   style={{
                     left: `${isMobile ? "125px" : " 250px"}`,
@@ -166,11 +176,11 @@ const FeedOrder = (
                     <div
                       className={`${styles.images} `}
                       style={{
-                        opacity: ` ${props.items.length > 6 ? 0.5 : null}`,
-                        backgroundImage: `url(${props.items[5].image_mobile})`,
+                        opacity: ` ${items.length > 6 ? 0.5 : null}`,
+                        backgroundImage: `url(${items[5].image_mobile})`,
                       }}
                     ></div>
-                    {props.items.length > 6 ? (
+                    {items.length > 6 ? (
                       <div
                         className={`${styles.total} text ${
                           isMobile
@@ -178,7 +188,7 @@ const FeedOrder = (
                             : "text_type_digits-default pt-15"
                         } `}
                       >
-                        +{props.items.length - 6}
+                        +{items.length - 6}
                       </div>
                     ) : null}
                   </div>
@@ -187,9 +197,7 @@ const FeedOrder = (
             </div>
 
             <div className={`${styles.feed__order__container} pt-5 `}>
-              <p className={` text text_type_digits-default pr-1`}>
-                {props.price}
-              </p>
+              <p className={` text text_type_digits-default pr-1`}>{price}</p>
               <CurrencyIcon />
             </div>
           </div>
