@@ -3,14 +3,6 @@ import FeedOrders from "../../components/feed-orders/feed-orders";
 import { v4 as uuidv4 } from "uuid";
 import { isMobileContext } from "../../services/context/appContext";
 import { useState, useEffect, useContext } from "react";
-//import { useDispatch, useSelector } from "react-redux";
-
-//import { getFeedOrders } from "../../services/actions/actions";
-/*
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getIngredients());
-  }, []);*/
 
 const Feed = ({
   orders,
@@ -19,24 +11,11 @@ const Feed = ({
   setOnCloseFunc,
   modalActive,
 }) => {
-
-
-
-  //let ordersReady = orders.filter((item) => item.status == "ready");
-  /*let newOrders = orders.map((item) => ({
-    orderId: item.orderId,
-    userId: item.userId,
-    title: item.title,
-    time: item.time,
-    items: item.items,
-  }));*/
-
-
-
-
   const [current, setCurrent] = useState("orders");
   const { isMobile } = useContext(isMobileContext);
 
+  let orderDone = orders.orders.filter((item) => item.status == "done");
+  let orderCreated = orders.orders.filter((item) => item.status == "created");
   return (
     <div className={` ${styles.feed__container} `}>
       <h1
@@ -85,7 +64,7 @@ const Feed = ({
                 setModalActive={setModalActive}
                 setModal={setModal}
                 modalActive={modalActive}
-                orders={orders}
+                orders={orders.orders}
               />
             </div>
           </div>
@@ -95,23 +74,53 @@ const Feed = ({
             <div className={`${styles.grid} `}>
               <div>
                 <p className={`text text_type_main-medium pb-5`}>Готовы:</p>
-                <ul className={`${styles.list}  text_type_digits-default`}>
-                  {orders.orders
-                    .filter((item) => item.status == "done")
-                    .map((item) => (
-                      <li key={uuidv4()}>{item.number}</li>
+                <div className={`${styles.flex}`}>
+                  <ul
+                    className={`${styles.list} ${
+                      orderDone.length > 10 ? styles.list_two : null
+                    }  text_type_digits-default`}
+                  >
+                    {orderDone.slice(0, 10).map((item) => (
+                      <li className={`${styles.flex} `} key={uuidv4()}>
+                        {item.number}
+                      </li>
                     ))}
-                </ul>
+                  </ul>
+                  {orderDone.length > 10 && !isMobile ? (
+                    <ul
+                      className={`${styles.list} ${styles.list_two}  text_type_digits-default`}
+                    >
+                      {orderDone.slice(10, 20).map((item) => (
+                        <li className={`${styles.flex} `} key={uuidv4()}>
+                          {item.number}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
               <div>
                 <p className={`text text_type_main-medium pb-5`}>В работе:</p>
-                <ul className={`${styles.list} text_type_digits-default`}>
-                  {orders.orders
-                    .filter((item) => item.status !== "done")
-                    .map((item) => (
+                <div className={`${styles.flex}`}>
+                  <ul
+                    className={`${styles.list} ${
+                      orderDone.length > 10 ? styles.list_two : null
+                    } text_type_digits-default`}
+                  >
+                    {orderCreated.slice(0, 10).map((item) => (
                       <li key={uuidv4()}>{item.number}</li>
                     ))}
-                </ul>
+                  </ul>
+                  {orderCreated > 10 ? (
+                    <ul
+                      className={`${styles.list} ${styles.list_two} text_type_digits-default`}
+                    >
+                      {orderCreated.slice(10, 20).map((item) => (
+                        <li key={uuidv4()}>{item.number}</li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </div>
               </div>
             </div>
 
@@ -136,9 +145,7 @@ const Feed = ({
             ${styles.count} text
            text_type_digits-large`}
               >
-                {
-                 orders.totalToday
-                }
+                {orders.totalToday}
               </p>
             </div>
           </div>

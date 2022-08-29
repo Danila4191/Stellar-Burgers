@@ -3,6 +3,11 @@
   gap: 60px;
   width: 584px;
 }
+.flex {
+  display: flex;
+}
+
+
 .main {
   width: min-content;
   margin: 0 auto;
@@ -20,6 +25,9 @@
   text-align: left;
   margin: 0;
   padding: 0px;
+}
+.list_two {
+  min-width: 50px;
 }
 .grid {
   display: grid;
@@ -88,3 +96,5 @@
     justify-content: space-between;
   }
 }
+
+

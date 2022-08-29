@@ -95,7 +95,7 @@ export function authLogin(data) {
   }
   export function getToken(data) {
     return function (dispatch) {
-      console.log(data)
+   
       getTokenApi(data)
         .then((dataFromServer) => {
           if (dataFromServer) {

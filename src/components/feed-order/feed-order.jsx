@@ -4,12 +4,12 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 import FeedId from "../../pages/feed-id/feed-id";
+import { useSelector } from "react-redux";
 const FeedOrder = ({
-  price,
   time,
   orderId,
   title,
-  items,
+  orders,
   status,
   setModalActive,
   setModal,
@@ -17,8 +17,10 @@ const FeedOrder = ({
   modalActive,
   openModal,
 }) => {
+  const ingredientsFromSetver = useSelector(
+    (state) => state.ingredients.productData
+  );
   const { isMobile } = useContext(isMobileContext);
-
   const location = useLocation();
   let navigate = useNavigate();
 
@@ -40,7 +42,23 @@ const FeedOrder = ({
     setOnCloseFunc(() => close);
   }
 
-  return (
+  function getArr(first, second) {
+    return first.reduce((acc, item) => {
+      const val = second.find((el) => el._id === item);
+      return val ? [...acc, val] : acc;
+      // return val ? [...acc, undefined] : acc; // на случай, если надо вернуть undefined
+    }, []);
+  }
+
+  let price = "0";
+  let items = getArr(orders, ingredientsFromSetver);
+
+  price = items.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.price,
+    0
+  );
+
+  return price !== 0 ? (
     <div onClick={openModal}>
       <NavLink
         to={
@@ -63,10 +81,16 @@ const FeedOrder = ({
           {status !== undefined ? (
             <p
               className={`${
-                status === "done" ? styles.color : status === "pending" &&  styles.colorRed
+                status === "done"
+                  ? styles.color
+                  : status === "pending" && styles.colorRed
               }  pt-2  text text_type_main-small`}
             >
-              {status}
+              {status === "done"
+                ? "Выполнен"
+                : status === "pending"
+                ? "Отменен"
+                : "Готовиться"}
             </p>
           ) : null}
 
@@ -203,6 +227,6 @@ const FeedOrder = ({
         </div>
       </NavLink>
     </div>
-  );
+  ) : null;
 };
 export default FeedOrder;

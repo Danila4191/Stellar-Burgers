@@ -11,8 +11,9 @@ const ProfileOrders = ({
   setOnCloseFunc,
   modalActive,
 }) => {
+
   const { isMobile } = useContext(isMobileContext);
-  return (
+  return orders !== null ? (
     <div className={`${styles.container} ${!isMobile && "pt-15"}`}>
       {!isMobile && (
         <div className={`pt-15 pr-15`}>
@@ -37,6 +38,6 @@ const ProfileOrders = ({
         />
       </div>
     </div>
-  );
+  ) : null;
 };
 export default ProfileOrders;

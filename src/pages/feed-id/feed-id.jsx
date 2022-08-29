@@ -6,7 +6,11 @@ import { v4 as uuidv4 } from "uuid";
 import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import FeedOrder from "../../components/feed-order/feed-order";
+import { useSelector } from "react-redux";
+
 const FeedIdElement = ({ title, count, price, img }) => {
+
+
   const { isMobile } = useContext(isMobileContext);
   return (
     <div className={`${styles.feed__order__ingredient} `}>
@@ -39,17 +43,32 @@ const FeedIdElement = ({ title, count, price, img }) => {
 
 const FeedId = ({ modalActive }) => {
   const { isMobile } = useContext(isMobileContext);
+  const ingredientsFromSetver = useSelector(
+    (state) => state.ingredients.productData
+  );
   let { id } = useParams();
   let order = undefined;
   let uniqueIngredient = null;
-  let itemNew = Array.from(orders.orders.filter((item) => item.number == id));
 
-  uniqueIngredient = itemNew[0].ingredients.reduce(
+  function getArr(first, second) {
+    return first.reduce((acc, item) => {
+      const val = second.find((el) => el._id === item);
+      return val ? [...acc, val] : acc;
+      // return val ? [...acc, undefined] : acc; // на случай, если надо вернуть undefined
+    }, []);
+  }
+
+
+  let copyThisOrder = Array.from(orders.orders.filter((order) => order.number == id));
+  order = copyThisOrder[0];
+  
+  let ingredients = getArr(order.ingredients, ingredientsFromSetver);
+
+  uniqueIngredient = ingredients.reduce(
     (r, i) =>
       !r.some((j) => JSON.stringify(i) === JSON.stringify(j)) ? [...r, i] : r,
     []
   );
-  order = itemNew[0];
 
   return order !== undefined ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
@@ -72,7 +91,11 @@ const FeedId = ({ modalActive }) => {
               : order.status === "pending" && styles.colorRed
           } text pt-3 text_type_main-small`}
         >
-          {order.status}
+          {order.status === "done"
+            ? "Выполнен"
+            : order.status === "pending"
+            ? "Отменен"
+            : "Готовиться"}
         </p>
         <p
           className={` text ${
@@ -88,13 +111,13 @@ const FeedId = ({ modalActive }) => {
               title={item.name}
               price={
                 item.price *
-                order.ingredients.filter(
+                ingredients.filter(
                   (ingredient) => ingredient._id == item._id
                 ).length
               }
               img={item.image_mobile}
               count={
-                order.ingredients.filter(
+                ingredients.filter(
                   (ingredient) => ingredient._id == item._id
                 ).length
               }
@@ -111,7 +134,7 @@ const FeedId = ({ modalActive }) => {
           </p>
           <div className={`${styles.feed__price__total} pr-2`}>
             <p className={`text pr-2 text_type_digits-default`}>
-              {order.ingredients.reduce(
+              {ingredients.reduce(
                 (accumulator, currentValue) => accumulator + currentValue.price,
                 0
               )}
