@@ -36,7 +36,8 @@ const AppRoutes = ({
   const [page, setPage] = useState("ingredients");
   const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
-  let userOrders = orders.filter((item) => item.userId == userId);
+
+  let userOrders = orders.orders.filter((item) => item._id == userId);
 
   function pageChange() {
     if (page == "ingredients") {
@@ -182,7 +183,6 @@ const AppRoutes = ({
             </ProtectedRoute>
           }
         />
-
         <Route path="/feed/:id" element={<FeedId />} />
 
         <Route

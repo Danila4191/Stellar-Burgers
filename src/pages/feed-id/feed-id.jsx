@@ -3,8 +3,9 @@ import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components
 import { useParams } from "react-router-dom";
 import orders from "../../utils/orders";
 import { v4 as uuidv4 } from "uuid";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
+import FeedOrder from "../../components/feed-order/feed-order";
 const FeedIdElement = ({ title, count, price, img }) => {
   const { isMobile } = useContext(isMobileContext);
   return (
@@ -38,52 +39,40 @@ const FeedIdElement = ({ title, count, price, img }) => {
 
 const FeedId = ({ modalActive }) => {
   const { isMobile } = useContext(isMobileContext);
-  const params = useParams(); ///////////////////// поченить
-  let id = null;
-  let order = null;
+  let { id } = useParams();
+  let order = undefined;
   let uniqueIngredient = null;
+  let itemNew = Array.from(orders.orders.filter((item) => item.number == id));
 
-  //console.log(params.id !== undefined);
+  uniqueIngredient = itemNew[0].ingredients.reduce(
+    (r, i) =>
+      !r.some((j) => JSON.stringify(i) === JSON.stringify(j)) ? [...r, i] : r,
+    []
+  );
+  order = itemNew[0];
 
-  useEffect(() => {
-    let orderItem2 = null
-    if (params.id !== undefined) {
-      let orderItem;
-      id = params.id;
-      orderItem = orders.filter((item) => item.orderId == id);
-      uniqueIngredient = orderItem[0].items.reduce(
-        (r, i) =>
-          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-            ? [...r, i]
-            : r,
-        []
-      );
-      orderItem2 = orderItem
-      //console.log(orderItem)
-    }
-    order = orderItem2
-  //  console.log(orderItem2)
-  }, [params]);
-
-  console.log(order);
-  return order !== null ? (
+  return order !== undefined ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
       <div
         className={`${styles.feed__order__container} ${
           isMobile ? "pt-4" : "pt-25"
         }  text_type_digits-default`}
       >
-        <p className={`${styles.feed__number} text`}>#{order[0].orderId}</p>
+        <p className={`${styles.feed__number} text`}>#{order.number}</p>
         <h1 className={` text  pt-10 text_type_main-medium`}>
-          {order[0].title}
+          {
+            "Death Star Starship Main бургер" //order.title
+          }
         </h1>
 
         <p
           className={` ${
-            order[0].status === "ready" && styles.color
+            order.status === "done"
+              ? styles.color
+              : order.status === "pending" && styles.colorRed
           } text pt-3 text_type_main-small`}
         >
-          {order[0].status}
+          {order.status}
         </p>
         <p
           className={` text ${
@@ -99,13 +88,13 @@ const FeedId = ({ modalActive }) => {
               title={item.name}
               price={
                 item.price *
-                order[0].items.filter(
+                order.ingredients.filter(
                   (ingredient) => ingredient._id == item._id
                 ).length
               }
               img={item.image_mobile}
               count={
-                order[0].items.filter(
+                order.ingredients.filter(
                   (ingredient) => ingredient._id == item._id
                 ).length
               }
@@ -118,11 +107,11 @@ const FeedId = ({ modalActive }) => {
               isMobile ? "text_type_main-small " : "text_type_main-default"
             } text_color_inactive`}
           >
-            {order[0].time}
+            {order.createdAt}
           </p>
           <div className={`${styles.feed__price__total} pr-2`}>
             <p className={`text pr-2 text_type_digits-default`}>
-              {order[0].items.reduce(
+              {order.ingredients.reduce(
                 (accumulator, currentValue) => accumulator + currentValue.price,
                 0
               )}

@@ -31,15 +31,13 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
-    dispatch({
-      type: WS_CONNECTION_START,
-    })
+ 
   }, []);
 
   useEffect(() => {
-    if (getCookie("refreshToken") !== undefined) {
-      dispatch(getUser());
-    }
+    dispatch({
+      type: WS_CONNECTION_START,
+    })
   }, []);
 
   useEffect(() => {
@@ -56,7 +54,11 @@ const App = () => {
       //   }, 600);
     }
   }, [user.failed]);
-
+  useEffect(() => {
+    if (getCookie("refreshToken") !== undefined) {
+      dispatch(getUser());
+    }
+  }, []);
 
   const auth = getCookie("refreshToken") == undefined ? false : true;
   const userId = user.userData == null ? null : user.userData.email;

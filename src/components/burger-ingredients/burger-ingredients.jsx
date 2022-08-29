@@ -41,7 +41,7 @@ const BurgerIngredients = ({
   const { isMobile } = useContext(isMobileContext);
   const total = useSelector((state) => state.total.total);
   
-
+ 
   function sroll(type) {
     document
       .querySelector(`#${type}`)

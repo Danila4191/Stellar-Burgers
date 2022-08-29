@@ -47,6 +47,9 @@
 .color {
   color: #00cccc;
 }
+.colorRed {
+  color: red;
+}
 .feed__order__ingredient {
   height: 60px;
   display: flex;

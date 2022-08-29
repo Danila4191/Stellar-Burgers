@@ -11,7 +11,6 @@ const FeedOrder = ({
   title,
   items,
   status,
-  order,
   setModalActive,
   setModal,
   setOnCloseFunc,
@@ -64,7 +63,7 @@ const FeedOrder = ({
           {status !== undefined ? (
             <p
               className={`${
-                status === "ready" && styles.color
+                status === "done" ? styles.color : status === "pending" &&  styles.colorRed
               }  pt-2  text text_type_main-small`}
             >
               {status}

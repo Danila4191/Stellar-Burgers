@@ -19,14 +19,21 @@ const Feed = ({
   setOnCloseFunc,
   modalActive,
 }) => {
-  let ordersReady = orders.filter((item) => item.status == "ready");
-  let newOrders = orders.map((item) => ({
+
+
+
+  //let ordersReady = orders.filter((item) => item.status == "ready");
+  /*let newOrders = orders.map((item) => ({
     orderId: item.orderId,
     userId: item.userId,
     title: item.title,
     time: item.time,
     items: item.items,
-  }));
+  }));*/
+
+
+
+
   const [current, setCurrent] = useState("orders");
   const { isMobile } = useContext(isMobileContext);
 
@@ -78,7 +85,7 @@ const Feed = ({
                 setModalActive={setModalActive}
                 setModal={setModal}
                 modalActive={modalActive}
-                orders={newOrders}
+                orders={orders}
               />
             </div>
           </div>
@@ -89,20 +96,20 @@ const Feed = ({
               <div>
                 <p className={`text text_type_main-medium pb-5`}>Готовы:</p>
                 <ul className={`${styles.list}  text_type_digits-default`}>
-                  {orders
-                    .filter((item) => item.status == "ready")
+                  {orders.orders
+                    .filter((item) => item.status == "done")
                     .map((item) => (
-                      <li key={uuidv4()}>{item.orderId}</li>
+                      <li key={uuidv4()}>{item.number}</li>
                     ))}
                 </ul>
               </div>
               <div>
                 <p className={`text text_type_main-medium pb-5`}>В работе:</p>
                 <ul className={`${styles.list} text_type_digits-default`}>
-                  {orders
-                    .filter((item) => item.status == "noready")
+                  {orders.orders
+                    .filter((item) => item.status !== "done")
                     .map((item) => (
-                      <li key={uuidv4()}>{item.orderId}</li>
+                      <li key={uuidv4()}>{item.number}</li>
                     ))}
                 </ul>
               </div>
@@ -113,7 +120,7 @@ const Feed = ({
                 Выполнено за все время:
               </h2>
               <p className={`   ${styles.count} text text_type_digits-large`}>
-                {ordersReady.length}
+                {orders.total}
               </p>
             </div>
             <div>
@@ -130,8 +137,7 @@ const Feed = ({
            text_type_digits-large`}
               >
                 {
-                  ordersReady.filter((data) => !~data.time.indexOf("Cегодня,"))
-                    .length
+                 orders.totalToday
                 }
               </p>
             </div>
