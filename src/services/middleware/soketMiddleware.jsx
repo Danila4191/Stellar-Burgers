@@ -37,6 +37,7 @@ export const socketMiddleware = wsUrl => {
 
         // функция, которая вызывается при ошибке соединения
         socket.onerror = (event) => {
+          alert("Пожалуйста отключите adBlock, чтобы приложение работало нормально. Рекламы тут нет.")
           dispatch({ type: WS_CONNECTION_ERROR, payload: event });
         };
 
