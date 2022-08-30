@@ -56,6 +56,7 @@ const FeedOrder = ({
 
   let price = "0";
   let items = getArr(orders, ingredientsFromSetver);
+  let dataOrder = new Date(time).toUTCString()
 
   price = items.reduce(
     (accumulator, currentValue) => accumulator + currentValue.price,
@@ -63,7 +64,7 @@ const FeedOrder = ({
   );
 
 
-
+  
   return price !== 0 ? (
     <div onClick={openModal}>
       <NavLink
@@ -79,7 +80,7 @@ const FeedOrder = ({
           <div className={`${styles.feed__order__container}  `}>
             <p className={` text  text_type_digits-default`}>#{orderId}</p>
             <p className={`${styles.time} text text_type_main-default`}>
-              {time}
+              { dataOrder}
             </p>
           </div>
           <h2 className={` pt-6  text text_type_main-medium`}>{title}</h2>

@@ -64,49 +64,45 @@ const FeedId = ({ orderId }) => {
   function orderNewSet() {
     if (orderId !== undefined) {
       orderNew = orderId;
-      console.log(1)
+   
     } else if (id !== undefined) {
       orderNew = id;
-      console.log(2)
+ 
     }
   }
 
   orderNewSet();
   function setOrders() {
-   
-      if (location.pathname.includes("profile/orders") && ordersUser[0] !== undefined) {
-      
+    if (
+      location.pathname.includes("profile/orders") &&
+      ordersUser[0] !== undefined
+    ) {
+      order = ordersUser[0].orders.filter(
+        (order) => order.number == orderNew
+      )[0];
 
-   console.log(orderNew)
-        order = ordersUser[0].orders.filter(
-          (order) => order.number == orderNew
-        )[0];
-      
-        ingredients = getArr(order.ingredients, ingredientsFromSetver);
-     
-        uniqueIngredient = ingredients.reduce(
-          (r, i) =>
-            !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-              ? [...r, i]
-              : r,
-          []
-        );
-      } else if(location.pathname.includes("feed") && orders[0] !== undefined) {
-        order = orders[0].orders.filter((order) => order.number == orderNew)[0];
-        console.log(orderNew)
-        ingredients = getArr(order.ingredients, ingredientsFromSetver);
-        
-        uniqueIngredient = ingredients.reduce(
-          (r, i) =>
-            !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-              ? [...r, i]
-              : r,
-          []
-        );
-      }
+      ingredients = getArr(order.ingredients, ingredientsFromSetver);
 
-    
-    
+      uniqueIngredient = ingredients.reduce(
+        (r, i) =>
+          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
+            ? [...r, i]
+            : r,
+        []
+      );
+    } else if (location.pathname.includes("feed") && orders[0] !== undefined) {
+      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
+
+      ingredients = getArr(order.ingredients, ingredientsFromSetver);
+
+      uniqueIngredient = ingredients.reduce(
+        (r, i) =>
+          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
+            ? [...r, i]
+            : r,
+        []
+      );
+    }
   }
   setOrders();
   return order !== undefined && ingredients !== null ? (
@@ -167,7 +163,7 @@ const FeedId = ({ orderId }) => {
               isMobile ? "text_type_main-small " : "text_type_main-default"
             } text_color_inactive`}
           >
-            {order.createdAt}
+            {new Date(order.createdAt).toUTCString()}
           </p>
           <div className={`${styles.feed__price__total} pr-2`}>
             <p className={`text pr-2 text_type_digits-default`}>
