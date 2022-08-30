@@ -9,17 +9,16 @@ const FeedOrders = ({
   orders,
 }) => {
 
-  return  (
+  return (
     <div className={`${styles.feed__orders}  `}>
       {orders.map((order) => (
         <FeedOrder
           key={uuidv4()}
           time={order.createdAt}
-          orders={ order.ingredients}
+          orders={order.ingredients}
           status={order.status}
           orderId={order.number}
-          title={ "Death Star Starship Main бургер" //order.title
-          }
+          title={order.name}
           setOnCloseFunc={setOnCloseFunc}
           setModalActive={setModalActive}
           setModal={setModal}
@@ -27,6 +26,6 @@ const FeedOrders = ({
         />
       ))}
     </div>
-  ) ;
+  );
 };
 export default FeedOrders;

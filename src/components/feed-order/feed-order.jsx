@@ -33,11 +33,15 @@ const FeedOrder = ({
   }
   function close(e) {
     setModalActive(false);
+    setTimeout(() => {
+      setModal(null);;
+    }, "500")
+   
     back();
   }
 
   function openModal() {
-    setModal(<FeedId modalActive={modalActive} />);
+    setModal(<FeedId  orderId={orderId}/>);
     setModalActive(true);
     setOnCloseFunc(() => close);
   }
@@ -57,6 +61,8 @@ const FeedOrder = ({
     (accumulator, currentValue) => accumulator + currentValue.price,
     0
   );
+
+
 
   return price !== 0 ? (
     <div onClick={openModal}>
@@ -78,7 +84,7 @@ const FeedOrder = ({
           </div>
           <h2 className={` pt-6  text text_type_main-medium`}>{title}</h2>
 
-          {status !== undefined ? (
+          { location.pathname.includes("profile") ? (
             <p
               className={`${
                 status === "done"

@@ -23,7 +23,7 @@ const Modal = ({ active, children, onCloseFunc }) => {
       document.removeEventListener("keydown", handleEscapeClose);
     };
   });
-  return ReactDom.createPortal(
+  return ReactDom.createPortal (
     <ModalOverlay active={active} onCloseFunc={onCloseFunc}>
       <div
         onClick={(e) => e.stopPropagation()}

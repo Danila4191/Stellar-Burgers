@@ -12,7 +12,13 @@ import AppRoutes from "../app-routes/app-routes";
 import { isMobileContext } from "../../services/context/appContext";
 import { useMediaQuery } from "react-responsive";
 import { TouchBackend } from "react-dnd-touch-backend";
-import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
+import {
+  WS_CONNECTION_START,
+  WS_CONNECTION_SUCCESS,
+  WS_GET_MESSAGE,
+  WS_CONNECTION_ERROR,
+  WS_CONNECTION_START_PROFILE,
+} from "../../services/actions/soketAction/soketAction";
 import { getCookie } from "../../utils/cookie/cookie";
 import { codeSendContext } from "../../services/context/appContext";
 import { HashRouter } from "react-router-dom";
@@ -31,27 +37,28 @@ const App = () => {
 
   useEffect(() => {
     dispatch(getIngredients());
- 
   }, []);
 
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
-    })
-  }, []);
-
+    });
+  },[]);
+  useEffect(() => {
+    if (getCookie("refreshToken") !== undefined ) {
+      dispatch({
+        type: WS_CONNECTION_START_PROFILE,
+      });
+    }
+  }, [user]);
   useEffect(() => {
     if (getCookie("refreshToken") !== undefined && user.failed == true) {
-      //  setTimeout(() => {
-      console.log("токент обновлен");
       dispatch(
         getToken({
           token: getCookie("refreshToken"),
         }),
         getUser()
       );
- 
-      //   }, 600);
     }
   }, [user.failed]);
   useEffect(() => {
@@ -61,7 +68,7 @@ const App = () => {
   }, []);
 
   const auth = getCookie("refreshToken") == undefined ? false : true;
-  const userId = user.userData == null ? null : user.userData.email;
+  
 
   return (
     <div>
@@ -70,7 +77,7 @@ const App = () => {
           <DndProvider backend={!isMobile ? HTML5Backend : TouchBackend}>
             <HashRouter>
               <AppRoutes
-                userId={userId}
+              
                 auth={auth}
                 setOnCloseFunc={setOnCloseFunc}
                 setModalActive={setModalActive}

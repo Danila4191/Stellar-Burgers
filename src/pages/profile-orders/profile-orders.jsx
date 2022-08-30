@@ -11,9 +11,8 @@ const ProfileOrders = ({
   setOnCloseFunc,
   modalActive,
 }) => {
-
   const { isMobile } = useContext(isMobileContext);
-  return orders !== null ? (
+  return orders !== undefined ? (
     <div className={`${styles.container} ${!isMobile && "pt-15"}`}>
       {!isMobile && (
         <div className={`pt-15 pr-15`}>
@@ -34,7 +33,7 @@ const ProfileOrders = ({
           setModalActive={setModalActive}
           setModal={setModal}
           modalActive={modalActive}
-          orders={orders}
+          orders={[...orders.orders].reverse()}
         />
       </div>
     </div>

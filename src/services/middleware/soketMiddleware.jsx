@@ -6,11 +6,14 @@ import {
   WS_SEND_MESSAGE,
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_ERROR,
+  WS_CONNECTION_START_PROFILE,
+  WS_GET_MESSAGE_PROFILE
 } from "../actions/soketAction/soketAction";
+import { getCookie } from "../../utils/cookie/cookie";
 
 //////////////////////////////////////////////////////////
 
-export const socketMiddleware = (wsUrl) => {
+export const socketMiddleware = wsUrl => {
   return (store) => {
     let socket = null;
 
@@ -20,9 +23,13 @@ export const socketMiddleware = (wsUrl) => {
 
       if (type === WS_CONNECTION_START) {
         // объект класса WebSocket
-        socket = new WebSocket(wsUrl);
+        socket = new WebSocket(`${wsUrl}/all`);
+      } else if (type === WS_CONNECTION_START_PROFILE) {
+  
+        // объект класса WebSocket
+        socket = new WebSocket(`${wsUrl}?token=${getCookie(`token`)}`);
       }
-      if (socket) {
+      if (socket ) {
         // функция, которая вызывается при открытии сокета
         socket.onopen = (event) => {
           dispatch({ type: WS_CONNECTION_SUCCESS, payload: event });
@@ -34,10 +41,18 @@ export const socketMiddleware = (wsUrl) => {
         };
 
         // функция, которая вызывается при получении события от сервера
-        socket.onmessage = (event) => {
-          const { data } = event;
-          dispatch({ type: WS_GET_MESSAGE, payload: data });
-        };
+        if (type === WS_CONNECTION_START) {
+          socket.onmessage = (event) => {
+            const { data } = event;
+            dispatch({ type: WS_GET_MESSAGE, payload: data });
+          };
+        }
+        if (type === WS_CONNECTION_START_PROFILE) {
+          socket.onmessage = (event) => {
+            const { data } = event;
+            dispatch({ type: WS_GET_MESSAGE_PROFILE, payload: data });
+          };
+        }
         // функция, которая вызывается при закрытии соединения
         socket.onclose = (event) => {
           dispatch({ type: WS_CONNECTION_CLOSED, payload: event });

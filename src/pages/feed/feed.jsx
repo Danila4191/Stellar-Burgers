@@ -13,10 +13,16 @@ const Feed = ({
 }) => {
   const [current, setCurrent] = useState("orders");
   const { isMobile } = useContext(isMobileContext);
-
-  let orderDone = orders.orders.filter((item) => item.status == "done");
-  let orderCreated = orders.orders.filter((item) => item.status == "created");
-  return (
+  let orderDone = null
+  let orderCreated = null
+ function setOrdersStatus(){
+  if(orders !== undefined){
+    orderDone = orders.orders.filter((item) => item.status == "done");
+    orderCreated = orders.orders.filter((item) => item.status == "created");
+  }
+ }
+ setOrdersStatus()
+  return orders !== undefined ? (
     <div className={` ${styles.feed__container} `}>
       <h1
         className={` ${styles.title} pl-5 mt-10 ${
@@ -65,6 +71,7 @@ const Feed = ({
                 setModal={setModal}
                 modalActive={modalActive}
                 orders={orders.orders}
+               
               />
             </div>
           </div>
@@ -104,7 +111,7 @@ const Feed = ({
                 <div className={`${styles.flex}`}>
                   <ul
                     className={`${styles.list} ${
-                      orderDone.length > 10 ? styles.list_two : null
+                      orderDone.length > 10 && !isMobile ?  styles.list_two : null
                     } text_type_digits-default`}
                   >
                     {orderCreated.slice(0, 10).map((item) => (
@@ -152,6 +159,6 @@ const Feed = ({
         )}
       </main>
     </div>
-  );
+  ) : null
 };
 export default Feed;
