@@ -56,7 +56,13 @@ const FeedOrder = ({
 
   let price = "0";
   let items = getArr(orders, ingredientsFromSetver);
-  let dataOrder = new Date(time).toUTCString()
+  let dataOrder = new Date(time).toLocaleString('ru', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: "numeric",
+    minute: "numeric"
+  });
 
   price = items.reduce(
     (accumulator, currentValue) => accumulator + currentValue.price,

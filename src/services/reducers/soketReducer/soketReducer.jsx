@@ -42,6 +42,7 @@ export const wsReducer = (state = initialState, action) => {
         ...state,
         error: undefined,
         wsConnected: false,
+    
       };
 
     // Опишем обработку экшена с типом WS_GET_MESSAGE

@@ -1,8 +1,11 @@
-import { useContext } from "react";
+import { useContext ,useEffect } from "react";
 import styles from "./profile-orders.module.css";
 import FeedOrders from "../../components/feed-orders/feed-orders";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
+import { useDispatch, useSelector } from "react-redux";
+import { getCookie } from "../../utils/cookie/cookie";
+import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
 
 const ProfileOrders = ({
   orders,
@@ -11,6 +14,18 @@ const ProfileOrders = ({
   setOnCloseFunc,
   modalActive,
 }) => {
+  const user = useSelector((state) => state.User);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (getCookie("refreshToken") !== undefined) {
+      dispatch({
+        type: WS_CONNECTION_START,
+        payload: `?token=${getCookie(`token`)}`,
+      });
+    }
+  }, [user]);
+
   const { isMobile } = useContext(isMobileContext);
   return orders !== undefined ? (
     <div className={`${styles.container} ${!isMobile && "pt-15"}`}>

@@ -11,8 +11,7 @@ import Login from "../../pages/login/login";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import ForgotPassword from "../../pages/forgot-password/forgot-password";
 import FeedId from "../../pages/feed-id/feed-id";
-import { useSelector } from "react-redux";
-
+import { useSelector, useDispatch } from "react-redux";
 import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import NotFound from "../../pages/not-found/not-found";
@@ -20,6 +19,7 @@ import Out from "../../pages/out/out";
 import ProtectedRoute from "../protectedRoute/protectedRoute";
 import Modal from "../modal/modal";
 import IngredientInfo from "../ingredient-info/ingredient-info";
+import { WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
 
 const AppRoutes = ({
   auth,
@@ -36,8 +36,8 @@ const AppRoutes = ({
   const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
   const orders = useSelector((state) => state.ws.messagesAllOrders);
-  const ordersUser = useSelector((state) => state.ws.messagesUserOrders);
-  
+  const dispatch = useDispatch();
+
   function pageChange() {
     if (page == "ingredients") {
       setPage("constructor");
@@ -51,6 +51,16 @@ const AppRoutes = ({
   let location = useLocation();
   let state = location.state;
 
+  useEffect(() => {
+    if (
+      !location.pathname.includes("profile/orders") ||
+      !location.pathname.includes("feed")
+    ) {
+      dispatch({
+        type: WS_CONNECTION_CLOSED,
+      });
+    }
+  }, [location.pathname]);
   return (
     <div>
       {headerActive && <AppHeader auth={auth} />}
@@ -161,13 +171,13 @@ const AppRoutes = ({
               setlastPage={setlastPage}
               auth={auth}
             >
-              {ordersUser !== null ? (
+              {orders !== null ? (
                 <ProfileOrders
                   setOnCloseFunc={setOnCloseFunc}
                   setModalActive={setModalActive}
                   setModal={setModal}
                   modalActive={modalActive}
-                  orders={ordersUser[0]}
+                  orders={orders[0]}
                 />
               ) : null}
             </ProtectedRoute>
@@ -175,16 +185,15 @@ const AppRoutes = ({
         />
 
         <Route
-           exact
+          exact
           path="/profile/orders/:id"
           element={
             <ProtectedRoute
               link="/profile/orders/:id"
               setlastPage={setlastPage}
               auth={auth}
-          
             >
-              {ordersUser !== null ? <FeedId /> : null}
+              {orders !== null ? <FeedId /> : null}
             </ProtectedRoute>
           }
         />
@@ -215,7 +224,7 @@ const AppRoutes = ({
           <Route
             path="/profile-orders/:id"
             element={
-              ordersUser !== null ? (
+              orders !== null ? (
                 <Modal active={modalActive} onCloseFunc={onCloseFunc}>
                   {modal}
                 </Modal>

@@ -64,20 +64,33 @@ const FeedId = ({ orderId }) => {
   function orderNewSet() {
     if (orderId !== undefined) {
       orderNew = orderId;
-   
     } else if (id !== undefined) {
       orderNew = id;
- 
     }
   }
+  function setOrders() {
+    if (orders[0] !== undefined) {
+      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
 
+      ingredients = getArr(order.ingredients, ingredientsFromSetver);
+
+      uniqueIngredient = ingredients.reduce(
+        (r, i) =>
+          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
+            ? [...r, i]
+            : r,
+        []
+      );
+    }
+  }
   orderNewSet();
+  /*
   function setOrders() {
     if (
       location.pathname.includes("profile/orders") &&
-      ordersUser[0] !== undefined
+      orders[0] !== undefined
     ) {
-      order = ordersUser[0].orders.filter(
+      order = orders[0].orders.filter(
         (order) => order.number == orderNew
       )[0];
 
@@ -103,7 +116,7 @@ const FeedId = ({ orderId }) => {
         []
       );
     }
-  }
+  }*/
   setOrders();
   return order !== undefined && ingredients !== null ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
@@ -163,7 +176,13 @@ const FeedId = ({ orderId }) => {
               isMobile ? "text_type_main-small " : "text_type_main-default"
             } text_color_inactive`}
           >
-            {new Date(order.createdAt).toUTCString()}
+            {new Date(order.createdAt).toLocaleString("ru", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              hour: "numeric",
+              minute: "numeric",
+            })}
           </p>
           <div className={`${styles.feed__price__total} pr-2`}>
             <p className={`text pr-2 text_type_digits-default`}>

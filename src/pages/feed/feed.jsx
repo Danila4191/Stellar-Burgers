@@ -3,6 +3,8 @@ import FeedOrders from "../../components/feed-orders/feed-orders";
 import { v4 as uuidv4 } from "uuid";
 import { isMobileContext } from "../../services/context/appContext";
 import { useState, useEffect, useContext } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
 
 const Feed = ({
   orders,
@@ -11,6 +13,14 @@ const Feed = ({
   setOnCloseFunc,
   modalActive,
 }) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({
+      type: WS_CONNECTION_START,
+      payload : "/all"
+    });
+  },[]);
+ 
   const [current, setCurrent] = useState("orders");
   const { isMobile } = useContext(isMobileContext);
   let orderDone = null
@@ -21,6 +31,8 @@ const Feed = ({
     orderCreated = orders.orders.filter((item) => item.status == "created");
   }
  }
+
+
  setOrdersStatus()
   return orders !== undefined ? (
     <div className={` ${styles.feed__container} `}>
@@ -87,8 +99,8 @@ const Feed = ({
                       orderDone.length > 10 ? styles.list_two : null
                     }  text_type_digits-default`}
                   >
-                    {orderDone.slice(0, 10).map((item) => (
-                      <li className={`${styles.flex} `} key={uuidv4()}>
+                    {orderDone.slice(0, 10).map((item, index) => (
+                      <li className={`${styles.flex} `} key={item._id + index}>
                         {item.number}
                       </li>
                     ))}
@@ -97,8 +109,8 @@ const Feed = ({
                     <ul
                       className={`${styles.list} ${styles.list_two}  text_type_digits-default`}
                     >
-                      {orderDone.slice(10, 20).map((item) => (
-                        <li className={`${styles.flex} `} key={uuidv4()}>
+                      {orderDone.slice(10, 20).map((item , index) => (
+                        <li className={`${styles.flex} `} key={item._id + index}>
                           {item.number}
                         </li>
                       ))}
@@ -114,16 +126,16 @@ const Feed = ({
                       orderDone.length > 10 && !isMobile ?  styles.list_two : null
                     } text_type_digits-default`}
                   >
-                    {orderCreated.slice(0, 10).map((item) => (
-                      <li key={uuidv4()}>{item.number}</li>
+                    {orderCreated.slice(0, 10).map((item, index) => (
+                      <li key={item._id + index}>{item.number}</li>
                     ))}
                   </ul>
                   {orderCreated > 10 ? (
                     <ul
                       className={`${styles.list} ${styles.list_two} text_type_digits-default`}
                     >
-                      {orderCreated.slice(10, 20).map((item) => (
-                        <li key={uuidv4()}>{item.number}</li>
+                      {orderCreated.slice(10, 20).map((item, index) => (
+                        <li key={item._id + index}>{item.number}</li>
                       ))}
                     </ul>
                   ) : null}
