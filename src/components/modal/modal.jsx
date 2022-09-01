@@ -8,7 +8,6 @@ import ModalOverlay from "../modal-overlay/modal-overlay";
 const modalRoot = document.getElementById("react-modals");
 const Modal = ({ active, children, onCloseFunc }) => {
   const ESC = 27;
-  
 
   useEffect(() => {
     const handleEscapeClose = (evt) => {
@@ -18,12 +17,16 @@ const Modal = ({ active, children, onCloseFunc }) => {
         }
       }
     };
-    document.addEventListener("keydown", handleEscapeClose);
+    if (active == true) {
+      document.addEventListener("keydown", handleEscapeClose);
+    }
+
     return () => {
       document.removeEventListener("keydown", handleEscapeClose);
     };
-  });
-  return ReactDom.createPortal (
+  }, [active]);
+
+  return ReactDom.createPortal(
     <ModalOverlay active={active} onCloseFunc={onCloseFunc}>
       <div
         onClick={(e) => e.stopPropagation()}

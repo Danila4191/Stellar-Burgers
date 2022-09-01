@@ -105,8 +105,8 @@ const Feed = ({
                       orderDone.length > 10 ? styles.list_two : null
                     }  text_type_digits-default`}
                   >
-                    {orderDone.slice(0, 10).map((item, index) => (
-                      <li className={`${styles.flex} `} key={item._id + index}>
+                    {orderDone.slice(0, 10).map((item) => (
+                      <li className={`${styles.flex} `} key={item._id }>
                         {item.number}
                       </li>
                     ))}
@@ -115,8 +115,8 @@ const Feed = ({
                     <ul
                       className={`${styles.list} ${styles.list_two}  text_type_digits-default`}
                     >
-                      {orderDone.slice(10, 20).map((item , index) => (
-                        <li className={`${styles.flex} `} key={item._id + index}>
+                      {orderDone.slice(10, 20).map((item ) => (
+                        <li className={`${styles.flex} `} key={item._id }>
                           {item.number}
                         </li>
                       ))}
@@ -132,16 +132,16 @@ const Feed = ({
                       orderDone.length > 10 && !isMobile ?  styles.list_two : null
                     } text_type_digits-default`}
                   >
-                    {orderCreated.slice(0, 10).map((item, index) => (
-                      <li key={item._id + index}>{item.number}</li>
+                    {orderCreated.slice(0, 10).map((item) => (
+                      <li key={item._id }>{item.number}</li>
                     ))}
                   </ul>
                   {orderCreated > 10 ? (
                     <ul
                       className={`${styles.list} ${styles.list_two} text_type_digits-default`}
                     >
-                      {orderCreated.slice(10, 20).map((item, index) => (
-                        <li key={item._id + index}>{item.number}</li>
+                      {orderCreated.slice(10, 20).map((item) => (
+                        <li key={item._id }>{item.number}</li>
                       ))}
                     </ul>
                   ) : null}

@@ -122,7 +122,7 @@ const BurgerIngredients = ({
         <Grid id="bun" title="Булки">
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "bun")
-            .map((ingredient, index) => (
+            .map((ingredient) => (
        
                 <BurgerIngredient
                   ingredient={ingredient}
@@ -130,7 +130,7 @@ const BurgerIngredients = ({
                   setModal={setModal}
                   setOnCloseFunc={setOnCloseFunc}
                   modalActive={modalActive}
-                  key={ingredient._id + index}
+                  key={ingredient._id }
                 />
             
             ))}
@@ -139,10 +139,10 @@ const BurgerIngredients = ({
         <Grid id="souce" title="Соусы">
           {ingredientsFromSetver
             .filter((ingredient) => ingredient.type == "sauce")
-            .map((ingredient, index) => (
+            .map((ingredient) => (
       
                 <BurgerIngredient
-                  key={ingredient._id + index}
+                  key={ingredient._id }
                   ingredient={ingredient}
                   setModalActive={setModalActive}
                   setModal={setModal}
@@ -157,10 +157,10 @@ const BurgerIngredients = ({
           <Grid id="main" title="Начинки">
             {ingredientsFromSetver
               .filter((ingredient) => ingredient.type == "main")
-              .map((ingredient, index) => (
+              .map((ingredient) => (
          
                   <BurgerIngredient
-                    key={ingredient._id + index}
+                    key={ingredient._id }
                     ingredient={ingredient}
                     setModalActive={setModalActive}
                     setModal={setModal}
