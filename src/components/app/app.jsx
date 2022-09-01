@@ -35,15 +35,10 @@ const App = () => {
 
 
   useEffect(() => {
-    if (getCookie("refreshToken") !== undefined && user.failed == true) {
-      dispatch(
-        getToken({
-          token: getCookie("refreshToken"),
-        }),
-        getUser()
-      );
-    }
+  
   }, [user.failed]);
+
+
   useEffect(() => {
     if (getCookie("refreshToken") !== undefined) {
       dispatch(getUser());

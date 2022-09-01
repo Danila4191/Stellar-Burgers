@@ -81,15 +81,18 @@ export function authLogin(data) {
           dispatch({
             type: GET_USER_FAILED,
           });
-         // dispatch(  getToken({
-        //    token: getCookie("refreshToken"),
-        //  }));
-         /* if (err.status !== "403") {
+          if (getCookie("refreshToken") !== undefined ) {
+            dispatch(
+              getToken({
+                token: getCookie("refreshToken"),
+              }),
+            );
+          } else if (err.status !== "403") {
             dispatch({
               type: GET_USER_FAILED,
             });
             alert(`Ошибка ${err.status}`);
-          }*/
+          }
         });
     };
   }

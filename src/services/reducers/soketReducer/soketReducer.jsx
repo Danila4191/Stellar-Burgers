@@ -13,6 +13,7 @@ const initialState = {
   messagesAllOrders: [],
   messagesUserOrders:[],
   error: undefined,
+
 };
 
 export const wsReducer = (state = initialState, action) => {
@@ -24,6 +25,7 @@ export const wsReducer = (state = initialState, action) => {
         ...state,
         error: undefined,
         wsConnected: true,
+    
       };
 
     // Опишем обработку экшена с типом WS_CONNECTION_ERROR
@@ -33,6 +35,7 @@ export const wsReducer = (state = initialState, action) => {
         ...state,
         error: action.payload,
         wsConnected: false,
+   
       };
 
     // Опишем обработку экшена с типом WS_CONNECTION_CLOSED, когда соединение закрывается
@@ -42,7 +45,7 @@ export const wsReducer = (state = initialState, action) => {
         ...state,
         error: undefined,
         wsConnected: false,
-    
+        messagesAllOrders: [],
       };
 
     // Опишем обработку экшена с типом WS_GET_MESSAGE
@@ -53,6 +56,7 @@ export const wsReducer = (state = initialState, action) => {
         ...state,
         error: undefined,
         messagesAllOrders: [ JSON.parse(action.payload)],
+   
       };
     case WS_GET_MESSAGE_PROFILE:
       return {

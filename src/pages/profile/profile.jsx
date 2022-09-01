@@ -43,6 +43,7 @@ const Profile = () => {
   const onChange = (e) => {
     setValue({ ...form, [e.target.name]: e.target.value });
     // setProfileButtonActive(true);
+
   };
 
   function cansel() {
@@ -55,12 +56,14 @@ const Profile = () => {
       form.name == "" ||
       form.email == "" ||
       errorEmail.error ||
-      errorName.error ||
-      (user.name == form.name && form.email == user.email)
+      errorName.error || 
+      errorPassword.error ||
+      (user.name == form.name && form.email == user.email && form.password == ""  )
     ) {
       setProfileButtonActive(false);
     } else {
       setProfileButtonActive(true);
+      console.log(1)
     }
   });
 
@@ -93,13 +96,15 @@ const Profile = () => {
   function confirm() {
     userFixApi({
       email: form.email,
-      //password: form.password,
+      password: form.password,
       name: form.name,
     })
       .then((data) => {
         if (data.success) {
+          form.password = ""
           setProfileButtonActive(false);
           dispatch(getUser());
+        
         }
       })
       .catch((err) => {

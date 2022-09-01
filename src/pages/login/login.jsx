@@ -12,6 +12,7 @@ const Login = ({ lastPage, auth,  setlastPage }) => {
   const [LoginButtonActive, setLoginButtonActive] = useState(false);
   const [form, setValue] = useState({ email: "", password: "" });
   const { user, loading, failed } = useSelector((state) => state.Login);
+  
   const [errorEmail, setErrorEmail] = useState({ error: false, errorText: "" });
   const [errorPassword, setErrorPassword] = useState({
     error: false,

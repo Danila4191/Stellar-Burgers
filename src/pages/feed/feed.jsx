@@ -3,9 +3,9 @@ import FeedOrders from "../../components/feed-orders/feed-orders";
 import { v4 as uuidv4 } from "uuid";
 import { isMobileContext } from "../../services/context/appContext";
 import { useState, useEffect, useContext } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
-
+import { useDispatch} from "react-redux";
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import Loader from "../../components/loader/loader";
 const Feed = ({
   orders,
   setModalActive,
@@ -14,13 +14,19 @@ const Feed = ({
   modalActive,
 }) => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
       payload : "/all"
     });
-  },[]);
- 
+
+    return () => {
+      dispatch({
+        type: WS_CONNECTION_CLOSED,
+      });
+    }
+  }, [dispatch])
   const [current, setCurrent] = useState("orders");
   const { isMobile } = useContext(isMobileContext);
   let orderDone = null
@@ -171,6 +177,6 @@ const Feed = ({
         )}
       </main>
     </div>
-  ) : null
+  ) : <Loader/>
 };
 export default Feed;

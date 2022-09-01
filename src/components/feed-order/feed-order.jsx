@@ -20,6 +20,7 @@ const FeedOrder = ({
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
   );
+  const ordersLoading = useSelector((state) => state.ws.loading);
   const { isMobile } = useContext(isMobileContext);
   const location = useLocation();
   let navigate = useNavigate();
@@ -41,8 +42,8 @@ const FeedOrder = ({
   }
 
   function openModal() {
-    setModal(<FeedId  orderId={orderId}/>);
     setModalActive(true);
+    setModal(<FeedId modalActive={!modalActive} orderId={orderId}/>);
     setOnCloseFunc(() => close);
   }
 
@@ -71,7 +72,7 @@ const FeedOrder = ({
 
 
   
-  return price !== 0 ? (
+  return price !== 0 && !ordersLoading ?  (
     <div onClick={openModal}>
       <NavLink
         to={

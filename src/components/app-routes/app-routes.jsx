@@ -2,7 +2,7 @@ import AppHeader from "../app-header/app-header";
 import styles from "./app-routes.module.css";
 import BurgerIngredients from "../burger-ingredients/burger-ingredients";
 import BurgerConstructor from "../burger-constructor/burger-constructor";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, useParams } from "react-router-dom";
 import ProfileOrders from "../../pages/profile-orders/profile-orders";
 import Feed from "../../pages/feed/feed";
 import Profile from "../../pages/profile/profile";
@@ -20,7 +20,7 @@ import ProtectedRoute from "../protectedRoute/protectedRoute";
 import Modal from "../modal/modal";
 import IngredientInfo from "../ingredient-info/ingredient-info";
 import { WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
-
+import Loader from "../loader/loader";
 const AppRoutes = ({
   auth,
   setOnCloseFunc,
@@ -51,22 +51,14 @@ const AppRoutes = ({
   let location = useLocation();
   let state = location.state;
 
-  useEffect(() => {
-    if (
-      !location.pathname.includes("profile/orders") ||
-      !location.pathname.includes("feed")
-    ) {
-      dispatch({
-        type: WS_CONNECTION_CLOSED,
-      });
-    }
-  }, [location.pathname]);
+
   return (
     <div>
       {headerActive && <AppHeader auth={auth} />}
       <Routes
         location={modalActive == true ? state?.backgroundLocation : location}
       >
+        
         <Route
           path="/"
           element={
@@ -132,12 +124,13 @@ const AppRoutes = ({
             orders !== null ? (
               <Feed
                 setOnCloseFunc={setOnCloseFunc}
-                setModalActive={setModalActive}
+               setModalActive={setModalActive}
                 setModal={setModal}
                 modalActive={modalActive}
                 orders={orders[0]}
-              />
-            ) : null
+              /> 
+           
+            ) : <Loader/>
           }
         />
 
@@ -179,7 +172,7 @@ const AppRoutes = ({
                   modalActive={modalActive}
                   orders={orders[0]}
                 />
-              ) : null}
+              ) : <Loader/>}
             </ProtectedRoute>
           }
         />
@@ -197,7 +190,7 @@ const AppRoutes = ({
             </ProtectedRoute>
           }
         />
-        <Route path="/feed/:id" element={<FeedId />} />
+        <Route path="/feed/:id" element={  orders !== null ?<FeedId /> : null} />
 
         <Route
           path="/ingredients/:id"

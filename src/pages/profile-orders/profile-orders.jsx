@@ -5,8 +5,8 @@ import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
 import { useDispatch, useSelector } from "react-redux";
 import { getCookie } from "../../utils/cookie/cookie";
-import { WS_CONNECTION_START } from "../../services/actions/soketAction/soketAction";
-
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import Loader from "../../components/loader/loader";
 const ProfileOrders = ({
   orders,
   setModalActive,
@@ -14,9 +14,9 @@ const ProfileOrders = ({
   setOnCloseFunc,
   modalActive,
 }) => {
-  const user = useSelector((state) => state.User);
+
   const dispatch = useDispatch();
-  
+
   useEffect(() => {
     if (getCookie("refreshToken") !== undefined) {
       dispatch({
@@ -24,7 +24,13 @@ const ProfileOrders = ({
         payload: `?token=${getCookie(`token`)}`,
       });
     }
-  }, [user]);
+
+    return () => {
+      dispatch({
+        type: WS_CONNECTION_CLOSED,
+      });
+    }
+  }, [dispatch])
 
   const { isMobile } = useContext(isMobileContext);
   return orders !== undefined ? (
@@ -52,6 +58,6 @@ const ProfileOrders = ({
         />
       </div>
     </div>
-  ) : null;
+  ) : <Loader/>;
 };
 export default ProfileOrders;

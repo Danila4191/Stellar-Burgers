@@ -1,13 +1,12 @@
 import styles from "./feed-id.module.css";
 import { CurrencyIcon } from "@ya.praktikum/react-developer-burger-ui-components";
 import { useParams, useLocation } from "react-router-dom";
-
 import { v4 as uuidv4 } from "uuid";
 import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
-import FeedOrder from "../../components/feed-order/feed-order";
-import { useSelector } from "react-redux";
-
+import { useDispatch, useSelector } from "react-redux";
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import { getCookie } from "../../utils/cookie/cookie";
 const FeedIdElement = ({ title, count, price, img }) => {
   const { isMobile } = useContext(isMobileContext);
   return (
@@ -39,19 +38,66 @@ const FeedIdElement = ({ title, count, price, img }) => {
   );
 };
 
-const FeedId = ({ orderId }) => {
+const FeedId = ({ orderId, modalActive }) => {
   const orders = useSelector((state) => state.ws.messagesAllOrders);
-  const ordersUser = useSelector((state) => state.ws.messagesUserOrders);
   const { isMobile } = useContext(isMobileContext);
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
   );
+  const dispatch = useDispatch();
   let location = useLocation();
-  let { id } = useParams();
+  let param = useParams();
   let order = undefined;
   let uniqueIngredient = null;
   let orderNew = undefined;
   let ingredients = null;
+
+  useEffect(() => {
+    if( param.id !== undefined &&
+      location.pathname.includes("feed") &&
+      !modalActive){
+        dispatch({
+          type: WS_CONNECTION_START,
+          payload : "/all"
+        });
+       
+      } else if(
+        param.id !== undefined &&
+        location.pathname.includes("profile/orders") &&
+        !modalActive
+      ) {
+        dispatch({
+          type: WS_CONNECTION_START,
+          payload: `?token=${getCookie(`token`)}`,
+        });
+      }
+    return () => {
+      if( param.id !== undefined &&
+        !modalActive){
+          dispatch({
+            type: WS_CONNECTION_CLOSED,
+          });
+        } 
+  
+    }
+  }, [dispatch])
+
+
+  function setOrders() {
+    if (orders[0] !== undefined && ingredientsFromSetver !== null) {
+      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
+  
+      ingredients = getArr(order.ingredients, ingredientsFromSetver);
+      uniqueIngredient = ingredients.reduce(
+        (r, i) =>
+          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
+            ? [...r, i]
+            : r,
+        []
+      );
+   
+    }
+  }
 
   function getArr(first, second) {
     return first.reduce((acc, item) => {
@@ -64,26 +110,13 @@ const FeedId = ({ orderId }) => {
   function orderNewSet() {
     if (orderId !== undefined) {
       orderNew = orderId;
-    } else if (id !== undefined) {
-      orderNew = id;
+    } else if (param.id !== undefined) {
+      orderNew = param.id;
     }
   }
-  function setOrders() {
-    if (orders[0] !== undefined) {
-      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
-
-      ingredients = getArr(order.ingredients, ingredientsFromSetver);
-
-      uniqueIngredient = ingredients.reduce(
-        (r, i) =>
-          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-            ? [...r, i]
-            : r,
-        []
-      );
-    }
-  }
+ 
   orderNewSet();
+  setOrders()
   /*
   function setOrders() {
     if (
@@ -117,8 +150,8 @@ const FeedId = ({ orderId }) => {
       );
     }
   }*/
-  setOrders();
-  return order !== undefined && ingredients !== null ? (
+
+  return order !== undefined && ingredients !== null  ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
       <div
         className={`${styles.feed__order__container} ${

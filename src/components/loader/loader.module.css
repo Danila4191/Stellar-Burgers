@@ -1,0 +1,28 @@
+.loader_container {
+    flex-grow: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .loader {
+    width: 64px;
+    height: 64px;
+    background-color: transparent;
+    border: 6px solid transparent;
+    border-top-color: white;
+    border-right-color: white;
+    border-bottom-color: white;
+    border-radius: 50%;
+    animation: rotate 1s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
