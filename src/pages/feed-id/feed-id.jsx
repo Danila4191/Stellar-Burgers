@@ -158,9 +158,9 @@ const FeedId = ({ orderId, modalActive }) => {
           Состав:
         </p>
         <div className={`${styles.feed__list} ${!isMobile && "pt-6 pr-6"}`}>
-          {uniqueIngredient.map((item, index) => (
+          {uniqueIngredient.map((item) => (
             <FeedIdElement
-              key={index + item._id}
+              key={ item._id}
               title={item.name}
               price={
                 item.price *

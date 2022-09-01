@@ -11,9 +11,9 @@ const FeedOrders = ({
 
   return (
     <div className={`${styles.feed__orders}  `}>
-      {orders.map((order, index) => (
+      {orders.map((order) => (
         <FeedOrder
-          key={order.createdAt + index}
+          key={order.createdAt }
           time={order.createdAt}
           orders={order.ingredients}
           status={order.status}
