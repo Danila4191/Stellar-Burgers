@@ -5,8 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import { useDispatch, useSelector } from "react-redux";
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE,WS_GET_MESSAGE_PROFILE } from "../../services/actions/soketAction/soketAction";
 import { getCookie } from "../../utils/cookie/cookie";
+import Loader from "../../components/loader/loader";
 const FeedIdElement = ({ title, count, price, img }) => {
   const { isMobile } = useContext(isMobileContext);
   return (
@@ -40,6 +41,7 @@ const FeedIdElement = ({ title, count, price, img }) => {
 
 const FeedId = ({ orderId, modalActive }) => {
   const orders = useSelector((state) => state.ws.messagesAllOrders);
+  const ordersUser = useSelector((state) => state.ws.messagesUserOrders);
   const { isMobile } = useContext(isMobileContext);
   const ingredientsFromSetver = useSelector(
     (state) => state.ingredients.productData
@@ -58,7 +60,7 @@ const FeedId = ({ orderId, modalActive }) => {
       !modalActive){
         dispatch({
           type: WS_CONNECTION_START,
-          payload : "/all"
+          payload : {url: "/all", caseNameOnMessage: WS_GET_MESSAGE }
         });
        
       } else if(
@@ -68,7 +70,7 @@ const FeedId = ({ orderId, modalActive }) => {
       ) {
         dispatch({
           type: WS_CONNECTION_START,
-          payload: `?token=${getCookie(`token`)}`,
+          payload: {url: `?token=${getCookie(`token`)}`, caseNameOnMessage: WS_GET_MESSAGE_PROFILE }
         });
       }
     return () => {
@@ -84,9 +86,13 @@ const FeedId = ({ orderId, modalActive }) => {
 
 
   function setOrders() {
-    if (orders[0] !== undefined && ingredientsFromSetver !== null) {
-      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
-  
+    if ((orders[0] !== undefined || ordersUser[0] !== undefined) && ingredientsFromSetver !== null ) {
+      if(orders[0] !== undefined){
+        order = orders[0].orders.filter((order) => order.number == orderNew)[0];
+      } else {
+        order = ordersUser[0].orders.filter((order) => order.number == orderNew)[0];
+      }
+    
       ingredients = getArr(order.ingredients, ingredientsFromSetver);
       uniqueIngredient = ingredients.reduce(
         (r, i) =>
@@ -95,7 +101,6 @@ const FeedId = ({ orderId, modalActive }) => {
             : r,
         []
       );
-   
     }
   }
 
@@ -103,7 +108,7 @@ const FeedId = ({ orderId, modalActive }) => {
     return first.reduce((acc, item) => {
       const val = second.find((el) => el._id === item);
       return val ? [...acc, val] : acc;
-      // return val ? [...acc, undefined] : acc; // на случай, если надо вернуть undefined
+    
     }, []);
   }
 
@@ -117,39 +122,6 @@ const FeedId = ({ orderId, modalActive }) => {
  
   orderNewSet();
   setOrders()
-  /*
-  function setOrders() {
-    if (
-      location.pathname.includes("profile/orders") &&
-      orders[0] !== undefined
-    ) {
-      order = orders[0].orders.filter(
-        (order) => order.number == orderNew
-      )[0];
-
-      ingredients = getArr(order.ingredients, ingredientsFromSetver);
-
-      uniqueIngredient = ingredients.reduce(
-        (r, i) =>
-          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-            ? [...r, i]
-            : r,
-        []
-      );
-    } else if (location.pathname.includes("feed") && orders[0] !== undefined) {
-      order = orders[0].orders.filter((order) => order.number == orderNew)[0];
-
-      ingredients = getArr(order.ingredients, ingredientsFromSetver);
-
-      uniqueIngredient = ingredients.reduce(
-        (r, i) =>
-          !r.some((j) => JSON.stringify(i) === JSON.stringify(j))
-            ? [...r, i]
-            : r,
-        []
-      );
-    }
-  }*/
 
   return order !== undefined && ingredients !== null  ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
@@ -229,6 +201,6 @@ const FeedId = ({ orderId, modalActive }) => {
         </div>
       </div>
     </div>
-  ) : null;
+  ) : <Loader/>;
 };
 export default FeedId;

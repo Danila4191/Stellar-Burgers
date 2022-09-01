@@ -5,7 +5,7 @@ import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
 import { useDispatch, useSelector } from "react-redux";
 import { getCookie } from "../../utils/cookie/cookie";
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE_PROFILE  } from "../../services/actions/soketAction/soketAction";
 import Loader from "../../components/loader/loader";
 const ProfileOrders = ({
   orders,
@@ -21,7 +21,7 @@ const ProfileOrders = ({
     if (getCookie("refreshToken") !== undefined) {
       dispatch({
         type: WS_CONNECTION_START,
-        payload: `?token=${getCookie(`token`)}`,
+        payload: {url: `?token=${getCookie(`token`)}`, caseNameOnMessage: WS_GET_MESSAGE_PROFILE }
       });
     }
 

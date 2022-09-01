@@ -124,7 +124,7 @@ export function authLogin(data) {
             if (refreshToken) {
               setCookie("refreshToken", refreshToken);
             }
-           // dispatch(getUser());
+            dispatch(getUser());
           }
         })
         .catch((err) => {

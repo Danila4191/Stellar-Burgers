@@ -46,6 +46,7 @@ export const wsReducer = (state = initialState, action) => {
         error: undefined,
         wsConnected: false,
         messagesAllOrders: [],
+        messagesUserOrders: [],
       };
 
     // Опишем обработку экшена с типом WS_GET_MESSAGE

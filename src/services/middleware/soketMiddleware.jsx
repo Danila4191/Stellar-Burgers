@@ -14,7 +14,7 @@ export const socketMiddleware =( wsUrl , wsActions) => {
 
       if (type === wsActions.wsInit) {
         // объект класса WebSocket
-        socket = new WebSocket(`${wsUrl}${payload}`);
+        socket = new WebSocket(`${wsUrl}${payload.url}`);
       } 
       if (socket ) {
         // функция, которая вызывается при открытии сокета
@@ -32,7 +32,7 @@ export const socketMiddleware =( wsUrl , wsActions) => {
         if (type === wsActions.wsInit) {
           socket.onmessage = (event) => {
             const { data } = event;
-            dispatch({ type: wsActions.onMessage, payload: data });
+            dispatch({ type: payload.caseNameOnMessage, payload: data });
           };
         }
         // функция, которая вызывается при закрытии соединения

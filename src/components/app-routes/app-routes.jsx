@@ -36,6 +36,7 @@ const AppRoutes = ({
   const [lastPage, setlastPage] = useState("");
   const [headerActive, setHeaderActive] = useState(true);
   const orders = useSelector((state) => state.ws.messagesAllOrders);
+  const ordersUser = useSelector((state) => state.ws.messagesUserOrders)
   const dispatch = useDispatch();
 
   function pageChange() {
@@ -164,13 +165,13 @@ const AppRoutes = ({
               setlastPage={setlastPage}
               auth={auth}
             >
-              {orders !== null ? (
+              {ordersUser !== null ? (
                 <ProfileOrders
                   setOnCloseFunc={setOnCloseFunc}
                   setModalActive={setModalActive}
                   setModal={setModal}
                   modalActive={modalActive}
-                  orders={orders[0]}
+                  orders={ordersUser[0]}
                 />
               ) : <Loader/>}
             </ProtectedRoute>
@@ -186,7 +187,7 @@ const AppRoutes = ({
               setlastPage={setlastPage}
               auth={auth}
             >
-              {orders !== null ? <FeedId /> : null}
+              {ordersUser !== null ? <FeedId /> : null}
             </ProtectedRoute>
           }
         />
@@ -217,7 +218,7 @@ const AppRoutes = ({
           <Route
             path="/profile-orders/:id"
             element={
-              orders !== null ? (
+              ordersUser !== null ? (
                 <Modal active={modalActive} onCloseFunc={onCloseFunc}>
                   {modal}
                 </Modal>

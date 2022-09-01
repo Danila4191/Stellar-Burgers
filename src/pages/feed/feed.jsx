@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { isMobileContext } from "../../services/context/appContext";
 import { useState, useEffect, useContext } from "react";
 import { useDispatch} from "react-redux";
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
+import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE} from "../../services/actions/soketAction/soketAction";
 import Loader from "../../components/loader/loader";
 const Feed = ({
   orders,
@@ -18,7 +18,7 @@ const Feed = ({
   useEffect(() => {
     dispatch({
       type: WS_CONNECTION_START,
-      payload : "/all"
+      payload :{url: "/all", caseNameOnMessage: WS_GET_MESSAGE }
     });
 
     return () => {
