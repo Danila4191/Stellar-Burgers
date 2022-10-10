@@ -8,15 +8,15 @@ import { useDispatch} from "react-redux";
 import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE} from "../../services/actions/soketAction/soketAction";
 import Loader from "../../components/loader/loader";
 import React, {  FC } from "react";
-import { FeedOrdersProps,ingredientObjectProps } from "../../services/types/types";
-const Feed:FC<FeedOrdersProps> = ({
+import { IFeedProps,IOrderProps,useDispatchTyped } from "../../services/types/types";
+const Feed:FC<IFeedProps> = ({
   orders,
   setModalActive,
   setModal,
   setOnCloseFunc,
   modalActive,
 }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatchTyped();
 
   useEffect(() => {
     dispatch({
@@ -33,13 +33,15 @@ const Feed:FC<FeedOrdersProps> = ({
   const [current, setCurrent] = useState("orders");
 
   const { isMobile } = useContext(isMobileContext);
-  let orderDone:any = null
-  let orderCreated:any = null
+  let orderDone:IOrderProps[] = []
+  let orderCreated:IOrderProps[] = []
  function setOrdersStatus(){
   if(orders !== undefined){
-    orderDone = orders.orders.filter((item:ingredientObjectProps) => item.status == "done");
-    orderCreated = orders.orders.filter((item:ingredientObjectProps) => item.status == "created");
+    orderDone = orders.orders.filter((item:IOrderProps) => item.status == "done");
+   
+    orderCreated = orders.orders.filter((item:IOrderProps) => item.status == "created");
   }
+  
  }
 
 
@@ -109,7 +111,7 @@ const Feed:FC<FeedOrdersProps> = ({
                       orderDone.length > 10 ? styles.list_two : null
                     }  text_type_digits-default`}
                   >
-                    {orderDone.slice(0, 10).map((item:ingredientObjectProps) => (
+                    {orderDone.slice(0, 10).map((item:IOrderProps) => (
                       <li className={`${styles.flex} `} key={item._id }>
                         {item.number}
                       </li>
@@ -119,7 +121,7 @@ const Feed:FC<FeedOrdersProps> = ({
                     <ul
                       className={`${styles.list} ${styles.list_two}  text_type_digits-default`}
                     >
-                      {orderDone.slice(10, 20).map((item:ingredientObjectProps ) => (
+                      {orderDone.slice(10, 20).map((item:IOrderProps ) => (
                         <li className={`${styles.flex} `} key={item._id }>
                           {item.number}
                         </li>
@@ -136,15 +138,15 @@ const Feed:FC<FeedOrdersProps> = ({
                       orderDone.length > 10 && !isMobile ?  styles.list_two : null
                     } text_type_digits-default`}
                   >
-                    {orderCreated.slice(0, 10).map((item:ingredientObjectProps) => (
+                    {orderCreated.slice(0, 10).map((item:IOrderProps) => (
                       <li key={item._id }>{item.number}</li>
                     ))}
                   </ul>
-                  {orderCreated > 10 ? (
+                  {orderCreated.length > 10 ? (
                     <ul
                       className={`${styles.list} ${styles.list_two} text_type_digits-default`}
                     >
-                      {orderCreated.slice(10, 20).map((item:ingredientObjectProps) => (
+                      {orderCreated.slice(10, 20).map((item:IOrderProps) => (
                         <li key={item._id }>{item.number}</li>
                       ))}
                     </ul>

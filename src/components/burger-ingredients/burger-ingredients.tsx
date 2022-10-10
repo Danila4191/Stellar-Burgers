@@ -8,9 +8,9 @@ import {
 } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./burger-ingredients.module.css";
 import BurgerIngredient from "../burger-ingredient/burger-ingredient";
-import { IngredientsProps,ingredientObjectProps,IngredientsGridProps } from "../../services/types/types";
+import { IIngredientsProps,IingredientObjectProps,IIngredientsGridProps, Scroll } from "../../services/types/types";
 
-const Grid:FC<IngredientsGridProps> = (props) => {
+const Grid:FC<IIngredientsGridProps> = (props) => {
   return (
     <ul id={`${props.id}`} className={`${styles.section} pb-10`}>
       <h2 className={`${styles.subtitle} text_type_main-medium`}>
@@ -22,7 +22,7 @@ const Grid:FC<IngredientsGridProps> = (props) => {
 };
 
 
-const BurgerIngredients:FC<IngredientsProps> = ({
+const BurgerIngredients:FC<IIngredientsProps> = ({
   setModalActive,
   setModal,
   setOnCloseFunc,
@@ -33,8 +33,8 @@ const BurgerIngredients:FC<IngredientsProps> = ({
     (state) => state.ingredients.productData
   );
 
-  const [cursorPosition, setCursorPosition] = React.useState<any>({y:0});
-  const [current, setCurrent] = useState("");
+  const [cursorPosition, setCursorPosition] = React.useState<Scroll>({y:0});
+  const [current, setCurrent] = useState<string>("");
 
   const { isMobile } = useContext(isMobileContext);
   const total = useSelectorTyped((state) => state.total.total);
@@ -47,14 +47,15 @@ const BurgerIngredients:FC<IngredientsProps> = ({
   }
 
   const OnScrol = (e?: React.UIEvent<HTMLDivElement, UIEvent>):void => {
-    const bun:number|undefined= document.querySelector<HTMLElement>(`#${"bun"}`)?.offsetTop;
+    const bun = document.querySelector<HTMLElement>(`#${"bun"}`)?.offsetTop;
     const main = document.querySelector<HTMLElement>(`#${"main"}`)?.offsetTop;
     const souse = document.querySelector<HTMLElement>(`#${"souce"}`)?.offsetTop;
     const scrollTop = document.querySelector<HTMLElement>(`#${"list"}`)?.scrollTop;
+    if(scrollTop !== undefined){
     setCursorPosition({
      // ...cursorPosition,
       y: scrollTop,
-    });
+    });}
 
     if ( bun !== undefined  && cursorPosition.y < bun  ) {
       setCurrent("bun");
@@ -120,8 +121,8 @@ const BurgerIngredients:FC<IngredientsProps> = ({
       >
         <Grid id="bun" title="Булки">
           {ingredientsFromSetver
-            .filter((ingredient:ingredientObjectProps) => ingredient.type == "bun")
-            .map((ingredient:ingredientObjectProps) => (
+            .filter((ingredient:IingredientObjectProps) => ingredient.type == "bun")
+            .map((ingredient:IingredientObjectProps) => (
        
                 <BurgerIngredient
                   ingredient={ingredient}
@@ -137,8 +138,8 @@ const BurgerIngredients:FC<IngredientsProps> = ({
 
         <Grid id="souce" title="Соусы">
           {ingredientsFromSetver
-            .filter((ingredient:ingredientObjectProps) => ingredient.type == "sauce")
-            .map((ingredient:ingredientObjectProps) => (
+            .filter((ingredient:IingredientObjectProps) => ingredient.type == "sauce")
+            .map((ingredient:IingredientObjectProps) => (
       
                 <BurgerIngredient
                   key={ingredient._id }
@@ -155,8 +156,8 @@ const BurgerIngredients:FC<IngredientsProps> = ({
         <div className="pb-15">
           <Grid id="main" title="Начинки">
             {ingredientsFromSetver
-              .filter((ingredient:ingredientObjectProps) => ingredient.type == "main")
-              .map((ingredient:ingredientObjectProps) => (
+              .filter((ingredient:IingredientObjectProps) => ingredient.type == "main")
+              .map((ingredient:IingredientObjectProps) => (
          
                   <BurgerIngredient
                     key={ingredient._id }

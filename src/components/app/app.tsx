@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import Modal from "../modal/modal";
-import { useDispatch } from "react-redux";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { getIngredients } from "../../services/actions/ingredientsActions/ingredientsActions";
@@ -12,14 +11,13 @@ import { TouchBackend } from "react-dnd-touch-backend";
 import { getCookie } from "../../utils/cookie/cookie";
 import { codeSendContext } from "../../services/context/appContext";
 import { HashRouter } from "react-router-dom";
-import { AppDispatch } from "../../services/store/store";
-import { useSelectorTyped,useDispatchTyped } from "../../services/types/types";
+import { useDispatchTyped } from "../../services/types/types";
 const App = () => {
   const [modalActive, setModalActive] = useState<boolean>(false);
-  const [onCloseFunc, setOnCloseFunc] = useState<() => void>();
-  const [modal, setModal] = useState();
-  const [codeSend, setCodeSend] = useState(false);
-
+  const [onCloseFunc, setOnCloseFunc] = useState<(() => void)|undefined>(undefined);
+  const [modal, setModal] = useState<React.ReactElement|null>(null);
+  const [codeSend, setCodeSend] = useState<boolean>(false);
+const [auth,setAuth]= useState<boolean>(false)
   const isMobile: boolean = useMediaQuery({
     query: "(max-width: 700px)",
   });
@@ -32,10 +30,14 @@ const App = () => {
     if (getCookie("refreshToken") !== undefined) {
       dispatch(getUser());
     }
+    
   }, []);
 
-  const auth = getCookie("refreshToken") == undefined ? false : true;
-
+  useEffect(() => {
+    setAuth(getCookie("refreshToken") == undefined ? false : true)
+  }, [] );
+  //const auth = getCookie("refreshToken") == undefined ? false : true;
+ 
   return (
     <div>
       <isMobileContext.Provider value={{ isMobile }}>
@@ -50,6 +52,7 @@ const App = () => {
                 modalActive={modalActive}
                 onCloseFunc={onCloseFunc}
                 modal={modal}
+                setAuth={setAuth}
               />
               <Modal active={modalActive} onCloseFunc={onCloseFunc}>
                 {modal}

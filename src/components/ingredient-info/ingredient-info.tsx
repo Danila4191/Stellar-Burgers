@@ -1,8 +1,6 @@
 import styles from "./ingredient-info.module.css";
-import { useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import React, { useEffect }  from "react";
-import { ingredientObjectProps } from "../../services/types/types";
+import { IingredientObjectProps } from "../../services/types/types";
 import { useSelectorTyped } from "../../services/types/types";
 const IngredientInfo = () => {
 
@@ -12,19 +10,17 @@ const IngredientInfo = () => {
   let { id } = useParams();
   let navItem = undefined
 
-  let itemNew:any = Array.from(items.filter((item:ingredientObjectProps) => item._id === id))[0];
+  let itemNew:IingredientObjectProps = Array.from(items.filter((item:IingredientObjectProps) => item._id === id))[0];
   navItem =  itemNew
 
- 
+      
   return item !== null || (navItem !== undefined) ? (
     <div className={styles.ingredient_info}>
       <h1 className="text text_type_main-large ">Детали ингредиента</h1>
       <img
         className={`${styles.image} pr-4 pl-4 pb-1`}
-      
-        src={item !== null ? item.image : ((navItem !== undefined) ? navItem.image : null)}
-    
-        alt={item !== null ? item.name : ((navItem !== undefined) ? navItem.name : null)}
+        src={item !== null ? item.image : ((navItem !== undefined) ? navItem.image : undefined)}
+        alt={item !== null ? item.name : ((navItem !== undefined) ? navItem.name : undefined)}
       />
       <h2 className="text text_type_main-medium pt-4 pb-8">
         

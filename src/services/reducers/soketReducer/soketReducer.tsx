@@ -1,28 +1,28 @@
 import {
-  WS_CONNECTION_START,
   WS_CONNECTION_SUCCESS,
   WS_GET_MESSAGE,
-  WS_SEND_MESSAGE,
   WS_CONNECTION_CLOSED,
   WS_CONNECTION_ERROR,
   WS_GET_MESSAGE_PROFILE,
-  TWSActions
 } from "../../actions/soketAction/soketAction";
-import { OrdersProps } from "../../types/types";
+import { TWSActions,IOrdersProps } from "../../types/types";
 export interface IinitialState {
-  wsConnected: boolean,
-  messagesAllOrders: string[]|[]|OrdersProps|any,
-  messagesUserOrders:string[]|[]|OrdersProps|any,
-  error: undefined|boolean,
+  wsConnected: boolean;
+  messagesAllOrders: IOrdersProps[]|[] ;
+  messagesUserOrders: IOrdersProps[]|[];
+  error: undefined | boolean;
 }
-const initialState:IinitialState = {
+const initialState: IinitialState = {
   wsConnected: false,
   messagesAllOrders: [],
-  messagesUserOrders:[],
+  messagesUserOrders: [],
   error: undefined,
 };
 
-export const wsReducer = (state = initialState, action: TWSActions):IinitialState => {
+export const wsReducer = (
+  state = initialState,
+  action: TWSActions
+): IinitialState => {
   switch (action.type) {
     // Опишем обработку экшена с типом WS_CONNECTION_SUCCESS
     // Установим флаг wsConnected в состояние true
@@ -31,7 +31,6 @@ export const wsReducer = (state = initialState, action: TWSActions):IinitialStat
         ...state,
         error: undefined,
         wsConnected: true,
-     
       };
 
     // Опишем обработку экшена с типом WS_CONNECTION_ERROR
@@ -41,7 +40,6 @@ export const wsReducer = (state = initialState, action: TWSActions):IinitialStat
         ...state,
         error: action.payload,
         wsConnected: false,
-    
       };
 
     // Опишем обработку экшена с типом WS_CONNECTION_CLOSED, когда соединение закрывается
@@ -62,14 +60,13 @@ export const wsReducer = (state = initialState, action: TWSActions):IinitialStat
       return {
         ...state,
         error: undefined,
-        messagesAllOrders: [ JSON.parse(action.payload)],
-   
+        messagesAllOrders: [JSON.parse(action.payload)],
       };
     case WS_GET_MESSAGE_PROFILE:
       return {
         ...state,
         error: undefined,
-        messagesUserOrders: [ JSON.parse(action.payload)],
+        messagesUserOrders: [JSON.parse(action.payload)],
       };
     default:
       return state;

@@ -11,21 +11,21 @@ import Login from "../../pages/login/login";
 import ResetPassword from "../../pages/reset-password/reset-password";
 import ForgotPassword from "../../pages/forgot-password/forgot-password";
 import FeedId from "../../pages/feed-id/feed-id";
-import { useSelector, useDispatch } from "react-redux";
-import { FC, useContext, useEffect, useState } from "react";
+import { FC, useContext, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import NotFound from "../../pages/not-found/not-found";
 import Out from "../../pages/out/out";
 import ProtectedRoute from "../protectedRoute/protectedRoute";
 import Modal from "../modal/modal";
 import IngredientInfo from "../ingredient-info/ingredient-info";
-import { WS_CONNECTION_CLOSED } from "../../services/actions/soketAction/soketAction";
 import Loader from "../loader/loader";
-import { ApproutesProps } from "../../services/types/types";
-import { useSelectorTyped } from "../../services/types/types";
-const AppRoutes
-: FC<ApproutesProps>
- = ({
+import { IApproutesProps } from "../../services/types/types";
+import {
+  IOrdersProps,
+  useSelectorTyped,
+  useDispatchTyped,
+} from "../../services/types/types";
+const AppRoutes: FC<IApproutesProps> = ({
   auth,
   setOnCloseFunc,
   setModalActive,
@@ -33,18 +33,17 @@ const AppRoutes
   modalActive,
   onCloseFunc,
   modal,
-}
-) => {
+  setAuth,
+}) => {
   const { loading, failed } = useSelectorTyped((state) => state.ingredients);
   const { isMobile } = useContext(isMobileContext);
-  const [page, setPage] = useState("ingredients");
-  const [lastPage, setlastPage] = useState<string>("");
-  const [headerActive, setHeaderActive] = useState(true);
- 
+  const [page, setPage] = useState<string>("ingredients");
+  const [lastPage, setlastPage] = useState<string | null>(null);
+  const [headerActive, setHeaderActive] = useState<boolean>(true);
+
   const orders = useSelectorTyped((state) => state.ws.messagesAllOrders);
-  
-  const ordersUser = useSelectorTyped((state) => state.ws.messagesUserOrders)
-  const dispatch = useDispatch();
+  const ordersUser = useSelectorTyped((state) => state.ws.messagesUserOrders);
+  const dispatch = useDispatchTyped();
 
   function pageChange() {
     if (page == "ingredients") {
@@ -56,18 +55,16 @@ const AppRoutes
     }
   }
 
-  let location:any = useLocation();
+  let location: any = useLocation();
   let state = location.state;
-
+  const { user } = useSelectorTyped((state) => state.Login);
 
   return (
     <div>
       {headerActive && <AppHeader auth={auth} />}
       <Routes
-      
-        location={modalActive == true ? state.backgroundLocation : location}
+        location={modalActive == true ? state?.backgroundLocation : location}
       >
-        
         <Route
           path="/"
           element={
@@ -96,7 +93,9 @@ const AppRoutes
         <Route
           path="/Login"
           element={
-            <Login setlastPage={setlastPage} auth={auth} lastPage={lastPage} />
+            //user == null && (
+            <Login setAuth={setAuth} setlastPage={setlastPage} auth={auth} lastPage={lastPage} />
+            //)
           }
         />
 
@@ -104,7 +103,7 @@ const AppRoutes
           path="/registration"
           element={
             <ProtectedRoute auth={!auth}>
-              <Register />{" "}
+              <Register />
             </ProtectedRoute>
           }
         />
@@ -112,7 +111,6 @@ const AppRoutes
         <Route
           path="/forgot-password"
           element={
-             
             <ProtectedRoute auth={!auth}>
               <ForgotPassword />
             </ProtectedRoute>
@@ -122,9 +120,8 @@ const AppRoutes
         <Route
           path="/reset-password"
           element={
-         
-            <ProtectedRoute auth={!auth} >
-              <ResetPassword />{" "}
+            <ProtectedRoute auth={!auth}>
+              <ResetPassword />
             </ProtectedRoute>
           }
         />
@@ -135,26 +132,26 @@ const AppRoutes
             orders !== null ? (
               <Feed
                 setOnCloseFunc={setOnCloseFunc}
-               setModalActive={setModalActive}
+                setModalActive={setModalActive}
                 setModal={setModal}
                 modalActive={modalActive}
                 orders={orders[0]}
-              /> 
-           
-            ) : <Loader/>
+              />
+            ) : (
+              <Loader />
+            )
           }
         />
 
         <Route
           path="/profile"
           element={
-          
             <ProtectedRoute
               link="/profile"
               setlastPage={setlastPage}
               auth={auth}
             >
-              <Profile />{" "}
+              <Profile />
             </ProtectedRoute>
           }
         />
@@ -162,9 +159,8 @@ const AppRoutes
         <Route
           path="/out"
           element={
-            
             <ProtectedRoute link="/out" setlastPage={setlastPage} auth={auth}>
-              <Out />{" "}
+              <Out setAuth={setAuth}/>
             </ProtectedRoute>
           }
         />
@@ -172,7 +168,6 @@ const AppRoutes
         <Route
           path="/profile/orders"
           element={
-            
             <ProtectedRoute
               link="/profile/orders"
               setlastPage={setlastPage}
@@ -186,16 +181,16 @@ const AppRoutes
                   modalActive={modalActive}
                   orders={ordersUser[0]}
                 />
-              ) : <Loader/>}
+              ) : (
+                <Loader />
+              )}
             </ProtectedRoute>
           }
         />
 
         <Route
-        
           path="/profile/orders/:id"
           element={
-            
             <ProtectedRoute
               link="/profile/orders/:id"
               setlastPage={setlastPage}
@@ -205,7 +200,7 @@ const AppRoutes
             </ProtectedRoute>
           }
         />
-        <Route path="/feed/:id" element={  orders !== null ?<FeedId /> : null} />
+        <Route path="/feed/:id" element={orders !== null ? <FeedId /> : null} />
 
         <Route
           path="/ingredients/:id"
@@ -215,10 +210,8 @@ const AppRoutes
             </div>
           }
         />
-        
-        {
- 
-          state?.backgroundLocation && (
+
+        {state?.backgroundLocation && (
           <Route
             path="/feed/:id"
             element={
@@ -231,9 +224,7 @@ const AppRoutes
           />
         )}
 
-        {
-      
-          state?.backgroundLocation && (
+        {state?.backgroundLocation && (
           <Route
             path="/profile-orders/:id"
             element={
@@ -246,9 +237,7 @@ const AppRoutes
           />
         )}
 
-        {
-       
-          state?.backgroundLocation && (
+        {state?.backgroundLocation && (
           <Route
             path="/ingredients/:id"
             element={

@@ -4,8 +4,8 @@ import thunk, { ThunkAction }  from 'redux-thunk';
 import { socketMiddleware } from '../middleware/soketMiddleware';
 import { wsActions } from '../actions/soketAction/soketAction';
 import {
-  TTodoActions
-} from "../actions/ingredientsActions/ingredientsActions";
+  TAllActions
+} from "../types/types";
 
 
 let wsURL =  "wss://norma.nomoreparties.space/orders"
@@ -18,12 +18,4 @@ const composeEnhancers =
     : compose; 
     const enhancer = composeEnhancers(applyMiddleware(thunk, socketMiddleware(wsURL , wsActions) ))  ;
 
-
-export const store = createStore(rootReducer, enhancer);
-
-export type RootState = ReturnType<typeof store.getState>
-
-export type AppThunk<TReturn = void> = ActionCreator<
-  ThunkAction<TReturn, Action, RootState, TTodoActions>
->; 
-export type AppDispatch = typeof store.dispatch
+    export const store = createStore(rootReducer, enhancer);

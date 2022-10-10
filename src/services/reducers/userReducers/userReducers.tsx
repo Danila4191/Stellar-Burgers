@@ -7,8 +7,12 @@ import {
   GET_USER_FAILED,
   AUTH_LOGIN_FAILED_RELOAD,
 } from "../../actions/userActions/userActions";
+
+import {
+  TUserActions,IGetUser
+} from "../../types/types";
 export interface IloginState {
-  user: [] | null;
+  user: IGetUser | null | undefined;
   loading: boolean;
   failed: boolean;
   accessToken: string;
@@ -35,7 +39,7 @@ const userState: IuserState = {
   loading: false,
   failed: false,
 };
-export const loginReducer = (state = loginState, action: any): IloginState => {
+export const loginReducer = (state = loginState, action: TUserActions): IloginState => {
   switch (action.type) {
     case AUTH_LOGIN_LOADING:
       return {
@@ -81,7 +85,7 @@ export const userReducer = (state = userState, action: any): IuserState => {
     case GET_USER:
       return {
         ...state,
-        userData: action.payload.userData,
+        userData: action.payload,
         loading: false,
         failed: false,
       };

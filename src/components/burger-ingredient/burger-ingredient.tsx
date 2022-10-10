@@ -7,13 +7,11 @@ import { useSelectorTyped } from "../../services/types/types";
 import styles from "./burger-ingredient.module.css";
 import { useNavigate } from "react-router-dom";
 import IngredientInfo from "../ingredient-info/ingredient-info";
-import { useDispatch, useSelector } from "react-redux";
 import { useDrag } from "react-dnd";
 import { NavLink, useLocation } from "react-router-dom";
 import {
   ADD_INGREDIENT,
   DELETE_INGREDIENT,
-  DELETE_INGREDIENTS_CONSTRUCTOR,
   ADD_INGREDIENTS_CONSTRUCTOR,
   SET_TOTAL,
 } from "../../services/actions/ingredientsActions/ingredientsActions";
@@ -21,8 +19,8 @@ import { useContext, useState,FC  } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 //@ts-ignore
 import { v4 as uuidv4 } from "uuid";
-import { ingredientObjectProps, IngredientProps } from "../../services/types/types";
-const BurgerIngredient:FC<IngredientProps> = ({
+import { IingredientObjectProps, IIngredientProps,useDispatchTyped } from "../../services/types/types";
+const BurgerIngredient:FC<IIngredientProps> = ({
   ingredient,
   setModalActive,
   setModal,
@@ -30,11 +28,11 @@ const BurgerIngredient:FC<IngredientProps> = ({
   modalActive,
 }) => {
   
-  const ingredientsConstructor:ingredientObjectProps[] = useSelectorTyped(
+  const ingredientsConstructor:IingredientObjectProps[] = useSelectorTyped(
     (state) => state.ingredientsConstructor.items
   );
   let count = ingredientsConstructor.filter(
-    (ingredientsConstructor:ingredientObjectProps) => ingredient._id == ingredientsConstructor._id
+    (ingredientsConstructor:IingredientObjectProps) => ingredient._id == ingredientsConstructor._id
   ).length;
   const [, dragRef] = useDrag({
     type: ingredient.type == "bun" ? "bun" : "main",
@@ -42,7 +40,7 @@ const BurgerIngredient:FC<IngredientProps> = ({
   });
   
   const { isMobile } = useContext(isMobileContext);
-  const dispatch = useDispatch();
+  const dispatch = useDispatchTyped();
   const ingredientData = useSelectorTyped((state) => state.ingredient.data);
   const location = useLocation();
 
@@ -71,13 +69,13 @@ const BurgerIngredient:FC<IngredientProps> = ({
   }
 
   function addIngredient() {
-    let itemsNew = Array.from(ingredientsConstructor);
+    let itemsNew:IingredientObjectProps[] = Array.from(ingredientsConstructor);
     ingredient.idKey = uuidv4();
-    let itemCopy:any = Object.assign({}, ingredient);
+    let itemCopy:IingredientObjectProps = Object.assign({}, ingredient);
     itemsNew.push(itemCopy);
-    let summ = itemsNew.reduce(
+    let summ:number = itemsNew.reduce(
 
-      (accumulator, currentValue:any) => accumulator + currentValue.price,
+      (accumulator:number, currentValue:IingredientObjectProps) => accumulator + currentValue.price,
       0
     );
     dispatch({ type: SET_TOTAL, payload: summ });
@@ -86,17 +84,17 @@ const BurgerIngredient:FC<IngredientProps> = ({
   function onClickAddBun(
  
     ) {
-    function addBun(itemsNew:any, item:any) {
+    function addBun(itemsNew:IingredientObjectProps[], item:IingredientObjectProps) {
       itemsNew.push(item);
       itemsNew.push(item);
       let summ = itemsNew.reduce(
-        (accumulator:number, currentValue:ingredientObjectProps) => accumulator + currentValue.price,
+        (accumulator:number, currentValue:IingredientObjectProps) => accumulator + currentValue.price,
         0
       );
       dispatch({ type: SET_TOTAL, payload: summ });
       dispatch({ type: ADD_INGREDIENTS_CONSTRUCTOR, payload: itemsNew });
     }
-    if (ingredientsConstructor.some((item:ingredientObjectProps) => item.type == "bun")) {
+    if (ingredientsConstructor.some((item:IingredientObjectProps) => item.type == "bun")) {
       let itemsNew = Array.from(ingredientsConstructor).filter(
    
         (itemIngredient:any) => itemIngredient.type !== "bun"

@@ -10,8 +10,8 @@ import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../menu/menu";
 
-import { NavigationProps } from "../../services/types/types";
-const Navigation: FC<NavigationProps> = ({
+import { INavigationProps } from "../../services/types/types";
+const Navigation: FC<INavigationProps> = ({
   auth,
   setMenuMobileActive,
   menuMobileActive,
@@ -32,7 +32,7 @@ const Navigation: FC<NavigationProps> = ({
       setMenuActiveProfile(false);
     }
   }
-
+  //console.log(auth)
   return (
     <nav className={`${styles.nav} `}>
       <div className={`${styles.links} `}>
@@ -40,11 +40,11 @@ const Navigation: FC<NavigationProps> = ({
           to="/"
           className={`${styles.link}`}
           onClick={
-            isMobile &&
-            setMenuMobileActive &&
-            (() => {
-              setMenuMobileActive(false);
-            })
+            isMobile && setMenuMobileActive
+              ? () => {
+                  setMenuMobileActive(false);
+                }
+              : undefined
           }
         >
           <div
@@ -61,11 +61,11 @@ const Navigation: FC<NavigationProps> = ({
           to="/feed"
           className={`${styles.link}`}
           onClick={
-            isMobile &&
-            setMenuMobileActive &&
-            (() => {
-              setMenuMobileActive(false);
-            })
+            isMobile && setMenuMobileActive
+              ? () => {
+                  setMenuMobileActive(false);
+                }
+              : undefined
           }
         >
           <div
@@ -119,7 +119,38 @@ const Navigation: FC<NavigationProps> = ({
           />{" "}
           Личный кабинет
         </NavLink>
-      ) : (
+      ) : !auth ? (<NavLink
+      to={ "/Login"}
+      className={`${styles.container}  ${
+        "/Login" == link ||
+        "/profile" == link ||
+        "/profile/orders" == link ||
+        "/registration" == link ||
+        "/forgot-password" == link ||
+        "/reset-password" == link
+          ? styles.active
+          : undefined
+      } mt-4 pl-5 pr-5 pt-4 pb-4 text_type_main-small`}
+      onClick={  !isMobile
+        ? () => setLink("/profile")
+        : !auth && setMenuMobileActive !== undefined
+        ? () => setMenuMobileActive(false)
+        : () => menuActiveChange()}
+    >
+      <ProfileIcon
+        type={
+          "/Login" == link ||
+          "/profile" == link ||
+          "/profile/orders" == link ||
+          "/registration" == link ||
+          "/forgot-password" == link ||
+          "/reset-password" == link
+            ? "primary"
+            : "secondary"
+        }
+      />{" "}
+      Личный кабинет
+    </NavLink>) : (
         <div
           className={`${styles.container}  ${
             "/Login" == link ||
@@ -134,7 +165,7 @@ const Navigation: FC<NavigationProps> = ({
           onClick={
             !isMobile
               ? () => setLink("/profile")
-              : !auth && setMenuMobileActive
+              : !auth && setMenuMobileActive !== undefined
               ? () => setMenuMobileActive(false)
               : () => menuActiveChange()
           }

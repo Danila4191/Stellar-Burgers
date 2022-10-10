@@ -7,22 +7,22 @@ import Menu from "../../components/menu/menu";
 import { isMobileContext } from "../../services/context/appContext";
 import { getUser } from "../../services/actions/userActions/userActions";
 import { userFixApi } from "../../services/api/api";
-import { useSelectorTyped } from "../../services/types/types";
-import { ValidationProps } from "../../services/types/types";
+import { useSelectorTyped ,useDispatchTyped,IValidationProps } from "../../services/types/types";
+
 const Profile = () => {
-  const [inputType, setInputType] = useState<any>("password");
+  const [inputType, setInputType] = useState<"password" | "email" | "text" | undefined>("password");
   const [profileButtonActive, setProfileButtonActive] = useState<boolean>(false);
 
   const { isMobile } = useContext(isMobileContext);
   const [form, setValue] = useState({ email: "", name: "", password: "" });
   const user = useSelectorTyped((state) => state.User.userData);
-  const [errorName, setErrorName] = useState<ValidationProps>({ error: false, errorText: "" });
-  const [errorEmail, setErrorEmail] = useState<ValidationProps>({ error: false, errorText: "" });
-  const [errorPassword, setErrorPassword] = useState<ValidationProps>({
+  const [errorName, setErrorName] = useState<IValidationProps>({ error: false, errorText: "" });
+  const [errorEmail, setErrorEmail] = useState<IValidationProps>({ error: false, errorText: "" });
+  const [errorPassword, setErrorPassword] = useState<IValidationProps>({
     error: false,
     errorText: "",
   });
-  const dispatch = useDispatch();
+  const dispatch = useDispatchTyped();
 
   useEffect(() => {
     if (user !== null) {
@@ -49,7 +49,7 @@ const Profile = () => {
   };
 
   function cansel() {
-    if(user){
+    if(user !== null){
     setValue({ email: user.email, name: user.name, password: "" });
     //setProfileButtonActive(false);
   }
@@ -67,12 +67,13 @@ const Profile = () => {
       setProfileButtonActive(false);
     } else {
       setProfileButtonActive(true);
-      console.log(1)
+    
     }
   });
 
-  useEffect(() => {
-    if (form.name.length < 5 && form.name.length !== 0) {
+  useEffect(() => {   
+    if ( form.name !== undefined && form.name.length < 5 && form.name.length !== 0) {
+   
       setErrorName({ error: true, errorText: "Слишком короткое имя" });
     } else {
       setErrorName({ error: false, errorText: "" });
@@ -90,7 +91,7 @@ const Profile = () => {
   }, [form.email]);
 
   useEffect(() => {
-    if (form.password.length < 8 && form.password.length !== 0) {
+    if (  form.password !== undefined && form.password.length < 8 && form.password.length !== 0) {
       setErrorPassword({ error: true, errorText: "Слишком короткий пароль" });
     } else {
       setErrorPassword({ error: false, errorText: "" });
@@ -107,9 +108,7 @@ const Profile = () => {
         if (data.success) {
           form.password = ""
           setProfileButtonActive(false);
-
-          dispatch<any>(getUser());
-        
+          dispatch(getUser());
         }
       })
       .catch((err) => {

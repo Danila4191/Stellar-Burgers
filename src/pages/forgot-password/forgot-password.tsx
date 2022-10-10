@@ -6,13 +6,13 @@ import { useState, useContext, useEffect } from "react";
 import { codeSendContext } from "../../services/context/appContext";
 import { getEmailCodeApi } from "../../services/api/api";
 import React, {  FC } from "react";
-import { ValidationProps } from "../../services/types/types";
+import { IValidationProps } from "../../services/types/types";
 const ForgotPassword:FC = () => {
   const [ForgotPasswordButtonActive, setForgotPasswordButtonActive] =
     useState<boolean>(false);
   const [form, setValue] = useState<any>({ email: "" });
   const { setCodeSend } = useContext(codeSendContext);
-  const [errorEmail, setErrorEmail] = useState<ValidationProps>({ error: false, errorText: "" });
+  const [errorEmail, setErrorEmail] = useState<IValidationProps>({ error: false, errorText: "" });
   let navigate = useNavigate();
   //вызывается при изменении импута
 

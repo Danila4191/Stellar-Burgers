@@ -4,10 +4,11 @@ import { useState, useContext, FC } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import MobileMenu from "../mobile-menu/mobile-menu";
 import { NavLink} from "react-router-dom";
+import { IAppHeaderProps } from "../../services/types/types";
 
-const AppHeader = ({auth}:any) => {
+const AppHeader:FC<IAppHeaderProps> = ({auth}) => {
   const { isMobile } = useContext(isMobileContext);
-  const [menuMobileActive,setMenuMobileActive] = useState(false)
+  const [menuMobileActive,setMenuMobileActive] = useState<boolean>(false)
 
   return (
     <header className={styles.header}>

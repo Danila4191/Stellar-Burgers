@@ -19,15 +19,15 @@ import {
   getOrderNumber,
 } from "../../services/actions/ingredientsActions/ingredientsActions";
 import IngredientConctructor from "../burger-constructor-ingredient/burger-conctructor-ingredient";
-import { useSelectorTyped, BurgerConstructorProps, ingredientObjectProps, useDispatchTyped} from "../../services/types/types";
-const BurgerConstructor:FC<BurgerConstructorProps> = ({
+import { useSelectorTyped, IBurgerConstructorProps, IingredientObjectProps, useDispatchTyped} from "../../services/types/types";
+const BurgerConstructor:FC<IBurgerConstructorProps> = ({
   setModalActive,
   setModal,
   setOnCloseFunc,
   pageChange,
 }) => {
   const dispatch = useDispatchTyped();
-  const ingredientsConstructor:ingredientObjectProps[] = useSelectorTyped(
+  const ingredientsConstructor:IingredientObjectProps[] = useSelectorTyped(
     (state) => state.ingredientsConstructor.items
   );
   const total = useSelectorTyped((state) => state.total.total);
@@ -35,14 +35,14 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
   const { isMobile } = useContext(isMobileContext);
   const [{ isHoverMain, isTypeMain }, dropTargetMain] = useDrop({
     accept: "main",
-    drop(item:ingredientObjectProps) {
+    drop(item:IingredientObjectProps) {
       let itemsNew = Array.from(ingredientsConstructor);
      
       item.idKey = uuidv4();
       let itemCopy = Object.assign({}, item);
       itemsNew.push(itemCopy);
       let summ = itemsNew.reduce(
-        (accumulator, currentValue:any) => accumulator + currentValue.price,
+        (accumulator:number, currentValue:IingredientObjectProps) => accumulator + currentValue.price,
         0
       );
       dispatch({ type: SET_TOTAL, payload: summ });
@@ -55,11 +55,12 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
     }),
   });
 
-  function addBun(itemsNew:any, item:ingredientObjectProps|unknown) {
+  function addBun(itemsNew:IingredientObjectProps[], item:IingredientObjectProps) {
+    console.log(itemsNew)
     itemsNew.push(item);
     itemsNew.push(item);
     let summ = itemsNew.reduce(
-      (accumulator:number, currentValue:ingredientObjectProps) => accumulator + currentValue.price,
+      (accumulator:number, currentValue:IingredientObjectProps) => accumulator + currentValue.price,
       0
     );
     dispatch({ type: SET_TOTAL, payload: summ });
@@ -68,11 +69,10 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
 
   const [{ isHover, isHoverBun }, dropTargetBun] = useDrop({
     accept: "bun",
-    drop(item:ingredientObjectProps) {
-      if (ingredientsConstructor.some((item:ingredientObjectProps) => item.type == "bun")) {
+    drop(item:IingredientObjectProps) {
+      if (ingredientsConstructor.some((item:IingredientObjectProps) => item.type == "bun")) {
         let itemsNew = Array.from(ingredientsConstructor).filter(
-       
-          (item:any) => item.type !== "bun"
+          (item) => item.type !== "bun"
         );
         addBun(itemsNew, item);
       } else {
@@ -87,7 +87,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
   });
   let navigate = useNavigate();
   const  user = useSelectorTyped((state) => state.User);
-  const close:any = ():any => {
+  const close = () => {
     dispatch({ type: SET_TOTAL, payload: 0 });
     dispatch({ type: DELETE_INGREDIENTS_CONSTRUCTOR, payload: [] });
     setModalActive(false);
@@ -97,13 +97,12 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
     if(user.userData !== null){
     dispatch(
       getOrderNumber({
-        ingredients: ingredientsConstructor.map((item:ingredientObjectProps) => `${item._id}`),
+        ingredients: ingredientsConstructor.map((item:IingredientObjectProps) => `${item._id}`),
       })
     );
     setTimeout(() => {
       if (loading == false && failed == false) {
         setModal(<OrderInfo />);
-    
         setOnCloseFunc(() => close);
         setModalActive(true);
       }
@@ -125,11 +124,11 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
             }`}
           >
             {" "}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")
               .length > 0 ? (
               <IngredientConctructor
                 ingredient={
-                  ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")[0]
+                  ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")[0]
                 }
                 position="top"
               />
@@ -143,12 +142,12 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
             {ingredientsConstructor.length == 0
               ? null
               : ingredientsConstructor
-                  .filter((item:ingredientObjectProps) => item.type !== "bun")
-                  .map((item:ingredientObjectProps, index:number) => (
+                  .filter((item:IingredientObjectProps) => item.type !== "bun")
+                  .map((item:IingredientObjectProps, index:number) => (
                     <IngredientConctructor ingredient={item} key={item.idKey} />
                   ))}
 
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type !== "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type !== "bun")
               .length > 0 ? null : (
               <div
                 className={`${styles.empy} ${styles.empy__main} ${
@@ -158,7 +157,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
                 }`}
               ></div>
             )}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type !== "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type !== "bun")
               .length > 1 ? null : (
               <div
                 className={`${styles.empy} ${styles.empy__main} ${
@@ -168,7 +167,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
                 }`}
               ></div>
             )}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type !== "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type !== "bun")
               .length > 2 ? null : (
               <div
                 className={`${styles.empy} ${styles.empy__main} ${
@@ -178,7 +177,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
                 }`}
               ></div>
             )}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type !== "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type !== "bun")
               .length > 3 ? null : (
               <div
                 className={`${styles.empy} ${styles.empy__main} ${
@@ -188,7 +187,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
                 }`}
               ></div>
             )}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type !== "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type !== "bun")
               .length > 4 ? null : (
               <div
                 className={`${styles.empy} ${styles.empy__main} ${
@@ -206,11 +205,11 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
             }`}
           >
             {" "}
-            {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")
+            {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")
               .length > 0 ? (
               <IngredientConctructor
                 ingredient={
-                  ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")[0]
+                  ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")[0]
                 }
                 position="bottom"
               />
@@ -219,26 +218,26 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
         </div>
       ) : (
         <div className={`${styles.modile__list}`}>
-          {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun").length >
+          {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun").length >
           0 ? (
             <IngredientConctructor
               ingredient={
-                ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")[0]
+                ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")[0]
               }
             />
           ) : null}
           {ingredientsConstructor.length == 0
             ? null
             : ingredientsConstructor
-                .filter((item:ingredientObjectProps) => item.type !== "bun")
-                .map((item:ingredientObjectProps, index:number) => (
+                .filter((item:IingredientObjectProps) => item.type !== "bun")
+                .map((item:IingredientObjectProps, index:number) => (
                   <IngredientConctructor ingredient={item} key={item.idKey} />
                 ))}
-          {ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun").length >
+          {ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun").length >
           0 ? (
             <IngredientConctructor
               ingredient={
-                ingredientsConstructor.filter((item:ingredientObjectProps) => item.type == "bun")[0]
+                ingredientsConstructor.filter((item:IingredientObjectProps) => item.type == "bun")[0]
               }
             />
           ) : null}
@@ -258,7 +257,7 @@ const BurgerConstructor:FC<BurgerConstructorProps> = ({
         </div>
         <Button
           disabled={
-            !ingredientsConstructor.some((item:ingredientObjectProps) => item.type == "bun")
+            !ingredientsConstructor.some((item:IingredientObjectProps) => item.type == "bun")
               ? true
               : false
           }

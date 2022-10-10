@@ -12,7 +12,7 @@ import { useDrop, useDrag } from "react-dnd";
 import { isMobileContext } from "../../services/context/appContext";
 //@ts-ignore
 import SwipeToDelete from "react-swipe-to-delete-component";
-import { useSelectorTyped, IngredientConctructorProps, ingredientObjectProps } from "../../services/types/types";
+import { useSelectorTyped,useDispatchTyped, IIngredientConctructorProps, IingredientObjectProps } from "../../services/types/types";
 import "react-swipe-to-delete-component/dist/swipe-to-delete.css";
 import {
   DELETE_INGREDIENTS_CONSTRUCTOR,
@@ -20,10 +20,10 @@ import {
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
 } from "../../services/actions/ingredientsActions/ingredientsActions";
 
-const IngredientConctructor:FC<IngredientConctructorProps> = ({ ingredient, position }) => {
-  const dispatch = useDispatch();
+const IngredientConctructor:FC<IIngredientConctructorProps> = ({ ingredient, position }) => {
+  const dispatch = useDispatchTyped();
   const { isMobile } = useContext(isMobileContext);
-  const ingredientsConstructor:ingredientObjectProps[] = useSelectorTyped(
+  const ingredientsConstructor:IingredientObjectProps[] = useSelectorTyped(
     (state) => state.ingredientsConstructor.items
   );
 
@@ -37,7 +37,7 @@ const IngredientConctructor:FC<IngredientConctructorProps> = ({ ingredient, posi
     }),
   });
 
-  const [{ isItem, isOverItem }, constructorToggle]:any = useDrop({
+  const [{ isItem, isOverItem }, constructorToggle]:any  = useDrop({
     accept: "new",
     hover() {
       move();
@@ -45,13 +45,13 @@ const IngredientConctructor:FC<IngredientConctructorProps> = ({ ingredient, posi
     drop() {
       move();
     },
-    collect: (monitor):any => ({
+    collect: (monitor) => ({
       isItem: monitor.getItem(),
       isOverItem: monitor.isOver(),
     }),
   });
 
-  function itemsDelete(ingredient:ingredientObjectProps) {
+  function itemsDelete(ingredient:IingredientObjectProps) {
     let itemsNew = Array.from(ingredientsConstructor);
 
     if (ingredient.type !== "bun") {
@@ -59,12 +59,12 @@ const IngredientConctructor:FC<IngredientConctructorProps> = ({ ingredient, posi
       itemsNew.splice(itemDelete, 1);
     } else {
       itemsNew = ingredientsConstructor.filter(
-        (ingredient:ingredientObjectProps) => ingredient.type !== "bun"
+        (ingredient:IingredientObjectProps) => ingredient.type !== "bun"
       );
     }
 
-    let summ = itemsNew.reduce(
-      (accumulator:number, currentValue:any) => accumulator + currentValue.price,
+    let summ:number = itemsNew.reduce(
+      (accumulator:number, currentValue:IingredientObjectProps) => accumulator + currentValue.price,
       0
     );
     dispatch({ type: SET_TOTAL, payload: summ });

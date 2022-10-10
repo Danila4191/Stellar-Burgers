@@ -11,16 +11,15 @@ import {
   TOOGLE_INGREDIENTS_CONSTRUCTOR,
   GET_ORDER_LOADING,
   GET_ORDER_FAILED,
-  TTodoActions
 } from "../../actions/ingredientsActions/ingredientsActions";
-import { ingredientObjectProps } from "../../types/types";
+import { IingredientObjectProps, TAllActions } from "../../types/types";
 export interface IingredientsState {
-  productData: [],
+  productData: IingredientObjectProps[],
   loading: boolean,
   failed: boolean,
 }
 export interface IingredientState {
-  data: null|ingredientObjectProps,
+  data: null|IingredientObjectProps,
 }
 export interface  IorderState {
   data: string|number,
@@ -28,7 +27,7 @@ export interface  IorderState {
   failed: boolean,
 }
 export interface IingredientsConstructorState {
-  items: [],
+  items: IingredientObjectProps[],
 }
 export interface ItotalState {
   total: number,
@@ -52,7 +51,7 @@ const ingredientsConstructorState:IingredientsConstructorState = {
 const totalState:ItotalState = {
   total: 0,
 };
-export const totalReducer = (state = totalState, action:TTodoActions):ItotalState => {
+export const totalReducer = (state = totalState, action:TAllActions):ItotalState => {
   switch (action.type) {
     case SET_TOTAL:
       return { ...state, total: action.payload };
@@ -60,7 +59,7 @@ export const totalReducer = (state = totalState, action:TTodoActions):ItotalStat
       return state;
   }
 };
-export const ingredientsReducer = (state = ingredientsState, action:TTodoActions):IingredientsState => {
+export const ingredientsReducer = (state = ingredientsState, action:TAllActions):IingredientsState => {
   switch (action.type) {
     case GET_INGREDIENTS_LOADING:
       return {
@@ -69,9 +68,10 @@ export const ingredientsReducer = (state = ingredientsState, action:TTodoActions
         failed: false,
       };
     case GET_INGREDIENTS:
+      console.log()
       return {
         ...state,
-        productData: action.payload.productData,
+        productData: action.payload,
         loading: false,
         failed: false,
       };
@@ -86,7 +86,7 @@ export const ingredientsReducer = (state = ingredientsState, action:TTodoActions
       return state;
   }
 };
-export const ingredientReducer = (state = ingredientState, action:TTodoActions):IingredientState => {
+export const ingredientReducer = (state = ingredientState, action:TAllActions):IingredientState => {
   switch (action.type) {
     case ADD_INGREDIENT:
       return { ...state, data: action.payload };
@@ -96,7 +96,7 @@ export const ingredientReducer = (state = ingredientState, action:TTodoActions):
       return state;
   }
 };
-export const orderReducer = (state = orderState, action:TTodoActions):IorderState => {
+export const orderReducer = (state = orderState, action:TAllActions):IorderState => {
   switch (action.type) {
     case GET_ORDER_LOADING:
       return {
@@ -108,7 +108,7 @@ export const orderReducer = (state = orderState, action:TTodoActions):IorderStat
     case GET_ORDER:
       return {
         ...state,
-        data: action.payload.data,
+        data: action.payload,
         loading: false,
         failed: false,
       };
@@ -125,7 +125,7 @@ export const orderReducer = (state = orderState, action:TTodoActions):IorderStat
 
 export const ingredientsConstructorReducer = (
   state = ingredientsConstructorState,
-  action:TTodoActions
+  action:TAllActions
 ):IingredientsConstructorState => {
   switch (action.type) {
     case ADD_INGREDIENTS_CONSTRUCTOR:

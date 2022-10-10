@@ -1,23 +1,21 @@
 import { Input } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./login.module.css";
-import { useState, useEffect, FC }  from "react";
+import { useState, useEffect, FC, ReactElement }  from "react";
 import Form from "../../components/form/form";
 import { NavLink, useNavigate,} from "react-router-dom";
 import { authLogin, AUTH_LOGIN_FAILED_RELOAD } from "../../services/actions/userActions/userActions";
-import { useDispatch} from "react-redux";
-import { AppDispatch } from "../../services/store/store";
 import { useSelectorTyped,useDispatchTyped } from "../../services/types/types";
-import { LoginProps } from "../../services/types/types";
-import { ValidationProps } from "../../services/types/types";
+import { ILoginProps } from "../../services/types/types";
+import { IValidationProps } from "../../services/types/types";
 
 
-const Login: FC<LoginProps> = ({ lastPage, auth,  setlastPage }) => {
-  const [inputType, setInputType] = useState<any>("password");
-  const [LoginButtonActive, setLoginButtonActive] = useState(false);
+const Login: FC<ILoginProps> = ({setAuth, lastPage, auth,  setlastPage }) => {
+  const [inputType, setInputType] = useState<"text" | "password" | "email" | undefined>("password");
+  const [LoginButtonActive, setLoginButtonActive] = useState<boolean>(false);
   const [form, setValue] = useState({ email: "", password: "" });
   const { user, loading, failed } = useSelectorTyped((state) => state.Login);
-  const [errorEmail, setErrorEmail] = useState<ValidationProps>({ error: false, errorText: "" });
-  const [errorPassword, setErrorPassword] = useState<ValidationProps>({
+  const [errorEmail, setErrorEmail] = useState<IValidationProps>({ error: false, errorText: "" });
+  const [errorPassword, setErrorPassword] = useState<IValidationProps>({
     error: false,
     errorText: "",
   });
@@ -74,9 +72,7 @@ const Login: FC<LoginProps> = ({ lastPage, auth,  setlastPage }) => {
       setLoginButtonActive(false);
     } else {
       setLoginButtonActive(true);
-     
     }
-    
   });
 useEffect(()=> {
   if (failed) {
@@ -105,20 +101,25 @@ useEffect(()=> {
 
   useEffect(() => {
     if (user !== null && (!failed == true)  && (lastPage !== null)) {
+      setAuth(true)
       navigate(lastPage);
       setlastPage(null)
+ 
     }
   }, [user]);
  
   useEffect(() => {
     if (user !== null && (!failed == true) && (lastPage == null)) {
+      setAuth(true)
       navigate("/");
+  
     }
   });
  
 
+  
   return (
-    user == null && (
+    user == null ? (
       <div className={`${styles.container} `}>
         <div>
           <Form
@@ -175,7 +176,7 @@ useEffect(()=> {
           </p>
         </div>
       </div>
-    )
+    ): null
   );
 };
 export default Login;

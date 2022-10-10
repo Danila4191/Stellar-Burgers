@@ -3,8 +3,8 @@ import FeedOrder from "../feed-order/feed-order";
 //@ts-ignore
 import { v4 as uuidv4 } from "uuid";
 import React, {  FC } from "react";
-import { FeedOrdersProps,OrderProps } from "../../services/types/types";
-const FeedOrders:FC<FeedOrdersProps> = ({
+import { IFeedOrdersProps,IOrderProps } from "../../services/types/types";
+const FeedOrders:FC<IFeedOrdersProps> = ({
   setOnCloseFunc,
   setModalActive,
   setModal,
@@ -15,7 +15,7 @@ const FeedOrders:FC<FeedOrdersProps> = ({
   return (
     <div className={`${styles.feed__orders}  `}>
       {
-      orders.map((order:OrderProps) => (
+      orders.map((order:IOrderProps) => (
         <FeedOrder
           key={order.createdAt }
           time={order.createdAt}

@@ -1,11 +1,12 @@
 import { Middleware, MiddlewareAPI } from "redux";
-
-
+import { IWsActions } from "../actions/soketAction/soketAction";
+import { TWSActions } from "../types/types";
 
 //////////////////////////////////////////////////////////
 
-export const socketMiddleware =( wsUrl:string , wsActions:any) => {
+export const socketMiddleware =( wsUrl:string , wsActions:IWsActions) => {
   return (store:any) => {
+   
     let socket:any = null;
 
     return (next:any) => (action:any) => {
@@ -15,6 +16,7 @@ export const socketMiddleware =( wsUrl:string , wsActions:any) => {
       if (type === wsActions.wsInit) {
         // объект класса WebSocket
         socket = new WebSocket(`${wsUrl}${payload.url}`);
+  
       } 
       if (socket ) {
         // функция, которая вызывается при открытии сокета

@@ -41,19 +41,17 @@ export interface IWsGetMessageProfileAction {
   readonly type: typeof WS_GET_MESSAGE_PROFILE;
   readonly payload: string
 }
-export type TWSActions = 
-    | IWsConnectionSuccessAction
-  | IWsGetMessageAction 
-  | IWsConnectionStartAction
-  | IWsSendMessageAction
-  | IWsConnectionClosedAction
-  | IWsConnectionErrorAction
-  | IWsConnectionStartProfileAction
-  | IWsGetMessageProfileAction ;
 
+  export interface IWsActions {
+    wsInit: string,
+    wsSendMessage:string,
+    onOpen: string,
+    onClose: string,
+    onError: string,
+    onMessage: string
+  }
 
-
-export const wsActions:any = {
+export const wsActions:IWsActions = {
     wsInit: WS_CONNECTION_START,
     wsSendMessage: WS_SEND_MESSAGE,
     onOpen: WS_CONNECTION_SUCCESS,

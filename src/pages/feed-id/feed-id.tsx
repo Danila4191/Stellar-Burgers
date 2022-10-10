@@ -6,15 +6,30 @@ import { v4 as uuidv4 } from "uuid";
 import { useContext, useEffect, useState } from "react";
 import { isMobileContext } from "../../services/context/appContext";
 import { useDispatch, useSelector } from "react-redux";
-import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE,WS_GET_MESSAGE_PROFILE } from "../../services/actions/soketAction/soketAction";
+import {
+  WS_CONNECTION_START,
+  WS_CONNECTION_CLOSED,
+  WS_GET_MESSAGE,
+  WS_GET_MESSAGE_PROFILE,
+} from "../../services/actions/soketAction/soketAction";
 import { getCookie } from "../../utils/cookie/cookie";
 import Loader from "../../components/loader/loader";
 import { useSelectorTyped } from "../../services/types/types";
-import React, {  FC } from "react";
-import { FeedIdElementProps, FeedIdProps, ingredientObjectProps } from "../../services/types/types";
-const FeedIdElement:FC<FeedIdElementProps> = ({ title, count, price, img }) => {
-
-  const { isMobile } = useContext(isMobileContext);
+import React, { FC } from "react";
+import {
+  IFeedIdElementProps,
+  IFeedIdProps,
+  IingredientObjectProps,
+  IOrderProps,IOrderNewProps
+} from "../../services/types/types";
+const FeedIdElement: FC<IFeedIdElementProps> = ({
+  title,
+  count,
+  price,
+  img,
+}) => {
+  const  {isMobile}  = useContext(isMobileContext);
+  
   return (
     <div className={`${styles.feed__order__ingredient} `}>
       <div className={`${styles.feed__image__container} `}>
@@ -38,86 +53,99 @@ const FeedIdElement:FC<FeedIdElementProps> = ({ title, count, price, img }) => {
       <div className={`${styles.feed__price} text pl-2`}>
         <p className={`text pr-2 text_type_digits-default`}>{count}x</p>
         <p className={`text pr-2 text_type_digits-default`}>{price}</p>
-        <CurrencyIcon type="primary"/>
+        <CurrencyIcon type="primary" />
       </div>
     </div>
   );
 };
 
-const FeedId:FC<FeedIdProps> = ({ orderId, modalActive }) => {
-
+const FeedId: FC<IFeedIdProps> = ({ orderId, modalActive }) => {
   const orders = useSelectorTyped((state) => state.ws.messagesAllOrders);
- 
+
   const ordersUser = useSelectorTyped((state) => state.ws.messagesUserOrders);
-  
+
   const { isMobile } = useContext(isMobileContext);
   const ingredientsFromSetver = useSelectorTyped(
     (state) => state.ingredients.productData
   );
   const dispatch = useDispatch();
-  let location:any = useLocation();
+  let location: any = useLocation();
   let param:any = useParams();
-  let order:any = undefined;
-  let uniqueIngredient:any = null;
-  let orderNew:any = undefined;
-  let ingredients:any = null;
+  let order: IOrderProps | undefined | any = undefined;
+  let uniqueIngredient: IingredientObjectProps[] = [];
+  let orderNew: number | undefined = undefined;
+  let ingredients: IingredientObjectProps[] = [];
 
   useEffect(() => {
-    if( param.id !== undefined &&
+    if (
+      param.id !== undefined &&
       location.pathname.includes("feed") &&
-      !modalActive){
+      !modalActive
+      
+    ) {
+      dispatch({
+        type: WS_CONNECTION_START,
+        payload: { url: "/all", caseNameOnMessage: WS_GET_MESSAGE },
+      });
+    } else if (
+      param.id !== undefined &&
+      location.pathname.includes("profile/orders") &&
+      !modalActive
+    ) {
+      dispatch({
+        type: WS_CONNECTION_START,
+        payload: {
+          url: `?token=${getCookie(`token`)}`,
+          caseNameOnMessage: WS_GET_MESSAGE_PROFILE,
+        },
+      });
+    }
+    return () => {
+      if (param.id !== undefined && !modalActive) {
         dispatch({
-          type: WS_CONNECTION_START,
-          payload : {url: "/all", caseNameOnMessage: WS_GET_MESSAGE }
-        });
-       
-      } else if(
-        param.id !== undefined &&
-        location.pathname.includes("profile/orders") &&
-        !modalActive
-      ) {
-        dispatch({
-          type: WS_CONNECTION_START,
-          payload: {url: `?token=${getCookie(`token`)}`, caseNameOnMessage: WS_GET_MESSAGE_PROFILE }
+          type: WS_CONNECTION_CLOSED,
         });
       }
-    return () => {
-      if( param.id !== undefined &&
-        !modalActive){
-          dispatch({
-            type: WS_CONNECTION_CLOSED,
-          });
-        } 
-  
-    }
-  }, [dispatch])
-
+    };
+  }, [dispatch]);
 
   function setOrders() {
-    if ((orders[0] !== undefined || ordersUser[0] !== undefined) && ingredientsFromSetver !== null ) {
-      if(orders[0] !== undefined){
-        order = orders[0].orders.filter((order:ingredientObjectProps) => order.number == orderNew)[0];
+    if (
+      (orders[0] !== undefined || ordersUser[0] !== undefined) &&
+      ingredientsFromSetver !== null
+     
+    ) { 
+      if (orders[0] !== undefined) {
+        order = orders[0].orders.filter(
+          (order: IOrderProps) => order.number == orderNew
+        )[0];
+
       } else {
-        order = ordersUser[0].orders.filter((order:ingredientObjectProps) => order.number == orderNew)[0];
+        order = ordersUser[0].orders.filter(
+          (order: IOrderProps) => order.number == orderNew
+        )[0];
       }
-    
+
       ingredients = getArr(order.ingredients, ingredientsFromSetver);
-      uniqueIngredient = ingredients.reduce(
-        (r:any, i:any) =>
-          !r.some((j:any) => JSON.stringify(i) === JSON.stringify(j))
-            ? [...r, i]
-            : r,
-        []
-      );
+      if (ingredients != null) {
+        uniqueIngredient = ingredients.reduce(
+          (r: any, i: any): IingredientObjectProps[] =>
+            !r.some((j: any) => JSON.stringify(i) === JSON.stringify(j))
+              ? [...r, i]
+              : r,
+          []
+        );
+      }
     }
   }
 
-  function getArr(first:[], second:[]) {
-  
-    return first.reduce((acc, item) => {
-      const val = second.find((el:ingredientObjectProps) => el._id === item);
+  function getArr(
+    first: string[],
+    second: IingredientObjectProps[]
+  ): IingredientObjectProps[] {
+    return first.reduce((acc: any, item: string) => {
+      const val = second.find((el: IingredientObjectProps) => el._id === item);
       return val ? [...acc, val] : acc;
-    
     }, []);
   }
 
@@ -128,11 +156,11 @@ const FeedId:FC<FeedIdProps> = ({ orderId, modalActive }) => {
       orderNew = param.id;
     }
   }
- 
-  orderNewSet();
-  setOrders()
 
-  return order !== undefined && ingredients !== null  ? (
+  orderNewSet();
+  setOrders();
+
+  return order !== undefined && ingredients !== null ? (
     <div className={`${styles.feed__order} ${isMobile && "pl-2"} `}>
       <div
         className={`${styles.feed__order__container} ${
@@ -167,22 +195,27 @@ const FeedId:FC<FeedIdProps> = ({ orderId, modalActive }) => {
           Состав:
         </p>
         <div className={`${styles.feed__list} ${!isMobile && "pt-6 pr-6"}`}>
-          {uniqueIngredient.map((item:ingredientObjectProps) => (
-            <FeedIdElement
-              key={ item._id}
-              title={item.name}
-              price={
-                item.price *
-                ingredients.filter((ingredient:ingredientObjectProps) => ingredient._id == item._id)
-                  .length
-              }
-              img={item.image_mobile}
-              count={
-                ingredients.filter((ingredient:ingredientObjectProps) => ingredient._id == item._id)
-                  .length
-              }
-            />
-          ))}
+          {uniqueIngredient &&
+            uniqueIngredient.map((item: IingredientObjectProps) => (
+              <FeedIdElement
+                key={item._id}
+                title={item.name}
+                price={
+                  item.price *
+                  ingredients.filter(
+                    (ingredient: IingredientObjectProps) =>
+                      ingredient._id == item._id
+                  ).length
+                }
+                img={item.image_mobile}
+                count={
+                  ingredients.filter(
+                    (ingredient: IingredientObjectProps) =>
+                      ingredient._id == item._id
+                  ).length
+                }
+              />
+            ))}
         </div>
         <div className={`${styles.feed__data__container} `}>
           <p
@@ -201,7 +234,8 @@ const FeedId:FC<FeedIdProps> = ({ orderId, modalActive }) => {
           <div className={`${styles.feed__price__total} pr-2`}>
             <p className={`text pr-2 text_type_digits-default`}>
               {ingredients.reduce(
-                (accumulator:number, currentValue:ingredientObjectProps) => accumulator + currentValue.price,
+                (accumulator: number, currentValue: IingredientObjectProps) =>
+                  accumulator + currentValue.price,
                 0
               )}
             </p>
@@ -210,6 +244,8 @@ const FeedId:FC<FeedIdProps> = ({ orderId, modalActive }) => {
         </div>
       </div>
     </div>
-  ) : <Loader/>;
+  ) : (
+    <Loader />
+  );
 };
 export default FeedId;

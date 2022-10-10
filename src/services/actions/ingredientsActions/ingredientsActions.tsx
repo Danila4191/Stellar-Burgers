@@ -1,5 +1,6 @@
 import { getIngredientsApi, getOrderNumberApi } from "../../api/api";
-import { AppDispatch, AppThunk} from "../../store/store";
+import { AppDispatch, AppThunk,IingredientObjectProps } from "../../types/types";
+
 export const GET_INGREDIENTS:"GET_INGREDIENTS" = "GET_INGREDIENTS";
 export const GET_INGREDIENTS_LOADING:"GET_INGREDIENTS_LOADING" = "GET_INGREDIENTS_LOADING";
 export const GET_INGREDIENTS_FAILED:"GET_INGREDIENTS_FAILED" = "GET_INGREDIENTS_FAILED";
@@ -12,23 +13,11 @@ export const GET_ORDER:"GET_ORDER" = "GET_ORDER";
 export const GET_ORDER_FAILED:"GET_ORDER_FAILED" = "GET_ORDER_FAILED";
 export const SET_TOTAL:"SET_TOTAL" = "SET_TOTAL";
 export const TOOGLE_INGREDIENTS_CONSTRUCTOR:"TOOGLE_INGREDIENTS_CONSTRUCTOR" = "TOOGLE_INGREDIENTS_CONSTRUCTOR";
-export type TTodoActions = 
-    | IgetIngredientsAction
-  |IGetIngredientsLoadingAction
-  | IGetIngredientsFailedAction
-  | IAddIngredientAction 
-  | IDeleteIngredientAction 
-  | IDeleteIngredientsConsructorAction
-  | IAddIngredientsConstructorAction 
-  | IGetOrderLoadingAction
-  |  IGetOrderAction 
-  | IGetOrderFailedAction
-  | ISetTotalAction
-  | IToogleIngredientsConstructorAction 
 
-export interface IgetIngredientsAction {
+
+export interface IGetIngredientsAction {
   readonly type: typeof GET_INGREDIENTS;
-  readonly payload: any;
+  readonly payload:  IingredientObjectProps[];
 }
 export interface IGetIngredientsLoadingAction {
   readonly type: typeof GET_INGREDIENTS_LOADING;
@@ -40,7 +29,7 @@ export interface IGetIngredientsFailedAction {
 
 export interface IAddIngredientAction {
     readonly type: typeof ADD_INGREDIENT;
-    readonly payload: any;
+    readonly payload: IingredientObjectProps;
 }
 export interface IDeleteIngredientAction {
   readonly type: typeof DELETE_INGREDIENT;
@@ -54,7 +43,7 @@ export interface IDeleteIngredientsConsructorAction {
 
 export interface IAddIngredientsConstructorAction {
     readonly type: typeof ADD_INGREDIENTS_CONSTRUCTOR;
-    readonly payload: [];
+    readonly payload: IingredientObjectProps[];
 
 }
 export interface IGetOrderLoadingAction {
@@ -63,7 +52,7 @@ export interface IGetOrderLoadingAction {
 }
 export interface IGetOrderAction {
    readonly type: typeof GET_ORDER;
-   readonly payload: any;
+   readonly payload: number;
 }
 export interface IGetOrderFailedAction {
   readonly type: typeof GET_ORDER_FAILED;
@@ -88,9 +77,8 @@ export function getOrderNumber(data:object){
         if (dataFromServer) {
           dispatch({
             type: GET_ORDER,
-            payload: {
-              data: dataFromServer.order.number,
-            },
+            payload: dataFromServer.order.number,
+            
           });
         }
       })
@@ -113,9 +101,7 @@ export function getIngredients() {
         if (dataFromServer) {
           dispatch({
             type: GET_INGREDIENTS,
-            payload: {
-              productData: dataFromServer.data,
-            },
+            payload:  dataFromServer.data,
           });
         }
       })

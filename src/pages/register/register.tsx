@@ -4,13 +4,13 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import Form from "../../components/form/form";
 import { registrationApi } from "../../services/api/api";
-import { ValidationProps } from "../../services/types/types";
+import { IValidationProps } from "../../services/types/types";
 import React, {  FC } from "react";
 const Register:FC = () => {
-  const [inputType, setInputType] = useState<any>("password");
-  const [errorName, setErrorName] = useState<ValidationProps>({ error: false, errorText: "" });
-  const [errorEmail, setErrorEmail] = useState<ValidationProps>({ error: false, errorText: "" });
-  const [errorPassword, setErrorPassword] = useState<ValidationProps>({
+  const [inputType, setInputType] = useState<"text" | "password" | "email" | undefined>("password");
+  const [errorName, setErrorName] = useState<IValidationProps>({ error: false, errorText: "" });
+  const [errorEmail, setErrorEmail] = useState<IValidationProps>({ error: false, errorText: "" });
+  const [errorPassword, setErrorPassword] = useState<IValidationProps>({
     error: false,
     errorText: "",
   });
@@ -29,10 +29,10 @@ const Register:FC = () => {
 
   //вызывается при изменении импута
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>|any) => {
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (form.name.length < 40) {
       setValue({ ...form, [e.target.name]: e.target.value });
-      
+      //@ts-ignore
     } else if (form.name.length == 40 && e.nativeEvent.data == null) {
       setValue({ ...form, [e.target.name]: e.target.value });
     }

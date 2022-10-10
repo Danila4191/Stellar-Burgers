@@ -1,8 +1,8 @@
 import styles from "./mobile-menu.module.css";
 import Navigation from "../navigation/navigation";
 import React, {  FC } from "react";
-import { MobileMenuProps } from "../../services/types/types";
-const MobileMenu: FC<MobileMenuProps> = ({ auth, setMenuMobileActive,  menuMobileActive }) => {
+import { IMobileMenuProps } from "../../services/types/types";
+const MobileMenu: FC<IMobileMenuProps> = ({ auth, setMenuMobileActive,  menuMobileActive }) => {
   return (
     <div className={` ${styles.menu} `}>
       <div className={` ${styles.menu__container} pt-4`}>

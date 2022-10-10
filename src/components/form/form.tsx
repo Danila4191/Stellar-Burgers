@@ -1,8 +1,8 @@
 import { Button } from "@ya.praktikum/react-developer-burger-ui-components";
 import styles from "./form.module.css";
-import { FormProps } from "../../services/types/types";
+import { IFormProps } from "../../services/types/types";
 import React, {  FC } from "react";
-const Form: FC<FormProps> = (props) => {
+const Form: FC<IFormProps> = (props) => {
 
   //сохранить изменение отключить кнопку
   function onSubmit(e:React.FormEvent): void{

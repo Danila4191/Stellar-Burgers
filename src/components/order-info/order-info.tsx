@@ -1,6 +1,4 @@
 import styles from "./order-info.module.css";
-import { wait } from "@testing-library/user-event/dist/utils";
-import { FC } from "react";
 import { useSelectorTyped } from "../../services/types/types";
 
 const OrderInfo = () => {

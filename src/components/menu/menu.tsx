@@ -2,9 +2,9 @@ import styles from "./menu.module.css";
 import { useState, useContext, useEffect, FC } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
-import { MenuProps } from "../../services/types/types";
-const Menu:FC<MenuProps> = ({ text, setMenuMobileActive }) => {
-  const [link, setLink] = useState("");
+import { IMenuProps } from "../../services/types/types";
+const Menu:FC<IMenuProps> = ({ text, setMenuMobileActive }) => {
+  const [link, setLink] = useState<string>("");
 
   const { isMobile } = useContext(isMobileContext);
   const location = useLocation();
@@ -18,10 +18,10 @@ const Menu:FC<MenuProps> = ({ text, setMenuMobileActive }) => {
       <nav className={`${styles.nav} `}>
         <NavLink
           onClick={
-            isMobile && setMenuMobileActive &&
+            (isMobile && setMenuMobileActive) ?
             (() => {
               setMenuMobileActive(false);
-            })
+            }): undefined
           }
       
           to={ "/profile"}
@@ -40,10 +40,10 @@ const Menu:FC<MenuProps> = ({ text, setMenuMobileActive }) => {
 
         <NavLink
           onClick={
-            isMobile && setMenuMobileActive &&
+            (isMobile && setMenuMobileActive) ?
             (() => {
               setMenuMobileActive(false);
-            })
+            }): undefined
           }
         
           to={"/profile/orders"}
@@ -61,10 +61,10 @@ const Menu:FC<MenuProps> = ({ text, setMenuMobileActive }) => {
         </NavLink>
         <NavLink
           onClick={
-            isMobile && setMenuMobileActive &&
+            (isMobile && setMenuMobileActive) ?
             (() => {
               setMenuMobileActive(false);
-            })
+            }): undefined
           }
        
           to={ "/out"}

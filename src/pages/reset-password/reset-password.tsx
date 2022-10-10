@@ -6,14 +6,14 @@ import { useState, useContext, useEffect } from "react";
 import { resetPasswordApi } from "../../services/api/api";
 import { codeSendContext } from "../../services/context/appContext";
 import React, {  FC } from "react";
-import { ValidationProps } from "../../services/types/types";
+import { IValidationProps } from "../../services/types/types";
 const ResetPassword:FC = () => {
-  const [inputType, setInputType] = useState<any>("password");
-  const [errorPasswordOne, setErrorPasswordOne] = useState<ValidationProps>({
+  const [inputType, setInputType] = useState<"text" | "password" | "email" | undefined>("password");
+  const [errorPasswordOne, setErrorPasswordOne] = useState<IValidationProps>({
     error: false,
     errorText: "",
   });
-  const [errorPasswordTwo, setErrorPasswordTwo] = useState<ValidationProps>({
+  const [errorPasswordTwo, setErrorPasswordTwo] = useState<IValidationProps>({
     error: false,
     errorText: "",
   });

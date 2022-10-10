@@ -3,13 +3,12 @@ import styles from "./profile-orders.module.css";
 import FeedOrders from "../../components/feed-orders/feed-orders";
 import { isMobileContext } from "../../services/context/appContext";
 import Menu from "../../components/menu/menu";
-import { useDispatch, useSelector } from "react-redux";
 import { getCookie } from "../../utils/cookie/cookie";
 import { WS_CONNECTION_START, WS_CONNECTION_CLOSED, WS_GET_MESSAGE_PROFILE  } from "../../services/actions/soketAction/soketAction";
 import Loader from "../../components/loader/loader";
-import { ProfileOrdersProps } from "../../services/types/types";
+import { IProfileOrdersProps,useDispatchTyped } from "../../services/types/types";
 import React, {  FC } from "react";
-const ProfileOrders: FC<ProfileOrdersProps> = ({
+const ProfileOrders: FC<IProfileOrdersProps> = ({
   orders,
   setModalActive,
   setModal,
@@ -17,7 +16,7 @@ const ProfileOrders: FC<ProfileOrdersProps> = ({
   modalActive,
 }) => {
 
-  const dispatch = useDispatch();
+  const dispatch = useDispatchTyped();
 
   useEffect(() => {
     if (getCookie("refreshToken") !== undefined) {

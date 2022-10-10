@@ -8,8 +8,8 @@ import { getCookie, deleteCookie } from "../../utils/cookie/cookie";
 import { useContext } from "react";
 import { codeSendContext } from "../../services/context/appContext";
 import React, {  FC } from "react";
-
-const Out: FC = () => {
+import { IOutProps } from "../../services/types/types";
+const Out: FC<IOutProps> = ({setAuth}) => {
 
   const { codeSend, setCodeSend } = useContext(codeSendContext);
 
@@ -25,6 +25,7 @@ const Out: FC = () => {
     });
     deleteCookie("token");
     deleteCookie("refreshToken");
+    setAuth(false)
     navigate("/Login");
     setCodeSend(false);
   }

@@ -5,10 +5,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { isMobileContext } from "../../services/context/appContext";
 import FeedId from "../../pages/feed-id/feed-id";
 import { useSelector } from "react-redux";
-import React, {  FC } from "react";
-import { FeedOrderProps, useSelectorTyped, ingredientObjectProps  } from "../../services/types/types";
+import React, { FC } from "react";
+import {
+  IFeedOrderProps,
+  useSelectorTyped,IOrderNewProps ,
+  IingredientObjectProps,
+} from "../../services/types/types";
 
-const FeedOrder:FC<FeedOrderProps> = ({
+const FeedOrder: FC<IFeedOrderProps> = ({
   time,
   orderId,
   title,
@@ -19,7 +23,6 @@ const FeedOrder:FC<FeedOrderProps> = ({
   setOnCloseFunc,
   modalActive,
 }) => {
-  
   const ingredientsFromSetver = useSelectorTyped(
     (state) => state.ingredients.productData
   );
@@ -40,48 +43,44 @@ const FeedOrder:FC<FeedOrderProps> = ({
   function close(e: React.MouseEvent<HTMLButtonElement>) {
     setModalActive(false);
     setTimeout(() => {
-    
-      setModal(null);;
-    }, 500)
-   
+      setModal(null);
+    }, 500);
+
     back();
   }
 
   function openModal() {
     setModalActive(true);
-    setModal(<FeedId modalActive={!modalActive} orderId={orderId}/>);
+    setModal(<FeedId modalActive={!modalActive} orderId={orderId} />);
     setOnCloseFunc(() => close);
   }
 
-  function getArr(first:[], second:[]):any {
-   
-    return first.reduce((acc, item) => {
-      const val = second.find((el:ingredientObjectProps) => el._id === item);
+  function getArr(first: string[], second: IingredientObjectProps[]):IingredientObjectProps[] {
+    return first.reduce((acc:any, item:string):IingredientObjectProps[] => {
+      const val = second.find((el: IingredientObjectProps) => el._id === item);
       return val ? [...acc, val] : acc;
       // return val ? [...acc, undefined] : acc; // на случай, если надо вернуть undefined
     }, []);
   }
 
-  let price = 0;
+  let price:number = 0;
   let items = getArr(orders, ingredientsFromSetver);
-  let dataOrder = new Date(time).toLocaleString('ru', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
+  let dataOrder = new Date(time).toLocaleString("ru", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
     hour: "numeric",
-    minute: "numeric"
+    minute: "numeric",
   });
 
   price = items.reduce(
-    (accumulator:number, currentValue:ingredientObjectProps) => accumulator + currentValue.price,
+    (accumulator: number, currentValue: IingredientObjectProps) =>
+      accumulator + currentValue.price,
     0
   );
 
-
-  
-  return price !== 0 
- // && !ordersLoading 
-  ?  (
+  return price !== 0 ? (
+    // && !ordersLoading
     <div onClick={openModal}>
       <NavLink
         to={
@@ -96,12 +95,12 @@ const FeedOrder:FC<FeedOrderProps> = ({
           <div className={`${styles.feed__order__container}  `}>
             <p className={` text  text_type_digits-default`}>#{orderId}</p>
             <p className={`${styles.time} text text_type_main-default`}>
-              { dataOrder}
+              {dataOrder}
             </p>
           </div>
           <h2 className={` pt-6  text text_type_main-medium`}>{title}</h2>
 
-          { location.pathname.includes("profile") ? (
+          {location.pathname.includes("profile") ? (
             <p
               className={`${
                 status === "done"
@@ -244,7 +243,7 @@ const FeedOrder:FC<FeedOrderProps> = ({
 
             <div className={`${styles.feed__order__container} pt-5 `}>
               <p className={` text text_type_digits-default pr-1`}>{price}</p>
-              <CurrencyIcon type="primary"/>
+              <CurrencyIcon type="primary" />
             </div>
           </div>
         </div>
