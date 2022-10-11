@@ -20,7 +20,8 @@ import {
   IFeedIdElementProps,
   IFeedIdProps,
   IingredientObjectProps,
-  IOrderProps,IOrderNewProps
+  IOrderProps,
+  IOrderNewProps,LocationState
 } from "../../services/types/types";
 const FeedIdElement: FC<IFeedIdElementProps> = ({
   title,
@@ -28,8 +29,8 @@ const FeedIdElement: FC<IFeedIdElementProps> = ({
   price,
   img,
 }) => {
-  const  {isMobile}  = useContext(isMobileContext);
-  
+  const { isMobile } = useContext(isMobileContext);
+
   return (
     <div className={`${styles.feed__order__ingredient} `}>
       <div className={`${styles.feed__image__container} `}>
@@ -69,19 +70,22 @@ const FeedId: FC<IFeedIdProps> = ({ orderId, modalActive }) => {
     (state) => state.ingredients.productData
   );
   const dispatch = useDispatch();
-  let location: any = useLocation();
+
+
+
+  let location:LocationState  = useLocation();
   let param:any = useParams();
   let order: IOrderProps | undefined | any = undefined;
   let uniqueIngredient: IingredientObjectProps[] = [];
   let orderNew: number | undefined = undefined;
   let ingredients: IingredientObjectProps[] = [];
 
+  console.log(param);
   useEffect(() => {
     if (
       param.id !== undefined &&
       location.pathname.includes("feed") &&
       !modalActive
-      
     ) {
       dispatch({
         type: WS_CONNECTION_START,
@@ -113,13 +117,11 @@ const FeedId: FC<IFeedIdProps> = ({ orderId, modalActive }) => {
     if (
       (orders[0] !== undefined || ordersUser[0] !== undefined) &&
       ingredientsFromSetver !== null
-     
-    ) { 
+    ) {
       if (orders[0] !== undefined) {
         order = orders[0].orders.filter(
           (order: IOrderProps) => order.number == orderNew
         )[0];
-
       } else {
         order = ordersUser[0].orders.filter(
           (order: IOrderProps) => order.number == orderNew

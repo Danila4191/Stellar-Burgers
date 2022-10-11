@@ -15,6 +15,7 @@ const Out: FC<IOutProps> = ({setAuth}) => {
 
   let navigate = useNavigate();
   function onClick() {
+
     authOutApi({
       token: getCookie("refreshToken"), // refreshToken
     });

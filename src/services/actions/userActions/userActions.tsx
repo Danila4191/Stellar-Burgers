@@ -1,6 +1,6 @@
 import { setCookie, getCookie } from "../../../utils/cookie/cookie";
 import { authLoginApi, getUserApi, getTokenApi } from "../../api/api";
-import { AppDispatch,IAuthLogin,IGetUser } from "../../types/types";
+import { AppDispatch,IAuthLogin,IGetUser,Ilogin,Itoken } from "../../types/types";
 
 export const AUTH_LOGIN: "AUTH_LOGIN" = "AUTH_LOGIN";
 export const AUTH_LOGIN_LOADING: "AUTH_LOGIN_LOADING" = "AUTH_LOGIN_LOADING";
@@ -51,7 +51,7 @@ export interface IAuthOutFailedReloadAction {
   readonly type: typeof AUTH_LOGIN_FAILED_RELOAD;
 }
 
-export function authLogin(data: object) {
+export function authLogin(data:Ilogin) {
   return function (dispatch: AppDispatch) {
     dispatch({
       type: AUTH_LOGIN_LOADING,
@@ -131,7 +131,7 @@ export function getUser() {
       });
   };
 }
-export function getToken(data: object) {
+export function getToken(data: Itoken) {
   return function (dispatch: AppDispatch) {
     getTokenApi(data)
       .then((dataFromServer) => {

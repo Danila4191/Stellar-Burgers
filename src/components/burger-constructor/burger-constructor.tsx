@@ -56,7 +56,6 @@ const BurgerConstructor:FC<IBurgerConstructorProps> = ({
   });
 
   function addBun(itemsNew:IingredientObjectProps[], item:IingredientObjectProps) {
-    console.log(itemsNew)
     itemsNew.push(item);
     itemsNew.push(item);
     let summ = itemsNew.reduce(

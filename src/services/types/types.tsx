@@ -227,6 +227,31 @@ export interface IIngredientsGridProps {
   title: string;
   children: React.ReactChild | React.ReactNode;
 }
+export interface IResetPassword {
+  password: string;
+  token: string;
+}
+export interface Iuser {
+  password: string;
+  name: string;
+  email: string
+}
+export interface LocationState {
+  pathname: string ;
+  state: any
+
+}
+
+export interface Ilogin {
+  password: string;
+  email: string
+}
+export interface IEmailCode {
+  email: string;
+}
+export interface Itoken {
+  token: string | undefined;
+}
 export interface IIngredientConctructorProps {
   ingredient: IingredientObjectProps;
   position?: "bottom" | "top" | undefined;

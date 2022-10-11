@@ -23,7 +23,7 @@ import { IApproutesProps } from "../../services/types/types";
 import {
   IOrdersProps,
   useSelectorTyped,
-  useDispatchTyped,
+  useDispatchTyped,LocationState
 } from "../../services/types/types";
 const AppRoutes: FC<IApproutesProps> = ({
   auth,
@@ -55,7 +55,7 @@ const AppRoutes: FC<IApproutesProps> = ({
     }
   }
 
-  let location: any = useLocation();
+  let location:LocationState = useLocation();
   let state = location.state;
   const { user } = useSelectorTyped((state) => state.Login);
 

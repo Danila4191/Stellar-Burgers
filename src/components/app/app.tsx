@@ -35,6 +35,7 @@ const [auth,setAuth]= useState<boolean>(false)
 
   useEffect(() => {
     setAuth(getCookie("refreshToken") == undefined ? false : true)
+
   }, [] );
   //const auth = getCookie("refreshToken") == undefined ? false : true;
  

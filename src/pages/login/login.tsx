@@ -116,10 +116,15 @@ useEffect(()=> {
     }
   });
  
-
+  useEffect(() => {
+    if (auth) {
+      navigate("/");
+      console.log(1)
+    }
+  },[auth]);
   
   return (
-    user == null ? (
+    user == null  ? (
       <div className={`${styles.container} `}>
         <div>
           <Form
