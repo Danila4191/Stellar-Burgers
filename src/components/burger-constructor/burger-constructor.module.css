@@ -1,0 +1,143 @@
+.burger__constructor {
+  width: 600px;
+  height: 912px;
+}
+
+.burger__list {
+  display: grid;
+  grid-template-rows: 80px 464px 80px;
+  row-gap: 16px;
+}
+.burger__list__scroll {
+  height: 464px;
+  overflow: scroll;
+  align-content: start;
+  display: grid;
+  row-gap: 16px;
+}
+.burger__list__scroll::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+.burger__list__scroll::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.burger__list__scroll::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+.order {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  height: min-content;
+  gap: 40px;
+}
+.total__container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+.total {
+  margin: 0;
+}
+.empy {
+  margin-left: 30px;
+  height: 76px;
+  width: 530px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #1c1c21;
+}
+.empy_top {
+  border-radius: 88px 88px 40px 40px;
+}
+.empy_botton {
+  border-radius: 40px 40px 88px 88px;
+}
+.empy__main {
+  border-radius: 40px;
+}
+.empy_active {
+  border: 2px solid #801ab3;
+}
+.modile__list{
+  padding-top: 64px;
+  padding-bottom: 64px;
+  height: 100%;
+  overflow: scroll;
+  align-content: start;
+  display: grid;
+  row-gap: 1px;
+}
+.modile__list::-webkit-scrollbar {
+  width: 8px;
+  height: 0px;
+}
+.modile__list::-webkit-scrollbar-track {
+  background: #2f2f37;
+}
+.modile__list::-webkit-scrollbar-thumb {
+  background: #8585ad;
+}
+
+.scrollbar__container__constructor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.button__close {
+  height: 25px;
+  width: 25px;
+  background-image: url(../../images/Close__conctructor.svg);
+  background-repeat: no-repeat;
+  border: none;
+  cursor: pointer;
+  background-color: inherit;
+}
+.scrollbar__constructor {
+  position: fixed;
+  z-index: 12;
+  top: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: #1c1c21;
+  height: 64px;
+  right: 0;
+  left: 0;
+}
+
+
+@media (max-width: 700px) {
+  .burger__constructor {
+    margin-left: auto;
+    margin-right: auto;
+    position: absolute;
+    height: 70%;
+    width: 100%;
+    top: 0px;
+    right: 0;
+    left: 0;
+    bottom: 0px;
+  }
+
+  .order {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: flex-end;
+    background-color: #1c1c21;
+    height: 72px;
+    right: 0;
+    gap: 0px;
+    left: 0;
+    padding-right: 10px;
+  }
+  .total__container {
+    display: flex;
+    align-items: center;
+    padding-right: 20px;
+    z-index: 20;
+  }
+}

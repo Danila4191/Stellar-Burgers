@@ -1,0 +1,20 @@
+
+.container {
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.orders__container {
+  width: 844px;
+  height: 180px;
+}
+  .title {
+    text-align: center;
+  }
+@media (max-width: 700px) {
+    .orders__container {
+      width: 100%;
+      height: min-content;
+    }
+}
