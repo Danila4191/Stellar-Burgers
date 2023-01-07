@@ -1,6 +1,6 @@
 # Учебная проектная работа "Stellar-Burgers" по курсам Яндекс.Практикума "Веб плюс"
 
-* [Ссылка на страницу приложения]([https://github.com/Danila4191/Stellar-Burgers/settings/pages](https://danila4191.github.io/Stellar-Burgers/))
+* [Ссылка на страницу приложения](https://danila4191.github.io/Stellar-Burgers/)
 
 ### Обзор
 * Интро
