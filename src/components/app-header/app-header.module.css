@@ -1,0 +1,40 @@
+
+.header {
+  background: #1c1c21;
+  width: 100%;
+  min-width: min-content;
+  height: 88px;
+}
+
+
+.header__container_mobile {
+  padding-left: 20px;
+  padding-right: 20px;
+  height: 64px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo_mobile {
+  background-image: url(../../images/logo.svg);
+  width: 40px;
+  height: 40px;
+  background-repeat: no-repeat;
+}
+.burger {
+  background-image: url(../../images/burgerMenu.svg);
+  background-color: inherit;
+  border: none;
+  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  cursor: pointer;
+  z-index: 9;
+}
+
+@media (max-width: 700px) {
+  .header {
+    height: 64px;
+
+  }
+}
